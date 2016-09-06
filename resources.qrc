@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/action-redo-2x.png</file>
+        <file>icons/action-undo-2x.png</file>
+        <file>icons/folder-2x.png</file>
+        <file>icons/file-2x.png</file>
+        <file>icons/hard-drive-2x.png</file>
+        <file>icons/external-link-2x.png</file>
+        <file>icons/print-2x.png</file>
+        <file>icons/delete-2x.png</file>
+        <file>icons/wrench-2x.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/clipboard-2x.png</file>
+        <file>icons/circle-x-2x.png</file>
+        <file>icons/fullscreen-enter-2x.png</file>
+        <file>icons/media-play-2x.png</file>
+    </qresource>
+</RCC>
