@@ -10,10 +10,16 @@ NoximGUI::NoximGUI(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::NoximGUI)
 {
+    // Shows splash screen
+    showSplash(this);
+
+    // Sets default configuration files
     NoximGUI::guiConfigFileName = "gui_config.yaml";
     NoximGUI::execConfigName = "Executable";
     NoximGUI::noximConfigFileName = "default_config.yaml";
+    NoximGUI::powerConfigFileName = "default_power.yaml";
 
+    // Checks if user selected a file. If not, fails and exits with warning
     if( getNoximExecutable() )
     {
         setDefaultNoximConfig();
@@ -26,6 +32,14 @@ NoximGUI::NoximGUI(QWidget *parent) :
     }
 
     ui->setupUi(this);
+
+    // Sets power config YAML Node
+    if ( !populatePowerConfig() )
+    {
+        QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                              QString( "Error: Unable to locate default power config. Check installation." ) );
+        exit( EXIT_FAILURE );
+    }
 
     // Sets all of the vectors with appropriate parameters
     populateLists();
@@ -52,6 +66,7 @@ NoximGUI::~NoximGUI()
 
 /**
  * @brief Dialog to select noxim executable file from filesystem
+ *
  */
 bool NoximGUI::getNoximExecutable()
 {
@@ -164,15 +179,36 @@ bool NoximGUI::writeNoximConfig( QString fileName )
     return true;
 }
 
+
+/**
+ * @brief Private method to check if a gui config already exists
+ */
+bool NoximGUI::noximExecSet()
+{
+    struct stat buffer;
+    return ( stat( "gui_config.yaml", &buffer ) == 0 );
+}
+
 /**
  * @brief Private method to populate comboboxes for UI
  */
 void NoximGUI::populateComboBoxes()
 {
-    ui->Packet_Injection_ComboBox->addItems( packetInjectionTypes );
-    ui->Algorithm_ComboBox->addItems( routingTypes );
-    ui->Selection_Strategy_ComboBox->addItems( selectionStrategies );
-    ui->Traffic_Pattern_ComboBox->addItems( trafficTypes );
+    // Buffer Depth Values
+    ui->Depth_ComboBox->addItems( availableBufferDepthValues );
+    // Connection Lengths
+    ui->RH_Length_ComboBox->addItems( availableConnectionLengths );
+    ui->RR_Length_ComboBox->addItems( availableConnectionLengths );
+    // Flit Sizes
+    ui->Flit_Size_ComboBox->addItems( availableFlitSizes );
+    // Packet Injection Types
+    ui->Packet_Injection_ComboBox->addItems( availablePacketInjectionTypes );
+    // Routing Algorithms
+    ui->Algorithm_ComboBox->addItems( availableRoutingTypes );
+    // Selection strategies
+    ui->Selection_Strategy_ComboBox->addItems( availableSelectionStrategies );
+    // Traffic Pattern Types
+    ui->Traffic_Pattern_ComboBox->addItems( availableTrafficTypes );
 }
 
 /**
@@ -181,22 +217,57 @@ void NoximGUI::populateComboBoxes()
 void NoximGUI::populateLists()
 {
     // Set QStringList for packet injection types
-    packetInjectionTypes << "Poisson" << "Burst" << "Pareto";
-
-    // Set vector for routing types
-    routingTypes << "XY" << "WEST_FIRST" << "NORTH_LAST" <<
-                    "NEGATIVE_FIRST" << "ODD_EVEN" << "DYAD" <<
-                    "TABLE_BASED";
+    availablePacketInjectionTypes << "Poisson" << "Burst" << "Pareto";
 
     // Set vector for selection strategies
-    selectionStrategies << "RANDOM" << "BUFFER_LEVEL" <<
+    availableSelectionStrategies << "RANDOM" << "BUFFER_LEVEL" <<
                            "NOP";
 
     // Set vector for traffic types
-    trafficTypes << "TRAFFIC_RANDOM" << "TRAFFIC_TRANSPOSE1" <<
+    availableTrafficTypes << "TRAFFIC_RANDOM" << "TRAFFIC_TRANSPOSE1" <<
                     "TRAFFIC_TRANSPOSE2" << "TRAFFIC_BIT_REVERSAL" <<
                     "TRAFFIC_SHUFFLE" << "TRAFFIC_BUTTERFLY" <<
                     "TRAFFIC_LOCAL" << "TRAFFIC_ULOCAL" << "TRAFFIC_TABLE_BASED";
+
+    // Set vector for connection lengths
+    YAML::Node connectionLengthsNode = powerConfigNode["Energy"]["LinkBitLine"];
+    for( std::size_t i = 0; i < connectionLengthsNode.size(); i++ )
+    {
+        QString temp = QString::fromStdString( connectionLengthsNode[i][0].as<std::string>() );
+        if( std::find( availableConnectionLengths.begin(), availableConnectionLengths.end(), temp ) == availableConnectionLengths.end() )
+        {
+            availableConnectionLengths << temp;
+        }
+    }
+
+    // Set vector for routing types
+    YAML::Node routingNode = powerConfigNode["Energy"]["Router"]["routing"];
+    for( YAML::const_iterator it = routingNode.begin(); it != routingNode.end(); ++it )
+    {
+        QString temp = QString::fromStdString( it->first.as<std::string>() );
+        availableRoutingTypes << temp;
+    }
+
+    // Set vector for flit sizes
+    YAML::Node bufferNode = powerConfigNode["Energy"]["Buffer"];
+    for( std::size_t i = 0; i < bufferNode.size(); i++ )
+    {
+        QString temp = QString::fromStdString( bufferNode[i][1].as<std::string>() );
+        if( std::find( availableFlitSizes.begin(), availableFlitSizes.end(), temp ) == availableFlitSizes.end() )
+        {
+            availableFlitSizes << temp;
+        }
+    }
+
+    // Set vector for buffer depth values
+    for( std::size_t i = 0; i < bufferNode.size(); i++ )
+    {
+        QString temp = QString::fromStdString( bufferNode[i][0].as<std::string>() );
+        if( std::find( availableBufferDepthValues.begin(), availableBufferDepthValues.end(), temp ) == availableBufferDepthValues.end() )
+        {
+            availableBufferDepthValues << temp;
+        }
+    }
 }
 
 /**
@@ -204,6 +275,16 @@ void NoximGUI::populateLists()
  */
 void NoximGUI::populateDependentParams()
 {
+    // TODO
+}
+
+/**
+ * @brief Private method to populate YAML power config node
+ */
+bool NoximGUI::populatePowerConfig()
+{
+    NoximGUI::powerConfigNode = YAML::LoadFile( powerConfigFileName );
+    return powerConfigNode.IsNull() ? false : true;
 }
 
 /**
@@ -214,16 +295,6 @@ void NoximGUI::populateUniversalParams()
     // X & Y mesh dimensions
     ui->X_Edit->setText( QString::fromStdString( noximConfigNode["mesh_dim_x"].as<std::string>() ) );
     ui->Y_Edit->setText( QString::fromStdString( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
-
-    // Buffer depth
-    ui->Depth_Edit->setText( QString::fromStdString( noximConfigNode["buffer_depth"].as<std::string>() ) );
-
-    // Flit size
-    ui->Flit_Size_Edit->setText( QString::fromStdString( noximConfigNode["flit_size"].as<std::string>() ) );
-
-    // Wired connection lengths
-    ui->RH_Length_Edit->setText( QString::fromStdString( noximConfigNode["r2h_link_length"].as<std::string>() ) );
-    ui->RR_Length_Edit->setText( QString::fromStdString( noximConfigNode["r2r_link_length"].as<std::string>() ) );
 
     // Clock options
     ui->Clock_Period_Edit->setText( QString::fromStdString( noximConfigNode["clock_period_ps"].as<std::string>() ) );
@@ -247,12 +318,16 @@ void NoximGUI::populateUniversalParams()
 }
 
 /**
- * @brief Private method to check if a gui config already exists
+ * @brief Private method for showing splash screen w/ icon, delay for 3 seconds
  */
-bool NoximGUI::noximExecSet()
+void NoximGUI::showSplash(QWidget *mainWindow)
 {
-    struct stat buffer;
-    return ( stat( "gui_config.yaml", &buffer ) == 0 );
+    QPixmap logo( "splash.jpg" );
+    QSplashScreen splash( logo );
+    splash.show();
+    sleep( 3 ); //Show splash for 3 seconds
+    QMainWindow *main = ( QMainWindow* ) mainWindow->parent();
+    splash.finish( main );
 }
 
 /**
@@ -263,34 +338,28 @@ void NoximGUI::updateNoximConfigNode()
     // X & Y mesh dimensions
     noximConfigNode["mesh_dim_x"] = ui->X_Edit->toPlainText().toStdString();
     noximConfigNode["mesh_dim_y"] = ui->Y_Edit->toPlainText().toStdString();
-
-    // Buffer depth
-    noximConfigNode["buffer_depth"] = ui->Depth_Edit->toPlainText().toStdString();
-
     // Flit size
-    noximConfigNode["flit_size"] = ui->Flit_Size_Edit->toPlainText().toStdString();
-
+    noximConfigNode["flit_size"] = ui->Flit_Size_ComboBox->currentText().toStdString();
     // Wired connection lengths
-    noximConfigNode["r2h_link_length"] = ui->RH_Length_Edit->toPlainText().toStdString();
-    noximConfigNode["r2r_link_length"] = ui->RR_Length_Edit->toPlainText().toStdString();
-
+    noximConfigNode["r2h_link_length"] = ui->RH_Length_ComboBox->currentText().toStdString();
+    noximConfigNode["r2r_link_length"] = ui->RR_Length_ComboBox->currentText().toStdString();
     // Clock options
     noximConfigNode["clock_period_ps"] = ui->Clock_Period_Edit->toPlainText().toStdString();
     noximConfigNode["simulation_time"] = ui->Simulation_Time_Edit->toPlainText().toStdString();
     noximConfigNode["stats_warm_up_time"] = ui->Warmup_Time_Edit->toPlainText().toStdString();
     noximConfigNode["reset_time"] = ui->Reset_Time_Edit->toPlainText().toStdString();
     noximConfigNode["max_volume_to_be_drained"] = ui->Delivery_Stop_Edit->toPlainText().toStdString();
-
     // Packet Options
     noximConfigNode["min_packet_size"] = ui->Min_Packet_Size_Edit->toPlainText().toStdString();
     noximConfigNode["max_packet_size"] = ui->Max_Packet_Size_Edit->toPlainText().toStdString();
     noximConfigNode["probability_of_retransmission"] = ui->Retransmission_Edit->toPlainText().toStdString();
     noximConfigNode["packet_injection_rate"] = ui->Packet_Injection_Edit->toPlainText().toStdString();
-
-    // Get currently selected items from comboboxes.
+    // Routing Options
     noximConfigNode["routing_algorithm"] = ui->Algorithm_ComboBox->currentText().toStdString();
     noximConfigNode["selection_strategy"] = ui->Selection_Strategy_ComboBox->currentText().toStdString();
     noximConfigNode["traffic_distribution"] = ui->Traffic_Pattern_ComboBox->currentText().toStdString();
+    // Buffer depth
+    noximConfigNode["buffer_depth"] = ui->Depth_ComboBox->currentText().toStdString();
 }
 
 /**
@@ -299,41 +368,39 @@ void NoximGUI::updateNoximConfigNode()
 void NoximGUI::on_actionRun_Simulation_triggered()
 {
     updateNoximConfigNode();
-//    std::string packetInjection = ui->Packet_Injection_ComboBox->currentText().toStdString();
-//    std::transform( packetInjection.begin(), packetInjection.end(), packetInjection.begin(), ::tolower );
 
-    // Save file as...
-    QFileDialog dialog;
+    // Save config to temp file for simulation
+    QString qTempFile = "temp";
 
-    dialog.setFileMode( QFileDialog::AnyFile );
-    dialog.setModal( true );
-    QString qFileName = dialog.getSaveFileName( 0, "Save configuration as...", "", ".yaml" );
-
-    bool writeResult = writeNoximConfig( qFileName );
+    bool writeResult = writeNoximConfig( qTempFile );
     if ( writeResult )
     {
         // Set arguments
         std::string config( "-config " + noximConfigFileName );
-        dialog.setFileMode( QFileDialog::ExistingFile );
-        QString qPowerFileName = dialog.getOpenFileName( 0, "Select power configuration file.", "" );
-
+        QString qPowerFileName = "default_power.yaml";
         std::string powerConfig( "-power " + qPowerFileName.toStdString() );
         std::string args = config + " " + powerConfig;
         std::string exec = guiConfigNode[execConfigName].as<std::string>() + " " + args;
 
+        // Start process, execute code
         QProcess simulationProcess;
         simulationProcess.start( QString::fromStdString( exec ) );
         simulationProcess.waitForFinished();
 
+        // Pipe output from program into stream and strings
         QTextStream out(stdout);
         QString stdout = simulationProcess.readAllStandardOutput();
         QString stderr = simulationProcess.readAllStandardError();
         out << stdout << "\n" << stderr << endl;
 
+        // Display output
         OutputDialog outputDialog;
         outputDialog.showOutput( stdout );
         outputDialog.setModal( true);
         outputDialog.exec();
+
+        QFile file( qTempFile );
+        file.remove();
     }
     else
     {

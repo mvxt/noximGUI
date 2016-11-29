@@ -39,7 +39,8 @@ else:unix: PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/libyaml-c
 
 DISTFILES += \
     default_config.yaml \
-    default_config.yaml
+    default_power.yaml \
+    splash.jpg
 
 RESOURCES += \
     resources.qrc

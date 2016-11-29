@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QPlainTextEdit>
 #include <QProcess>
+#include <QSplashScreen>
 #include <QString>
 #include <QStringList>
 #include <QTextStream>
@@ -42,11 +43,11 @@ class NoximGUI : public QMainWindow
         // Opens fileDialog asking user to select location of noxim executable
         bool getNoximExecutable();
 
-        // Method to set the noximExec
-        bool setGUIConfig( QString fileName );
-
         // Method to set the default config file to run with noxim, calls setNoximConfig
         bool setDefaultNoximConfig();
+
+        // Method to set the noximExec
+        bool setGUIConfig( QString fileName );
 
         // Method to set the config file to run with noxim
         bool setNoximConfig( QString fileName );
@@ -55,23 +56,30 @@ class NoximGUI : public QMainWindow
         // Run Simulation button pressed.
         void on_actionRun_Simulation_triggered();
 
-private:
+    private:
         // Const strings
         std::string execConfigName;
         std::string guiConfigFileName;
         std::string noximConfigFileName;
+        std::string powerConfigFileName;
 
         // Vectors containing packet injection, routing, selection_strategy, traffic types
-        QStringList packetInjectionTypes;
-        QStringList routingTypes;
-        QStringList selectionStrategies;
-        QStringList trafficTypes;
+        QStringList availableBufferDepthValues;
+        QStringList availableConnectionLengths;
+        QStringList availableFlitSizes;
+        QStringList availablePacketInjectionTypes;
+        QStringList availableRoutingTypes;
+        QStringList availableSelectionStrategies;
+        QStringList availableTrafficTypes;
 
         // YAML Node object containing gui config
         YAML::Node guiConfigNode;
 
         // YAML Node object containing noxim config
         YAML::Node noximConfigNode;
+
+        // YAML Node object containing power config
+        YAML::Node powerConfigNode;
 
         // Pointer to noximGUI object
         Ui::NoximGUI *ui;
@@ -88,8 +96,14 @@ private:
         // Private method to populate vectors
         void populateLists();
 
+        // Private method to populate YAML power config
+        bool populatePowerConfig();
+
         // Private method to populate universal fields (shared by all configs)
         void populateUniversalParams();
+
+        // Private method to show splash screen
+        void showSplash(QWidget *mainWindow);
 
         // Private method to take info from fields and update noximConfigNode
         void updateNoximConfigNode();

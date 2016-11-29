@@ -213,20 +213,19 @@ font-style: italic;
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Depth:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Depth_Edit">
+           <widget class="QComboBox" name="Depth_ComboBox">
             <property name="geometry">
              <rect>
-              <x>108</x>
+              <x>110</x>
               <y>0</y>
               <width>96</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+text-align: center;</string>
             </property>
            </widget>
           </widget>
@@ -276,20 +275,19 @@ font-style: italic;
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Size (bits):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Flit_Size_Edit">
+           <widget class="QComboBox" name="Flit_Size_ComboBox">
             <property name="geometry">
              <rect>
               <x>130</x>
               <y>0</y>
               <width>141</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+text-align: center;</string>
             </property>
            </widget>
           </widget>
@@ -338,20 +336,22 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;R-to-H (mm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="RH_Length_Edit">
+           <widget class="QComboBox" name="RH_Length_ComboBox">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="geometry">
              <rect>
               <x>130</x>
               <y>0</y>
               <width>141</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+text-align: center;</string>
             </property>
            </widget>
           </widget>
@@ -375,20 +375,19 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;R-to-R (mm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="RR_Length_Edit">
+           <widget class="QComboBox" name="RR_Length_ComboBox">
             <property name="geometry">
              <rect>
               <x>130</x>
               <y>0</y>
               <width>141</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+text-align: center;</string>
             </property>
            </widget>
           </widget>
@@ -1162,7 +1161,7 @@ border-radius: 0px;</string>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; font-style:italic;&quot;&gt;NoximGUI &lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.5.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; font-style:italic;&quot;&gt;NoximGUI &lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.6.0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </widget>
@@ -1618,7 +1617,6 @@ text-align: center;</string>
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="actionExport"/>
-   <addaction name="actionPrint"/>
    <addaction name="separator"/>
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
