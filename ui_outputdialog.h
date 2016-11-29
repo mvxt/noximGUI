@@ -18,6 +18,7 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
@@ -27,10 +28,11 @@ class Ui_OutputDialog
 {
 public:
     QFrame *Output_Dialog_Frame;
-    QWidget *Simulation_Widget_4;
-    QLabel *Simulation_Label_4;
-    QTextEdit *Simulation_Output_TextEdit_4;
-    QDialogButtonBox *Output_Dialog_ButtonBox_4;
+    QWidget *Simulation_Widget;
+    QLabel *Simulation_Label;
+    QTextEdit *Simulation_Output_TextEdit;
+    QDialogButtonBox *Output_Dialog_ButtonBox;
+    QPushButton *Print_Button;
 
     void setupUi(QDialog *OutputDialog)
     {
@@ -43,30 +45,33 @@ public:
         Output_Dialog_Frame->setStyleSheet(QStringLiteral("background-color: rgb(177, 177, 177);"));
         Output_Dialog_Frame->setFrameShape(QFrame::StyledPanel);
         Output_Dialog_Frame->setFrameShadow(QFrame::Raised);
-        Simulation_Widget_4 = new QWidget(Output_Dialog_Frame);
-        Simulation_Widget_4->setObjectName(QStringLiteral("Simulation_Widget_4"));
-        Simulation_Widget_4->setGeometry(QRect(10, 10, 676, 526));
-        Simulation_Widget_4->setStyleSheet(QLatin1String("background-color: rgb(230, 230, 230);\n"
+        Simulation_Widget = new QWidget(Output_Dialog_Frame);
+        Simulation_Widget->setObjectName(QStringLiteral("Simulation_Widget"));
+        Simulation_Widget->setGeometry(QRect(10, 10, 676, 526));
+        Simulation_Widget->setStyleSheet(QLatin1String("background-color: rgb(230, 230, 230);\n"
 "border-radius: 5px;\n"
 ""));
-        Simulation_Label_4 = new QLabel(Simulation_Widget_4);
-        Simulation_Label_4->setObjectName(QStringLiteral("Simulation_Label_4"));
-        Simulation_Label_4->setGeometry(QRect(10, 0, 221, 36));
-        Simulation_Output_TextEdit_4 = new QTextEdit(Simulation_Widget_4);
-        Simulation_Output_TextEdit_4->setObjectName(QStringLiteral("Simulation_Output_TextEdit_4"));
-        Simulation_Output_TextEdit_4->setGeometry(QRect(10, 35, 656, 481));
-        Simulation_Output_TextEdit_4->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
+        Simulation_Label = new QLabel(Simulation_Widget);
+        Simulation_Label->setObjectName(QStringLiteral("Simulation_Label"));
+        Simulation_Label->setGeometry(QRect(10, 0, 221, 36));
+        Simulation_Output_TextEdit = new QTextEdit(Simulation_Widget);
+        Simulation_Output_TextEdit->setObjectName(QStringLiteral("Simulation_Output_TextEdit"));
+        Simulation_Output_TextEdit->setGeometry(QRect(10, 35, 656, 481));
+        Simulation_Output_TextEdit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 5px;\n"
 ""));
-        Output_Dialog_ButtonBox_4 = new QDialogButtonBox(Output_Dialog_Frame);
-        Output_Dialog_ButtonBox_4->setObjectName(QStringLiteral("Output_Dialog_ButtonBox_4"));
-        Output_Dialog_ButtonBox_4->setGeometry(QRect(-25, 545, 701, 32));
-        Output_Dialog_ButtonBox_4->setOrientation(Qt::Horizontal);
-        Output_Dialog_ButtonBox_4->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        Output_Dialog_ButtonBox = new QDialogButtonBox(Output_Dialog_Frame);
+        Output_Dialog_ButtonBox->setObjectName(QStringLiteral("Output_Dialog_ButtonBox"));
+        Output_Dialog_ButtonBox->setGeometry(QRect(145, 541, 536, 36));
+        Output_Dialog_ButtonBox->setOrientation(Qt::Horizontal);
+        Output_Dialog_ButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        Print_Button = new QPushButton(Output_Dialog_Frame);
+        Print_Button->setObjectName(QStringLiteral("Print_Button"));
+        Print_Button->setGeometry(QRect(25, 545, 99, 27));
 
         retranslateUi(OutputDialog);
-        QObject::connect(Output_Dialog_ButtonBox_4, SIGNAL(accepted()), OutputDialog, SLOT(close()));
-        QObject::connect(Output_Dialog_ButtonBox_4, SIGNAL(rejected()), OutputDialog, SLOT(close()));
+        QObject::connect(Output_Dialog_ButtonBox, SIGNAL(accepted()), OutputDialog, SLOT(close()));
+        QObject::connect(Output_Dialog_ButtonBox, SIGNAL(rejected()), OutputDialog, SLOT(close()));
 
         QMetaObject::connectSlotsByName(OutputDialog);
     } // setupUi
@@ -74,7 +79,8 @@ public:
     void retranslateUi(QDialog *OutputDialog)
     {
         OutputDialog->setWindowTitle(QApplication::translate("OutputDialog", "Dialog", 0));
-        Simulation_Label_4->setText(QApplication::translate("OutputDialog", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Simulation Output</span></p></body></html>", 0));
+        Simulation_Label->setText(QApplication::translate("OutputDialog", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Simulation Output</span></p></body></html>", 0));
+        Print_Button->setText(QApplication::translate("OutputDialog", "Print...", 0));
     } // retranslateUi
 
 };

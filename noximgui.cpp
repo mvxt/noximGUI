@@ -171,7 +171,7 @@ bool NoximGUI::writeNoximConfig( QString fileName )
     }
 
     std::ofstream fout( fileName.toStdString().c_str() );
-    fout << noximConfigNode;
+    Utils::writeYamlOrderedMaps(fout, noximConfigNode);
     fout.close();
 
     noximConfigFileName = fileName.toStdString();
@@ -218,27 +218,34 @@ void NoximGUI::populateLists()
 {
     // Set QStringList for packet injection types
     availablePacketInjectionTypes << "Poisson" << "Burst" << "Pareto";
+    std::sort( availablePacketInjectionTypes.begin(),
+               availablePacketInjectionTypes.end() );
 
     // Set vector for selection strategies
-    availableSelectionStrategies << "RANDOM" << "BUFFER_LEVEL" <<
-                           "NOP";
+    availableSelectionStrategies << "RANDOM" << "BUFFER_LEVEL" <<"NOP";
+    std::sort( availableSelectionStrategies.begin(),
+               availableSelectionStrategies.end() );
 
     // Set vector for traffic types
     availableTrafficTypes << "TRAFFIC_RANDOM" << "TRAFFIC_TRANSPOSE1" <<
                     "TRAFFIC_TRANSPOSE2" << "TRAFFIC_BIT_REVERSAL" <<
                     "TRAFFIC_SHUFFLE" << "TRAFFIC_BUTTERFLY" <<
                     "TRAFFIC_LOCAL" << "TRAFFIC_ULOCAL" << "TRAFFIC_TABLE_BASED";
+    std::sort( availableTrafficTypes.begin(),
+               availableTrafficTypes.end() );
 
     // Set vector for connection lengths
     YAML::Node connectionLengthsNode = powerConfigNode["Energy"]["LinkBitLine"];
     for( std::size_t i = 0; i < connectionLengthsNode.size(); i++ )
     {
         QString temp = QString::fromStdString( connectionLengthsNode[i][0].as<std::string>() );
-        if( std::find( availableConnectionLengths.begin(), availableConnectionLengths.end(), temp ) == availableConnectionLengths.end() )
+        if( std::find( availableConnectionLengths.begin(), availableConnectionLengths.end(),
+                       temp ) == availableConnectionLengths.end() )
         {
             availableConnectionLengths << temp;
         }
     }
+    std::sort( availableConnectionLengths.begin(), availableConnectionLengths.end() );
 
     // Set vector for routing types
     YAML::Node routingNode = powerConfigNode["Energy"]["Router"]["routing"];
@@ -247,6 +254,7 @@ void NoximGUI::populateLists()
         QString temp = QString::fromStdString( it->first.as<std::string>() );
         availableRoutingTypes << temp;
     }
+    std::sort( availableRoutingTypes.begin(), availableRoutingTypes.end() );
 
     // Set vector for flit sizes
     YAML::Node bufferNode = powerConfigNode["Energy"]["Buffer"];
@@ -258,6 +266,7 @@ void NoximGUI::populateLists()
             availableFlitSizes << temp;
         }
     }
+    std::sort( availableFlitSizes.begin(), availableFlitSizes.end(), Utils::convertAndCompare );
 
     // Set vector for buffer depth values
     for( std::size_t i = 0; i < bufferNode.size(); i++ )
@@ -268,6 +277,7 @@ void NoximGUI::populateLists()
             availableBufferDepthValues << temp;
         }
     }
+    std::sort( availableBufferDepthValues.begin(), availableBufferDepthValues.end(), Utils::convertAndCompare );
 }
 
 /**
@@ -309,7 +319,7 @@ void NoximGUI::populateUniversalParams()
     ui->Retransmission_Edit->setText( QString::fromStdString( noximConfigNode["probability_of_retransmission"].as<std::string>() ) );
     ui->Packet_Injection_Edit->setText( QString::fromStdString( noximConfigNode["packet_injection_rate"].as<std::string>() ) );
 
-    // Disable unsupported features
+    // Disable unsupported features or features TODO
     ui->Wireless_CheckBox->setDisabled( true );
     ui->Wireless_Config_Widget->setDisabled( true );
     ui->Packet_Injection_Edit_2->setDisabled( true );
@@ -393,9 +403,17 @@ void NoximGUI::on_actionRun_Simulation_triggered()
         QString stderr = simulationProcess.readAllStandardError();
         out << stdout << "\n" << stderr << endl;
 
-        // Display output
+        // Display output with config values
+        std::stringstream ss;
+        ss << "CONFIGURATION:" << std::endl;
+        ss << "______________" << std::endl;
+        Utils::writeYamlOrderedMaps( ss, noximConfigNode );
+        ss << std::endl;
+        ss << "OUTPUT:" << std::endl;
+        ss << "______________" << std::endl;
+        ss << stdout.toStdString();
         OutputDialog outputDialog;
-        outputDialog.showOutput( stdout );
+        outputDialog.showOutput( QString::fromStdString(ss.str()) );
         outputDialog.setModal( true);
         outputDialog.exec();
 
@@ -409,5 +427,67 @@ void NoximGUI::on_actionRun_Simulation_triggered()
     }
 }
 
-//    QTextStream out(stdout);
-//    out << test << endl;
+// Helper function to sort string-digits
+bool Utils::convertAndCompare(QString i, QString j)
+{
+    int left = i.toInt();
+    int right = j.toInt();
+    return left < right;
+}
+
+// Recursive helper function that does all the work
+// Code written by hersh (https://github.com/jbeder/yaml-cpp/issues/169)
+void Utils::writeNode(const YAML::Node& node, YAML::Emitter& emitter)
+{
+  switch (node.Type())
+  {
+    case YAML::NodeType::Sequence:
+    {
+      emitter << YAML::BeginSeq;
+      for (size_t i = 0; i < node.size(); i++)
+      {
+        writeNode(node[i], emitter);
+      }
+      emitter << YAML::EndSeq;
+      break;
+    }
+    case YAML::NodeType::Map:
+    {
+      emitter << YAML::BeginMap;
+
+      // First collect all the keys
+      std::vector<std::string> keys(node.size());
+      int key_it = 0;
+      for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
+      {
+        keys[key_it++] = it->first.as<std::string>();
+      }
+
+      // Then sort them
+      std::sort(keys.begin(), keys.end());
+
+      // Then emit all the entries in sorted order.
+      for(size_t i = 0; i < keys.size(); i++)
+      {
+        emitter << YAML::Key;
+        emitter << keys[i];
+        emitter << YAML::Value;
+        writeNode(node[keys[i]], emitter);
+      }
+      emitter << YAML::EndMap;
+      break;
+    }
+    default:
+      emitter << node;
+      break;
+  }
+}
+
+// Main function that emits a yaml node to an output stream.
+void Utils::writeYamlOrderedMaps(std::ostream& out, const YAML::Node& node)
+{
+  YAML::Emitter emitter;
+  writeNode(node, emitter);
+  out << emitter.c_str() << std::endl;
+}
+

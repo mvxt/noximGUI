@@ -1,6 +1,8 @@
 #include "outputdialog.h"
 #include "ui_outputdialog.h"
 
+#include <iostream>
+
 OutputDialog::OutputDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OutputDialog)
@@ -13,8 +15,27 @@ OutputDialog::~OutputDialog()
     delete ui;
 }
 
+// Sets output text and prevents changes
 void OutputDialog::showOutput( QString text )
 {
-    ui->Simulation_Output_TextEdit_4->setText( text );
-    ui->Simulation_Output_TextEdit_4->setReadOnly( true );
+    ui->Simulation_Output_TextEdit->setText( text );
+    ui->Simulation_Output_TextEdit->setReadOnly( true );
+}
+
+// Signal slot for print button click
+void OutputDialog::on_Print_Button_clicked()
+{
+    QPrinter printer( QPrinter::HighResolution );
+    QPrintDialog *dialog = new QPrintDialog( &printer, this );
+    printer.setOutputFormat( QPrinter::PdfFormat );
+    dialog->setWindowTitle( tr("Print Output") );
+    if( dialog->exec() == QDialog::Accepted )
+    {
+        ui->Simulation_Output_TextEdit->print( &printer );
+        return;
+    }
+    else
+    {
+        return;
+    }
 }

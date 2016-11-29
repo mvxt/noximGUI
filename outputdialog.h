@@ -2,6 +2,9 @@
 #define OUTPUTDIALOG_H
 
 #include <QDialog>
+#include <QPainter>
+#include <QPrintDialog>
+#include <QPrinter>
 
 namespace Ui {
     class OutputDialog;
@@ -16,7 +19,10 @@ class OutputDialog : public QDialog
     void showOutput( QString text );
     ~OutputDialog();
 
-  private:
+private slots:
+    void on_Print_Button_clicked();
+
+private:
     Ui::OutputDialog *ui;
 };
 

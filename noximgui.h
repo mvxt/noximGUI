@@ -31,6 +31,13 @@ namespace Ui
     class NoximGUI;
 }
 
+namespace Utils
+{
+    bool convertAndCompare(QString i, QString j);
+    void writeNode(const YAML::Node& node, YAML::Emitter& emitter);
+    void writeYamlOrderedMaps(std::ostream& out, const YAML::Node& node);
+}
+
 class NoximGUI : public QMainWindow
 {
     Q_OBJECT
