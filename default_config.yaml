@@ -65,17 +65,17 @@ Hubs:
 # we have 4 hubs (0-3) connected to the four nodes of the 2x2
 # sub-meshes
 
-#    0:
-#        attachedNodes: [0,1,4,5]
+    0:
+        attachedNodes: [0,1,4,5]
 
-#    1:
-#        attachedNodes: [2,3,6,7]
+    1:
+        attachedNodes: [2,3,6,7]
 
-#    2:
-#        attachedNodes: [8,9,12,13]
+    2:
+        attachedNodes: [8,9,12,13]
 
-#    3:
-#        attachedNodes: [10,11,14,15]
+    3:
+        attachedNodes: [10,11,14,15]
 
 # Transmission channels configuration
 # each channel modelizes the transmission over a given frequency that
@@ -107,8 +107,8 @@ Channels:
 # this example, channel 0 has different slower data rate of 8 Gb/s,
 # while the other channels will use the default value of 16 specified
 # in the "defaults" section.
-#    0:
-#        dataRate: 8
+    0:
+        dataRate: 8
 
 #
 # SIMULATION PARAMETERS

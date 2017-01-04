@@ -104,7 +104,7 @@ class NoximGUI : public QMainWindow
         void populateLists();
 
         // Private method to populate YAML power config
-        bool populatePowerConfig();
+        bool populatePowerConfig( QString fileName );
 
         // Private method to populate universal fields (shared by all configs)
         void populateUniversalParams();
@@ -120,6 +120,9 @@ class NoximGUI : public QMainWindow
 
         // Private method to write noximConfig to specified fileName
         bool writeNoximConfig( QString fileName );
+
+        // Private method to write power Config to specified fileName
+        bool writePowerConfig( QString fileName );
 };
 
 #endif // NOXIMGUI_H

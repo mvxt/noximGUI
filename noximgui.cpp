@@ -1,7 +1,7 @@
 #include "noximgui.h"
 #include "ui_noximgui.h"
 #include "outputdialog.h"
-
+#include <QTimer>
 #include <iostream>
 /**
  * @brief CTOR for main noximGUI window. Sets up noximgui.ui, sets global variables
@@ -10,14 +10,17 @@ NoximGUI::NoximGUI(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::NoximGUI)
 {
+    // Force initialization of resources
+    Q_INIT_RESOURCE(resources);
+
     // Shows splash screen
-    showSplash(this);
+    //showSplash(this);
 
     // Sets default configuration files
-    NoximGUI::guiConfigFileName = "gui_config.yaml";
-    NoximGUI::execConfigName = "Executable";
-    NoximGUI::noximConfigFileName = "default_config.yaml";
-    NoximGUI::powerConfigFileName = "default_power.yaml";
+    guiConfigFileName = "gui_config.yaml";
+    execConfigName = "Executable";
+    noximConfigFileName = ":/assets/default_config.yaml";
+    powerConfigFileName = ":/assets/default_power.yaml";
 
     // Checks if user selected a file. If not, fails and exits with warning
     if( getNoximExecutable() )
@@ -34,7 +37,7 @@ NoximGUI::NoximGUI(QWidget *parent) :
     ui->setupUi(this);
 
     // Sets power config YAML Node
-    if ( !populatePowerConfig() )
+    if ( !populatePowerConfig( QString::fromStdString( NoximGUI::powerConfigFileName ) ) )
     {
         QMessageBox::warning( NULL, QString( "NoximGUI" ),
                               QString( "Error: Unable to locate default power config. Check installation." ) );
@@ -53,21 +56,14 @@ NoximGUI::NoximGUI(QWidget *parent) :
     // Sets specialized parameters which may be depended on by other parameters
     populateDependentParams();
 
-    // Set theme for app, MIT license from
-    //  https://github.com/ColinDuquesnoy/QDarkStyleSheet
-    QFile f("style.qss");
-    if (!f.exists())
-    {
-        printf("Unable to set stylesheet, file not found\n");
-    }
-    else
-    {
-        f.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&f);
-        this->setStyleSheet(ts.readAll());
-    }
-
-    this->show();
+    // Finally, show splash screen and start program
+    QImage splashImage;
+    splashImage.load(":/assets/splash.jpg");
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap::fromImage(splashImage));
+    splash->show();
+    QTimer::singleShot(3000, splash, SLOT(close()));
+    QTimer::singleShot(3000, this, SLOT(show()));
 }
 
 /**
@@ -156,14 +152,17 @@ bool NoximGUI::setDefaultNoximConfig()
 }
 
 /**
- * @brief Method to specify noxim config. If file is empty, return false
+ * @brief Method to set noxim config
  * @param fileName - string representing file's fully qualified name in QString object
  *
  * @return bool
  */
 bool NoximGUI::setNoximConfig( QString fileName )
 {
-    noximConfigNode = YAML::LoadFile( fileName.toStdString() );
+    QFile file( fileName );
+    file.open(QFile::ReadOnly);
+    QTextStream in(&file);
+    noximConfigNode = YAML::Load( in.readAll().toStdString() );
     if ( noximConfigNode.IsNull() )
     {
         return false;
@@ -193,6 +192,26 @@ bool NoximGUI::writeNoximConfig( QString fileName )
     return true;
 }
 
+/**
+ * @brief Method to write power config to file.
+ *
+ * @return bool
+ */
+bool NoximGUI::writePowerConfig( QString fileName )
+{
+    if ( fileName.isEmpty() || fileName.isNull() )
+    {
+        return false;
+    }
+
+    std::ofstream fout( fileName.toStdString().c_str() );
+    Utils::writeYamlOrderedMaps(fout, powerConfigNode);
+    fout.close();
+
+    powerConfigFileName = fileName.toStdString();
+
+    return true;
+}
 
 /**
  * @brief Private method to check if a gui config already exists
@@ -305,9 +324,13 @@ void NoximGUI::populateDependentParams()
 /**
  * @brief Private method to populate YAML power config node
  */
-bool NoximGUI::populatePowerConfig()
+bool NoximGUI::populatePowerConfig( QString fileName )
 {
-    NoximGUI::powerConfigNode = YAML::LoadFile( powerConfigFileName );
+    QFile file( fileName );
+    file.open(QFile::ReadOnly);
+    QTextStream in(&file);
+    NoximGUI::powerConfigNode = YAML::Load( in.readAll().toStdString() );
+    powerConfigFileName = fileName.toStdString();
     return powerConfigNode.IsNull() ? false : true;
 }
 
@@ -346,12 +369,16 @@ void NoximGUI::populateUniversalParams()
  */
 void NoximGUI::showSplash(QWidget *mainWindow)
 {
-    QPixmap logo( "splash.jpg" );
-    QSplashScreen splash( logo );
-    splash.show();
-    sleep( 3 ); //Show splash for 3 seconds
+    QImage splashImage;
+    splashImage.load(":/assets/splash.jpg");
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap::fromImage(splashImage));
+    splash->show();
     QMainWindow *main = ( QMainWindow* ) mainWindow->parent();
-    splash.finish( main );
+//    QTimer::singleShot(3000, splash, SLOT(close()));
+//    QTimer::singleShot(3000, main, SLOT(show()));
+
+//    splash->finish( main );
 }
 
 /**
@@ -395,14 +422,15 @@ void NoximGUI::on_actionRun_Simulation_triggered()
 
     // Save config to temp file for simulation
     QString qTempFile = "temp";
+    QString qTempPowFile = "tempPow";
 
-    bool writeResult = writeNoximConfig( qTempFile );
-    if ( writeResult )
+    bool writeConfigResult = writeNoximConfig( qTempFile );
+    bool writePowerResult = writePowerConfig( qTempPowFile );
+    if ( writeConfigResult && writePowerResult )
     {
         // Set arguments
         std::string config( "-config " + noximConfigFileName );
-        QString qPowerFileName = "default_power.yaml";
-        std::string powerConfig( "-power " + qPowerFileName.toStdString() );
+        std::string powerConfig( "-power " + powerConfigFileName );
         std::string args = config + " " + powerConfig;
         std::string exec = guiConfigNode[execConfigName].as<std::string>() + " " + args;
 
@@ -433,6 +461,8 @@ void NoximGUI::on_actionRun_Simulation_triggered()
 
         QFile file( qTempFile );
         file.remove();
+        QFile file1( qTempPowFile );
+        file1.remove();
     }
     else
     {
