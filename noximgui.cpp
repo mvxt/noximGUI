@@ -53,6 +53,20 @@ NoximGUI::NoximGUI(QWidget *parent) :
     // Sets specialized parameters which may be depended on by other parameters
     populateDependentParams();
 
+    // Set theme for app, MIT license from
+    //  https://github.com/ColinDuquesnoy/QDarkStyleSheet
+    QFile f("style.qss");
+    if (!f.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+    else
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+        this->setStyleSheet(ts.readAll());
+    }
+
     this->show();
 }
 
@@ -490,4 +504,3 @@ void Utils::writeYamlOrderedMaps(std::ostream& out, const YAML::Node& node)
   writeNode(node, emitter);
   out << emitter.c_str() << std::endl;
 }
-

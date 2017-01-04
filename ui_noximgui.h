@@ -1126,7 +1126,7 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:italic;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Traffic Pattern:</p></body></html>", 0));
-        NoximGUI_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; font-style:italic;\">NoximGUI </span><span style=\" font-size:12pt;\">v0.6.0</span></p></body></html>", 0));
+        NoximGUI_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; font-style:italic;\">NoximGUI </span><span style=\" font-size:12pt;\">v0.7.0</span></p></body></html>", 0));
         Wireless_Config_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Wireless Configuration</span></p></body></html>", 0));
         pushButton->setText(QApplication::translate("NoximGUI", "Add Channel...", 0));
         Hub_Defaults_Group->setTitle(QApplication::translate("NoximGUI", "Hub Defaults", 0));
