@@ -319,6 +319,9 @@ compiler_rcc_make_all: qrc_resources.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_resources.cpp
 qrc_resources.cpp: resources.qrc \
+		splash.jpg \
+		default_config.yaml \
+		default_power.yaml \
 		icons/folder-2x.png \
 		icons/fullscreen-enter-2x.png \
 		icons/cut.png \

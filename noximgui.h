@@ -109,9 +109,6 @@ class NoximGUI : public QMainWindow
         // Private method to populate universal fields (shared by all configs)
         void populateUniversalParams();
 
-        // Private method to show splash screen
-        void showSplash(QWidget *mainWindow);
-
         // Private method to take info from fields and update noximConfigNode
         void updateNoximConfigNode();
 

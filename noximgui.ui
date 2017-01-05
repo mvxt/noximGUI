@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>850</width>
-    <height>892</height>
+    <height>878</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,7 +49,7 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>270</y>
+         <y>255</y>
          <width>831</width>
          <height>191</height>
         </rect>
@@ -113,20 +113,17 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Mesh Size (X):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="X_Edit">
+           <widget class="QSpinBox" name="X_SpinBox">
             <property name="geometry">
              <rect>
-              <x>108</x>
+              <x>110</x>
               <y>0</y>
               <width>96</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -150,20 +147,17 @@ font-style: italic;</string>
              <string>Mesh Size (Y):</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Y_Edit">
+           <widget class="QSpinBox" name="Y_SpinBox">
             <property name="geometry">
              <rect>
-              <x>108</x>
+              <x>110</x>
               <y>0</y>
               <width>96</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -526,7 +520,7 @@ text-align: center;</string>
          <x>10</x>
          <y>10</y>
          <width>831</width>
-         <height>251</height>
+         <height>236</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -589,20 +583,17 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Clock Period (ps):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Clock_Period_Edit">
+           <widget class="QSpinBox" name="Clock_Period_SpinBox">
             <property name="geometry">
              <rect>
               <x>125</x>
               <y>0</y>
               <width>81</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -626,20 +617,17 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Simulation Time:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Simulation_Time_Edit">
+           <widget class="QSpinBox" name="Simulation_Time_SpinBox">
             <property name="geometry">
              <rect>
               <x>125</x>
               <y>0</y>
               <width>81</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -663,20 +651,17 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Warmup Time:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Warmup_Time_Edit">
+           <widget class="QSpinBox" name="Warmup_Time_SpinBox">
             <property name="geometry">
              <rect>
               <x>125</x>
               <y>0</y>
               <width>81</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -700,27 +685,24 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Reset Time:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Reset_Time_Edit">
+           <widget class="QSpinBox" name="Reset_Time_SpinBox">
             <property name="geometry">
              <rect>
               <x>125</x>
               <y>0</y>
               <width>81</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
          </item>
          <item>
           <widget class="QWidget" name="Delivery_Stop_Widget" native="true">
-           <widget class="QLabel" name="Warmup_Time_Label_2">
+           <widget class="QLabel" name="Delivery_Stop_Label">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -737,78 +719,22 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Delivery Stop:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QTextEdit" name="Delivery_Stop_Edit">
+           <widget class="QSpinBox" name="Delivery_Stop_SpinBox">
             <property name="geometry">
              <rect>
               <x>125</x>
               <y>0</y>
               <width>81</width>
-              <height>25</height>
+              <height>27</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
          </item>
         </layout>
-       </widget>
-       <widget class="QCheckBox" name="Wireless_CheckBox">
-        <property name="geometry">
-         <rect>
-          <x>5</x>
-          <y>225</y>
-          <width>121</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Use Wireless</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="Power_Save_CheckBox">
-        <property name="geometry">
-         <rect>
-          <x>125</x>
-          <y>225</y>
-          <width>126</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Power Saving</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="Trace_Mode_CheckBox">
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>225</y>
-          <width>111</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Trace Mode</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="Trace_Mode_File">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>225</y>
-          <width>176</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;</string>
-        </property>
        </widget>
        <widget class="QGroupBox" name="Packet_Options_Group">
         <property name="geometry">
@@ -858,20 +784,17 @@ font-style: italic;</string>
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Min Packet Size:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
-         <widget class="QTextEdit" name="Min_Packet_Size_Edit">
+         <widget class="QSpinBox" name="Min_Packet_Size_SpinBox">
           <property name="geometry">
            <rect>
             <x>190</x>
             <y>0</y>
             <width>81</width>
-            <height>25</height>
+            <height>27</height>
            </rect>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+           <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </widget>
@@ -901,20 +824,17 @@ font-style: italic;</string>
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Max Packet Size:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
-         <widget class="QTextEdit" name="Max_Packet_Size_Edit">
+         <widget class="QSpinBox" name="Max_Packet_Size_SpinBox">
           <property name="geometry">
            <rect>
             <x>190</x>
             <y>0</y>
             <width>81</width>
-            <height>25</height>
+            <height>27</height>
            </rect>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+           <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </widget>
@@ -1050,20 +970,17 @@ font-style: italic;</string>
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Retransmission Probability:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
-         <widget class="QTextEdit" name="Retransmission_Edit">
+         <widget class="QDoubleSpinBox" name="Retransmission_SpinBox">
           <property name="geometry">
            <rect>
             <x>190</x>
             <y>0</y>
             <width>81</width>
-            <height>25</height>
+            <height>27</height>
            </rect>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-font-size: 11pt;
-text-align: right;</string>
+           <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </widget>
@@ -1154,14 +1071,14 @@ border-radius: 0px;</string>
        <widget class="QLabel" name="NoximGUI_Label">
         <property name="geometry">
          <rect>
-          <x>595</x>
-          <y>185</y>
+          <x>590</x>
+          <y>175</y>
           <width>176</width>
           <height>26</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; font-style:italic;&quot;&gt;NoximGUI &lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.7.0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; font-style:italic;&quot;&gt;NoximGUI &lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.8.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </widget>
@@ -1169,7 +1086,7 @@ border-radius: 0px;</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>470</y>
+         <y>455</y>
          <width>831</width>
          <height>331</height>
         </rect>

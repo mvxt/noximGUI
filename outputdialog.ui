@@ -58,7 +58,7 @@ border-radius: 5px;
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Simulation Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="Simulation_Output_TextEdit">
+    <widget class="QTextBrowser" name="Simulation_Output_TextBrowser">
      <property name="geometry">
       <rect>
        <x>10</x>

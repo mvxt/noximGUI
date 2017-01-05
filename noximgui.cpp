@@ -344,7 +344,10 @@ void NoximGUI::populateUniversalParams()
     ui->Y_Edit->setText( QString::fromStdString( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
 
     // Clock options
-    ui->Clock_Period_Edit->setText( QString::fromStdString( noximConfigNode["clock_period_ps"].as<std::string>() ) );
+    ui->Clock_Period_SpinBox->setRange( noximConfigNode["stats_warm_up_time"].as<int>() + 1, (int) LONG_MAX );
+
+
+    // Set minimum to warmup time, since clock cycle must be larger than warmup time
     ui->Simulation_Time_Edit->setText( QString::fromStdString( noximConfigNode["simulation_time"].as<std::string>() ) );
     ui->Warmup_Time_Edit->setText( QString::fromStdString( noximConfigNode["stats_warm_up_time"].as<std::string>() ) );
     ui->Reset_Time_Edit->setText( QString::fromStdString( noximConfigNode["reset_time"].as<std::string>() ) );
@@ -365,23 +368,6 @@ void NoximGUI::populateUniversalParams()
 }
 
 /**
- * @brief Private method for showing splash screen w/ icon, delay for 3 seconds
- */
-void NoximGUI::showSplash(QWidget *mainWindow)
-{
-    QImage splashImage;
-    splashImage.load(":/assets/splash.jpg");
-    QSplashScreen *splash = new QSplashScreen;
-    splash->setPixmap(QPixmap::fromImage(splashImage));
-    splash->show();
-    QMainWindow *main = ( QMainWindow* ) mainWindow->parent();
-//    QTimer::singleShot(3000, splash, SLOT(close()));
-//    QTimer::singleShot(3000, main, SLOT(show()));
-
-//    splash->finish( main );
-}
-
-/**
  * @brief Private method to populate noximConfigNode with field items
  */
 void NoximGUI::updateNoximConfigNode()
@@ -395,7 +381,7 @@ void NoximGUI::updateNoximConfigNode()
     noximConfigNode["r2h_link_length"] = ui->RH_Length_ComboBox->currentText().toStdString();
     noximConfigNode["r2r_link_length"] = ui->RR_Length_ComboBox->currentText().toStdString();
     // Clock options
-    noximConfigNode["clock_period_ps"] = ui->Clock_Period_Edit->toPlainText().toStdString();
+    //noximConfigNode["clock_period_ps"] = ui->Clock_Period_Edit->toPlainText().toStdString();
     noximConfigNode["simulation_time"] = ui->Simulation_Time_Edit->toPlainText().toStdString();
     noximConfigNode["stats_warm_up_time"] = ui->Warmup_Time_Edit->toPlainText().toStdString();
     noximConfigNode["reset_time"] = ui->Reset_Time_Edit->toPlainText().toStdString();

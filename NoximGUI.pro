@@ -22,7 +22,8 @@ HEADERS  += \
 
 FORMS    += \
     noximgui.ui \
-    outputdialog.ui
+    outputdialog.ui \
+    run_configurations.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/release/ -lyaml-cpp
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/debug/ -lyaml-cpp

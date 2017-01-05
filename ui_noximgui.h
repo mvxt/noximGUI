@@ -24,6 +24,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
@@ -101,7 +102,7 @@ public:
     QVBoxLayout *verticalLayout_6;
     QWidget *Clock_Period_Widget;
     QLabel *Clock_Period_Label;
-    QTextEdit *Clock_Period_Edit;
+    QSpinBox *Clock_Period_SpinBox;
     QWidget *Simulation_Time_Widget;
     QLabel *Simulation_Time_Label;
     QTextEdit *Simulation_Time_Edit;
@@ -112,7 +113,7 @@ public:
     QLabel *Reset_Time_Label;
     QTextEdit *Reset_Time_Edit;
     QWidget *Delivery_Stop_Widget;
-    QLabel *Warmup_Time_Label_2;
+    QLabel *Delivery_Stop_Label;
     QTextEdit *Delivery_Stop_Edit;
     QCheckBox *Wireless_CheckBox;
     QCheckBox *Power_Save_CheckBox;
@@ -548,13 +549,10 @@ public:
         Clock_Period_Label->setGeometry(QRect(0, 0, 126, 26));
         Clock_Period_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Clock_Period_Edit = new QTextEdit(Clock_Period_Widget);
-        Clock_Period_Edit->setObjectName(QStringLiteral("Clock_Period_Edit"));
-        Clock_Period_Edit->setGeometry(QRect(125, 0, 81, 25));
-        Clock_Period_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Clock_Period_SpinBox = new QSpinBox(Clock_Period_Widget);
+        Clock_Period_SpinBox->setObjectName(QStringLiteral("Clock_Period_SpinBox"));
+        Clock_Period_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Clock_Period_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Clock_Period_Widget);
 
@@ -611,10 +609,10 @@ public:
 
         Delivery_Stop_Widget = new QWidget(Clock_Options_Group);
         Delivery_Stop_Widget->setObjectName(QStringLiteral("Delivery_Stop_Widget"));
-        Warmup_Time_Label_2 = new QLabel(Delivery_Stop_Widget);
-        Warmup_Time_Label_2->setObjectName(QStringLiteral("Warmup_Time_Label_2"));
-        Warmup_Time_Label_2->setGeometry(QRect(0, 0, 121, 26));
-        Warmup_Time_Label_2->setStyleSheet(QLatin1String("font-size: 11pt;\n"
+        Delivery_Stop_Label = new QLabel(Delivery_Stop_Widget);
+        Delivery_Stop_Label->setObjectName(QStringLiteral("Delivery_Stop_Label"));
+        Delivery_Stop_Label->setGeometry(QRect(0, 0, 121, 26));
+        Delivery_Stop_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
         Delivery_Stop_Edit = new QTextEdit(Delivery_Stop_Widget);
         Delivery_Stop_Edit->setObjectName(QStringLiteral("Delivery_Stop_Edit"));
@@ -1111,7 +1109,7 @@ public:
         Simulation_Time_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Simulation Time:</p></body></html>", 0));
         Warmup_Time_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Warmup Time:</p></body></html>", 0));
         Reset_Time_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Reset Time:</p></body></html>", 0));
-        Warmup_Time_Label_2->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Delivery Stop:</p></body></html>", 0));
+        Delivery_Stop_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Delivery Stop:</p></body></html>", 0));
         Wireless_CheckBox->setText(QApplication::translate("NoximGUI", "Use Wireless", 0));
         Power_Save_CheckBox->setText(QApplication::translate("NoximGUI", "Power Saving", 0));
         Trace_Mode_CheckBox->setText(QApplication::translate("NoximGUI", "Trace Mode", 0));
