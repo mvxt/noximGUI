@@ -91,9 +91,6 @@ class NoximGUI : public QMainWindow
         // Pointer to noximGUI object
         Ui::NoximGUI *ui;
 
-        // Private method to check if gui_config.yaml exists
-        bool noximExecSet();
-
         // Private method to populate combo boxes
         void populateComboBoxes();
 

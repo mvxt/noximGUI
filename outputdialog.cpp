@@ -18,8 +18,7 @@ OutputDialog::~OutputDialog()
 // Sets output text and prevents changes
 void OutputDialog::showOutput( QString text )
 {
-    ui->Simulation_Output_TextEdit->setText( text );
-    ui->Simulation_Output_TextEdit->setReadOnly( true );
+    ui->Simulation_Output_TextBrowser->setText( text );
 }
 
 // Signal slot for print button click
@@ -31,7 +30,7 @@ void OutputDialog::on_Print_Button_clicked()
     dialog->setWindowTitle( tr("Print Output") );
     if( dialog->exec() == QDialog::Accepted )
     {
-        ui->Simulation_Output_TextEdit->print( &printer );
+        ui->Simulation_Output_TextBrowser->print( &printer );
         return;
     }
     else

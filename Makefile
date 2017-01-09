@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -m64 -pipe -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -isystem /usr/local/include/yaml-cpp -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -61,7 +61,7 @@ OBJECTS       = main.o \
 		moc_outputdialog.o
 DIST          = default_config.yaml \
 		default_power.yaml \
-		splash.jpg \
+		splash.png \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -107,6 +107,7 @@ DIST          = default_config.yaml \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf \
@@ -149,7 +150,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a ui_noximgui.h ui_outputdialog.h $(OBJECTS)  
+$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a ui_noximgui.h ui_outputdialog.h ui_run_configurations.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: NoximGUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -197,6 +198,7 @@ Makefile: NoximGUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf \
@@ -260,6 +262,7 @@ Makefile: NoximGUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf:
@@ -294,7 +297,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents noximgui.h outputdialog.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp noximgui.cpp outputdialog.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents noximgui.ui outputdialog.ui $(DISTDIR)/
+	$(COPY_FILE) --parents noximgui.ui outputdialog.ui run_configurations.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -319,8 +322,8 @@ compiler_rcc_make_all: qrc_resources.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_resources.cpp
 qrc_resources.cpp: resources.qrc \
-		splash.jpg \
 		default_config.yaml \
+		splash.png \
 		default_power.yaml \
 		icons/folder-2x.png \
 		icons/fullscreen-enter-2x.png \
@@ -350,14 +353,17 @@ moc_outputdialog.cpp: outputdialog.h
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_noximgui.h ui_outputdialog.h
+compiler_uic_make_all: ui_noximgui.h ui_outputdialog.h ui_run_configurations.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_noximgui.h ui_outputdialog.h
+	-$(DEL_FILE) ui_noximgui.h ui_outputdialog.h ui_run_configurations.h
 ui_noximgui.h: noximgui.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic noximgui.ui -o ui_noximgui.h
 
 ui_outputdialog.h: outputdialog.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic outputdialog.ui -o ui_outputdialog.h
+
+ui_run_configurations.h: run_configurations.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic run_configurations.ui -o ui_run_configurations.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:

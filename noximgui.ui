@@ -15,15 +15,20 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox {
-    border: 1px solid gray;
+    border: 1px solid black;
     border-radius: 9px;
     margin-top: 0.5em;
 }
-
 QGroupBox::title {
     subcontrol-origin: margin;
     left: 10px;
     padding: 0 3px 0 3px;
+}
+QLabel {
+	color:rgb(255, 255, 255);
+}
+QLabel:disabled {
+	color:rgb(120, 120, 120);
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -43,7 +48,7 @@ QGroupBox::title {
     <item>
      <widget class="QFrame" name="Main_Background_Frame">
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(177, 177, 177)</string>
+       <string notr="true">background-color: rgb(80, 80, 80)</string>
       </property>
       <widget class="QWidget" name="NoC_Wired_Config_Widget" native="true">
        <property name="geometry">
@@ -55,7 +60,7 @@ QGroupBox::title {
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(230, 230, 230);
+        <string notr="true">background-color: rgb(50, 50, 50);
 border-radius: 5px;</string>
        </property>
        <widget class="QLabel" name="Wired_Config_Label">
@@ -524,7 +529,7 @@ text-align: center;</string>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(230, 230, 230);
+        <string notr="true">background-color: rgb(50, 50, 50);
 border-radius: 5px;
 </string>
        </property>
@@ -1071,14 +1076,14 @@ border-radius: 0px;</string>
        <widget class="QLabel" name="NoximGUI_Label">
         <property name="geometry">
          <rect>
-          <x>590</x>
-          <y>175</y>
-          <width>176</width>
+          <x>775</x>
+          <y>205</y>
+          <width>51</width>
           <height>26</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; font-style:italic;&quot;&gt;NoximGUI &lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.8.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.8.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </widget>
@@ -1092,7 +1097,7 @@ border-radius: 0px;</string>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(230, 230, 230);
+        <string notr="true">background-color: rgb(50, 50, 50);
 border-radius: 5px;
 </string>
        </property>
@@ -1449,7 +1454,7 @@ text-align: center;</string>
      <x>0</x>
      <y>0</y>
      <width>850</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

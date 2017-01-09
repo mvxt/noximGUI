@@ -19,6 +19,6 @@
     <qresource prefix="/assets">
         <file>default_config.yaml</file>
         <file>default_power.yaml</file>
-        <file>splash.jpg</file>
+        <file>splash.png</file>
     </qresource>
 </RCC>

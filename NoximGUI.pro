@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = NoximGUI
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp \
     noximgui.cpp \
@@ -41,7 +41,7 @@ else:unix: PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/libyaml-c
 DISTFILES += \
     default_config.yaml \
     default_power.yaml \
-    splash.jpg
+    splash.png
 
 RESOURCES += \
     resources.qrc

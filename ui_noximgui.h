@@ -13,8 +13,8 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -66,10 +66,10 @@ public:
     QVBoxLayout *verticalLayout;
     QWidget *X_Dim_Widget;
     QLabel *X_Label;
-    QTextEdit *X_Edit;
+    QSpinBox *X_SpinBox;
     QWidget *Y_Dim_Widget;
     QLabel *Y_Label;
-    QTextEdit *Y_Edit;
+    QSpinBox *Y_SpinBox;
     QGroupBox *Buffer_Group;
     QVBoxLayout *verticalLayout_2;
     QWidget *Depth_Widget;
@@ -105,27 +105,23 @@ public:
     QSpinBox *Clock_Period_SpinBox;
     QWidget *Simulation_Time_Widget;
     QLabel *Simulation_Time_Label;
-    QTextEdit *Simulation_Time_Edit;
+    QSpinBox *Simulation_Time_SpinBox;
     QWidget *Warmup_Time_Widget;
     QLabel *Warmup_Time_Label;
-    QTextEdit *Warmup_Time_Edit;
+    QSpinBox *Warmup_Time_SpinBox;
     QWidget *Reset_Time_Widget;
     QLabel *Reset_Time_Label;
-    QTextEdit *Reset_Time_Edit;
+    QSpinBox *Reset_Time_SpinBox;
     QWidget *Delivery_Stop_Widget;
     QLabel *Delivery_Stop_Label;
-    QTextEdit *Delivery_Stop_Edit;
-    QCheckBox *Wireless_CheckBox;
-    QCheckBox *Power_Save_CheckBox;
-    QCheckBox *Trace_Mode_CheckBox;
-    QLineEdit *Trace_Mode_File;
+    QSpinBox *Delivery_Stop_SpinBox;
     QGroupBox *Packet_Options_Group;
     QWidget *Min_Packet_Size_Widget;
     QLabel *Min_Packet_Size_Label;
-    QTextEdit *Min_Packet_Size_Edit;
+    QSpinBox *Min_Packet_Size_SpinBox;
     QWidget *Max_Packet_Size_Widget;
     QLabel *Max_Packet_Size_Label;
-    QTextEdit *Max_Packet_Size_Edit;
+    QSpinBox *Max_Packet_Size_SpinBox;
     QWidget *Packet_Injection_Widget;
     QLabel *Packet_Injection_Label;
     QTextEdit *Packet_Injection_Edit;
@@ -135,7 +131,7 @@ public:
     QTextEdit *Packet_Injection_Edit_4;
     QWidget *Retransmission_Widget;
     QLabel *Retransmission_Label;
-    QTextEdit *Retransmission_Edit;
+    QDoubleSpinBox *Retransmission_SpinBox;
     QGroupBox *Traffic_Options_Group;
     QWidget *Traffic_Pattern_Widget;
     QLabel *Traffic_Pattern_Label;
@@ -182,17 +178,22 @@ public:
     {
         if (NoximGUI->objectName().isEmpty())
             NoximGUI->setObjectName(QStringLiteral("NoximGUI"));
-        NoximGUI->resize(850, 892);
+        NoximGUI->resize(850, 878);
         NoximGUI->setStyleSheet(QLatin1String("QGroupBox {\n"
-"    border: 1px solid gray;\n"
+"    border: 1px solid black;\n"
 "    border-radius: 9px;\n"
 "    margin-top: 0.5em;\n"
 "}\n"
-"\n"
 "QGroupBox::title {\n"
 "    subcontrol-origin: margin;\n"
 "    left: 10px;\n"
 "    padding: 0 3px 0 3px;\n"
+"}\n"
+"QLabel {\n"
+"	color:rgb(255, 255, 255);\n"
+"}\n"
+"QLabel:disabled {\n"
+"	color:rgb(120, 120, 120);\n"
 "}"));
         actionNew = new QAction(NoximGUI);
         actionNew->setObjectName(QStringLiteral("actionNew"));
@@ -328,11 +329,11 @@ public:
         verticalLayout_5->setContentsMargins(0, 0, 0, 0);
         Main_Background_Frame = new QFrame(centralWidget);
         Main_Background_Frame->setObjectName(QStringLiteral("Main_Background_Frame"));
-        Main_Background_Frame->setStyleSheet(QStringLiteral("background-color: rgb(177, 177, 177)"));
+        Main_Background_Frame->setStyleSheet(QStringLiteral("background-color: rgb(80, 80, 80)"));
         NoC_Wired_Config_Widget = new QWidget(Main_Background_Frame);
         NoC_Wired_Config_Widget->setObjectName(QStringLiteral("NoC_Wired_Config_Widget"));
-        NoC_Wired_Config_Widget->setGeometry(QRect(10, 270, 831, 191));
-        NoC_Wired_Config_Widget->setStyleSheet(QLatin1String("background-color: rgb(230, 230, 230);\n"
+        NoC_Wired_Config_Widget->setGeometry(QRect(10, 255, 831, 191));
+        NoC_Wired_Config_Widget->setStyleSheet(QLatin1String("background-color: rgb(50, 50, 50);\n"
 "border-radius: 5px;"));
         Wired_Config_Label = new QLabel(NoC_Wired_Config_Widget);
         Wired_Config_Label->setObjectName(QStringLiteral("Wired_Config_Label"));
@@ -355,13 +356,10 @@ public:
         X_Label->setGeometry(QRect(0, 0, 101, 26));
         X_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        X_Edit = new QTextEdit(X_Dim_Widget);
-        X_Edit->setObjectName(QStringLiteral("X_Edit"));
-        X_Edit->setGeometry(QRect(108, 0, 96, 25));
-        X_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        X_SpinBox = new QSpinBox(X_Dim_Widget);
+        X_SpinBox->setObjectName(QStringLiteral("X_SpinBox"));
+        X_SpinBox->setGeometry(QRect(110, 0, 96, 27));
+        X_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout->addWidget(X_Dim_Widget);
 
@@ -372,13 +370,10 @@ public:
         Y_Label->setGeometry(QRect(5, 0, 96, 26));
         Y_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Y_Edit = new QTextEdit(Y_Dim_Widget);
-        Y_Edit->setObjectName(QStringLiteral("Y_Edit"));
-        Y_Edit->setGeometry(QRect(108, 0, 96, 25));
-        Y_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Y_SpinBox = new QSpinBox(Y_Dim_Widget);
+        Y_SpinBox->setObjectName(QStringLiteral("Y_SpinBox"));
+        Y_SpinBox->setGeometry(QRect(110, 0, 96, 27));
+        Y_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout->addWidget(Y_Dim_Widget);
 
@@ -524,8 +519,8 @@ public:
 "text-align: center;"));
         Simulation_Params_Widget = new QWidget(Main_Background_Frame);
         Simulation_Params_Widget->setObjectName(QStringLiteral("Simulation_Params_Widget"));
-        Simulation_Params_Widget->setGeometry(QRect(10, 10, 831, 251));
-        Simulation_Params_Widget->setStyleSheet(QLatin1String("background-color: rgb(230, 230, 230);\n"
+        Simulation_Params_Widget->setGeometry(QRect(10, 10, 831, 236));
+        Simulation_Params_Widget->setStyleSheet(QLatin1String("background-color: rgb(50, 50, 50);\n"
 "border-radius: 5px;\n"
 ""));
         Simulation_Params_Label = new QLabel(Simulation_Params_Widget);
@@ -563,13 +558,10 @@ public:
         Simulation_Time_Label->setGeometry(QRect(0, 0, 121, 26));
         Simulation_Time_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Simulation_Time_Edit = new QTextEdit(Simulation_Time_Widget);
-        Simulation_Time_Edit->setObjectName(QStringLiteral("Simulation_Time_Edit"));
-        Simulation_Time_Edit->setGeometry(QRect(125, 0, 81, 25));
-        Simulation_Time_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Simulation_Time_SpinBox = new QSpinBox(Simulation_Time_Widget);
+        Simulation_Time_SpinBox->setObjectName(QStringLiteral("Simulation_Time_SpinBox"));
+        Simulation_Time_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Simulation_Time_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Simulation_Time_Widget);
 
@@ -580,13 +572,10 @@ public:
         Warmup_Time_Label->setGeometry(QRect(0, 0, 121, 26));
         Warmup_Time_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Warmup_Time_Edit = new QTextEdit(Warmup_Time_Widget);
-        Warmup_Time_Edit->setObjectName(QStringLiteral("Warmup_Time_Edit"));
-        Warmup_Time_Edit->setGeometry(QRect(125, 0, 81, 25));
-        Warmup_Time_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Warmup_Time_SpinBox = new QSpinBox(Warmup_Time_Widget);
+        Warmup_Time_SpinBox->setObjectName(QStringLiteral("Warmup_Time_SpinBox"));
+        Warmup_Time_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Warmup_Time_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Warmup_Time_Widget);
 
@@ -597,13 +586,10 @@ public:
         Reset_Time_Label->setGeometry(QRect(0, 0, 121, 26));
         Reset_Time_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Reset_Time_Edit = new QTextEdit(Reset_Time_Widget);
-        Reset_Time_Edit->setObjectName(QStringLiteral("Reset_Time_Edit"));
-        Reset_Time_Edit->setGeometry(QRect(125, 0, 81, 25));
-        Reset_Time_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Reset_Time_SpinBox = new QSpinBox(Reset_Time_Widget);
+        Reset_Time_SpinBox->setObjectName(QStringLiteral("Reset_Time_SpinBox"));
+        Reset_Time_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Reset_Time_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Reset_Time_Widget);
 
@@ -614,30 +600,13 @@ public:
         Delivery_Stop_Label->setGeometry(QRect(0, 0, 121, 26));
         Delivery_Stop_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Delivery_Stop_Edit = new QTextEdit(Delivery_Stop_Widget);
-        Delivery_Stop_Edit->setObjectName(QStringLiteral("Delivery_Stop_Edit"));
-        Delivery_Stop_Edit->setGeometry(QRect(125, 0, 81, 25));
-        Delivery_Stop_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Delivery_Stop_SpinBox = new QSpinBox(Delivery_Stop_Widget);
+        Delivery_Stop_SpinBox->setObjectName(QStringLiteral("Delivery_Stop_SpinBox"));
+        Delivery_Stop_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Delivery_Stop_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Delivery_Stop_Widget);
 
-        Wireless_CheckBox = new QCheckBox(Simulation_Params_Widget);
-        Wireless_CheckBox->setObjectName(QStringLiteral("Wireless_CheckBox"));
-        Wireless_CheckBox->setGeometry(QRect(5, 225, 121, 22));
-        Power_Save_CheckBox = new QCheckBox(Simulation_Params_Widget);
-        Power_Save_CheckBox->setObjectName(QStringLiteral("Power_Save_CheckBox"));
-        Power_Save_CheckBox->setGeometry(QRect(125, 225, 126, 22));
-        Trace_Mode_CheckBox = new QCheckBox(Simulation_Params_Widget);
-        Trace_Mode_CheckBox->setObjectName(QStringLiteral("Trace_Mode_CheckBox"));
-        Trace_Mode_CheckBox->setGeometry(QRect(250, 225, 111, 22));
-        Trace_Mode_File = new QLineEdit(Simulation_Params_Widget);
-        Trace_Mode_File->setObjectName(QStringLiteral("Trace_Mode_File"));
-        Trace_Mode_File->setGeometry(QRect(360, 225, 176, 21));
-        Trace_Mode_File->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;"));
         Packet_Options_Group = new QGroupBox(Simulation_Params_Widget);
         Packet_Options_Group->setObjectName(QStringLiteral("Packet_Options_Group"));
         Packet_Options_Group->setGeometry(QRect(245, 35, 291, 186));
@@ -653,13 +622,10 @@ public:
         Min_Packet_Size_Label->setGeometry(QRect(0, 0, 191, 26));
         Min_Packet_Size_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Min_Packet_Size_Edit = new QTextEdit(Min_Packet_Size_Widget);
-        Min_Packet_Size_Edit->setObjectName(QStringLiteral("Min_Packet_Size_Edit"));
-        Min_Packet_Size_Edit->setGeometry(QRect(190, 0, 81, 25));
-        Min_Packet_Size_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Min_Packet_Size_SpinBox = new QSpinBox(Min_Packet_Size_Widget);
+        Min_Packet_Size_SpinBox->setObjectName(QStringLiteral("Min_Packet_Size_SpinBox"));
+        Min_Packet_Size_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Min_Packet_Size_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         Max_Packet_Size_Widget = new QWidget(Packet_Options_Group);
         Max_Packet_Size_Widget->setObjectName(QStringLiteral("Max_Packet_Size_Widget"));
         Max_Packet_Size_Widget->setGeometry(QRect(10, 51, 271, 26));
@@ -668,13 +634,10 @@ public:
         Max_Packet_Size_Label->setGeometry(QRect(0, 0, 191, 26));
         Max_Packet_Size_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Max_Packet_Size_Edit = new QTextEdit(Max_Packet_Size_Widget);
-        Max_Packet_Size_Edit->setObjectName(QStringLiteral("Max_Packet_Size_Edit"));
-        Max_Packet_Size_Edit->setGeometry(QRect(190, 0, 81, 25));
-        Max_Packet_Size_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Max_Packet_Size_SpinBox = new QSpinBox(Max_Packet_Size_Widget);
+        Max_Packet_Size_SpinBox->setObjectName(QStringLiteral("Max_Packet_Size_SpinBox"));
+        Max_Packet_Size_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Max_Packet_Size_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         Packet_Injection_Widget = new QWidget(Packet_Options_Group);
         Packet_Injection_Widget->setObjectName(QStringLiteral("Packet_Injection_Widget"));
         Packet_Injection_Widget->setGeometry(QRect(5, 120, 281, 61));
@@ -725,13 +688,10 @@ public:
         Retransmission_Label->setGeometry(QRect(0, 0, 191, 26));
         Retransmission_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        Retransmission_Edit = new QTextEdit(Retransmission_Widget);
-        Retransmission_Edit->setObjectName(QStringLiteral("Retransmission_Edit"));
-        Retransmission_Edit->setGeometry(QRect(190, 0, 81, 25));
-        Retransmission_Edit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"font-size: 11pt;\n"
-"text-align: right;"));
+        Retransmission_SpinBox = new QDoubleSpinBox(Retransmission_Widget);
+        Retransmission_SpinBox->setObjectName(QStringLiteral("Retransmission_SpinBox"));
+        Retransmission_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Retransmission_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         Traffic_Options_Group = new QGroupBox(Simulation_Params_Widget);
         Traffic_Options_Group->setObjectName(QStringLiteral("Traffic_Options_Group"));
         Traffic_Options_Group->setGeometry(QRect(545, 35, 276, 106));
@@ -760,11 +720,11 @@ public:
 "border-radius: 0px;"));
         NoximGUI_Label = new QLabel(Simulation_Params_Widget);
         NoximGUI_Label->setObjectName(QStringLiteral("NoximGUI_Label"));
-        NoximGUI_Label->setGeometry(QRect(595, 185, 176, 26));
+        NoximGUI_Label->setGeometry(QRect(775, 205, 51, 26));
         Wireless_Config_Widget = new QWidget(Main_Background_Frame);
         Wireless_Config_Widget->setObjectName(QStringLiteral("Wireless_Config_Widget"));
-        Wireless_Config_Widget->setGeometry(QRect(10, 470, 831, 331));
-        Wireless_Config_Widget->setStyleSheet(QLatin1String("background-color: rgb(230, 230, 230);\n"
+        Wireless_Config_Widget->setGeometry(QRect(10, 455, 831, 331));
+        Wireless_Config_Widget->setStyleSheet(QLatin1String("background-color: rgb(50, 50, 50);\n"
 "border-radius: 5px;\n"
 ""));
         Wireless_Config_Label = new QLabel(Wireless_Config_Widget);
@@ -909,7 +869,7 @@ public:
         NoximGUI->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(NoximGUI);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 850, 25));
+        menuBar->setGeometry(QRect(0, 0, 850, 22));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -1110,9 +1070,6 @@ public:
         Warmup_Time_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Warmup Time:</p></body></html>", 0));
         Reset_Time_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Reset Time:</p></body></html>", 0));
         Delivery_Stop_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Delivery Stop:</p></body></html>", 0));
-        Wireless_CheckBox->setText(QApplication::translate("NoximGUI", "Use Wireless", 0));
-        Power_Save_CheckBox->setText(QApplication::translate("NoximGUI", "Power Saving", 0));
-        Trace_Mode_CheckBox->setText(QApplication::translate("NoximGUI", "Trace Mode", 0));
         Packet_Options_Group->setTitle(QApplication::translate("NoximGUI", "Packet Options", 0));
         Min_Packet_Size_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Min Packet Size:</p></body></html>", 0));
         Max_Packet_Size_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Max Packet Size:</p></body></html>", 0));
@@ -1124,7 +1081,7 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:italic;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Traffic Pattern:</p></body></html>", 0));
-        NoximGUI_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; font-style:italic;\">NoximGUI </span><span style=\" font-size:12pt;\">v0.7.0</span></p></body></html>", 0));
+        NoximGUI_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">v0.8.1</span></p></body></html>", 0));
         Wireless_Config_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Wireless Configuration</span></p></body></html>", 0));
         pushButton->setText(QApplication::translate("NoximGUI", "Add Channel...", 0));
         Hub_Defaults_Group->setTitle(QApplication::translate("NoximGUI", "Hub Defaults", 0));

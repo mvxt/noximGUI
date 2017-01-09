@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(177, 177, 177);</string>
+    <string notr="true">background-color: rgb(80, 80, 80)</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -41,7 +41,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(230, 230, 230);
+     <string notr="true">background-color: rgb(50, 50, 50);
 border-radius: 5px;
 </string>
     </property>

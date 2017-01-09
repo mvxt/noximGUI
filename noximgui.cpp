@@ -13,9 +13,6 @@ NoximGUI::NoximGUI(QWidget *parent) :
     // Force initialization of resources
     Q_INIT_RESOURCE(resources);
 
-    // Shows splash screen
-    //showSplash(this);
-
     // Sets default configuration files
     guiConfigFileName = "gui_config.yaml";
     execConfigName = "Executable";
@@ -58,7 +55,7 @@ NoximGUI::NoximGUI(QWidget *parent) :
 
     // Finally, show splash screen and start program
     QImage splashImage;
-    splashImage.load(":/assets/splash.jpg");
+    splashImage.load(":/assets/splash.png");
     QSplashScreen *splash = new QSplashScreen;
     splash->setPixmap(QPixmap::fromImage(splashImage));
     splash->show();
@@ -85,27 +82,25 @@ bool NoximGUI::getNoximExecutable()
     QFileDialog dialog;
 
     // Check if gui_config.yaml exists
-    //   If no, ask for executable and set new
-    //   If yes, then read result from gui_config.yaml
-    if ( !this->noximExecSet() )
-    {
-        dialog.setFileMode(QFileDialog::ExistingFile);
-        qFileName = dialog.getOpenFileName( 0, "Select Noxim Executable" );
-        bool setResult = setGUIConfig( qFileName );
-
-        return setResult;
-    }
-    else
+    //   If yes, check contents
+    //     If contents good, load program
+    //     If contents not good, ask for new executable location
+    //  If no, ask for new executable location
+    struct stat buffer;
+    if ( stat( "gui_config.yaml", &buffer ) == 0 ) // File exists
     {
         YAML::Node guiConfigNode = YAML::LoadFile( guiConfigFileName );
-        if ( !guiConfigNode.IsNull()  )
+        if ( !guiConfigNode.IsNull() )
         {
             std::string result = guiConfigNode[execConfigName].as<std::string>();
             return setGUIConfig( QString::fromStdString( result ) );
         }
-        return false;
     }
-    return false;
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    qFileName = dialog.getOpenFileName( 0, "Select Noxim Executable" );
+    bool setResult = setGUIConfig( qFileName );
+
+    return setResult;
 }
 
 /**
@@ -129,8 +124,8 @@ bool NoximGUI::setGUIConfig( QString fileName )
  */
 bool NoximGUI::writeGUIConfig()
 {
-    std::ofstream fout( guiConfigFileName.c_str() );
-    if ( fout == NULL )
+    std::ofstream fout( guiConfigFileName.c_str(), std::ofstream::out );
+    if ( !fout.is_open() )
     {
         QMessageBox::warning( NULL, QString( "NoximGUI" ),
                               QString( "Error saving preferences file. Check your system settings." ) );
@@ -211,15 +206,6 @@ bool NoximGUI::writePowerConfig( QString fileName )
     powerConfigFileName = fileName.toStdString();
 
     return true;
-}
-
-/**
- * @brief Private method to check if a gui config already exists
- */
-bool NoximGUI::noximExecSet()
-{
-    struct stat buffer;
-    return ( stat( "gui_config.yaml", &buffer ) == 0 );
 }
 
 /**
@@ -340,27 +326,26 @@ bool NoximGUI::populatePowerConfig( QString fileName )
 void NoximGUI::populateUniversalParams()
 {
     // X & Y mesh dimensions
-    ui->X_Edit->setText( QString::fromStdString( noximConfigNode["mesh_dim_x"].as<std::string>() ) );
-    ui->Y_Edit->setText( QString::fromStdString( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
+    ui->X_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_x"].as<std::string>() ) );
+    ui->Y_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
 
     // Clock options
-    ui->Clock_Period_SpinBox->setRange( noximConfigNode["stats_warm_up_time"].as<int>() + 1, (int) LONG_MAX );
+    ui->Clock_Period_SpinBox->setRange( std::stoi( noximConfigNode["stats_warm_up_time"].as<std::string>() ) + 1, (int) LONG_MAX );
 
 
     // Set minimum to warmup time, since clock cycle must be larger than warmup time
-    ui->Simulation_Time_Edit->setText( QString::fromStdString( noximConfigNode["simulation_time"].as<std::string>() ) );
-    ui->Warmup_Time_Edit->setText( QString::fromStdString( noximConfigNode["stats_warm_up_time"].as<std::string>() ) );
-    ui->Reset_Time_Edit->setText( QString::fromStdString( noximConfigNode["reset_time"].as<std::string>() ) );
-    ui->Delivery_Stop_Edit->setText( QString::fromStdString( noximConfigNode["max_volume_to_be_drained"].as<std::string>() ) );
+    ui->Simulation_Time_SpinBox->setValue( std::stoi( noximConfigNode["simulation_time"].as<std::string>() ) );
+    ui->Warmup_Time_SpinBox->setValue( std::stoi( noximConfigNode["stats_warm_up_time"].as<std::string>() ) );
+    ui->Reset_Time_SpinBox->setValue( std::stoi( noximConfigNode["reset_time"].as<std::string>() ) );
+    ui->Delivery_Stop_SpinBox->setValue( std::stoi( noximConfigNode["max_volume_to_be_drained"].as<std::string>() ) );
 
     // Packet Options
-    ui->Min_Packet_Size_Edit->setText( QString::fromStdString( noximConfigNode["min_packet_size"].as<std::string>() ) );
-    ui->Max_Packet_Size_Edit->setText( QString::fromStdString( noximConfigNode["max_packet_size"].as<std::string>() ) );
-    ui->Retransmission_Edit->setText( QString::fromStdString( noximConfigNode["probability_of_retransmission"].as<std::string>() ) );
+    ui->Min_Packet_Size_SpinBox->setValue( std::stoi( noximConfigNode["min_packet_size"].as<std::string>() ) );
+    ui->Max_Packet_Size_SpinBox->setValue( std::stoi( noximConfigNode["max_packet_size"].as<std::string>() ) );
+    ui->Retransmission_SpinBox->setValue( std::stod( noximConfigNode["probability_of_retransmission"].as<std::string>() ) );
     ui->Packet_Injection_Edit->setText( QString::fromStdString( noximConfigNode["packet_injection_rate"].as<std::string>() ) );
 
     // Disable unsupported features or features TODO
-    ui->Wireless_CheckBox->setDisabled( true );
     ui->Wireless_Config_Widget->setDisabled( true );
     ui->Packet_Injection_Edit_2->setDisabled( true );
     ui->Packet_Injection_Edit_3->setDisabled( true );
@@ -373,8 +358,8 @@ void NoximGUI::populateUniversalParams()
 void NoximGUI::updateNoximConfigNode()
 {
     // X & Y mesh dimensions
-    noximConfigNode["mesh_dim_x"] = ui->X_Edit->toPlainText().toStdString();
-    noximConfigNode["mesh_dim_y"] = ui->Y_Edit->toPlainText().toStdString();
+    noximConfigNode["mesh_dim_x"] = ui->X_SpinBox->value();
+    noximConfigNode["mesh_dim_y"] = ui->Y_SpinBox->value();
     // Flit size
     noximConfigNode["flit_size"] = ui->Flit_Size_ComboBox->currentText().toStdString();
     // Wired connection lengths
@@ -382,14 +367,14 @@ void NoximGUI::updateNoximConfigNode()
     noximConfigNode["r2r_link_length"] = ui->RR_Length_ComboBox->currentText().toStdString();
     // Clock options
     //noximConfigNode["clock_period_ps"] = ui->Clock_Period_Edit->toPlainText().toStdString();
-    noximConfigNode["simulation_time"] = ui->Simulation_Time_Edit->toPlainText().toStdString();
-    noximConfigNode["stats_warm_up_time"] = ui->Warmup_Time_Edit->toPlainText().toStdString();
-    noximConfigNode["reset_time"] = ui->Reset_Time_Edit->toPlainText().toStdString();
-    noximConfigNode["max_volume_to_be_drained"] = ui->Delivery_Stop_Edit->toPlainText().toStdString();
+    noximConfigNode["simulation_time"] = ui->Simulation_Time_SpinBox->value();
+    noximConfigNode["stats_warm_up_time"] = ui->Warmup_Time_SpinBox->value();
+    noximConfigNode["reset_time"] = ui->Reset_Time_SpinBox->value();
+    noximConfigNode["max_volume_to_be_drained"] = ui->Delivery_Stop_SpinBox->value();
     // Packet Options
-    noximConfigNode["min_packet_size"] = ui->Min_Packet_Size_Edit->toPlainText().toStdString();
-    noximConfigNode["max_packet_size"] = ui->Max_Packet_Size_Edit->toPlainText().toStdString();
-    noximConfigNode["probability_of_retransmission"] = ui->Retransmission_Edit->toPlainText().toStdString();
+    noximConfigNode["min_packet_size"] = ui->Min_Packet_Size_SpinBox->value();
+    noximConfigNode["max_packet_size"] = ui->Max_Packet_Size_SpinBox->value();
+    noximConfigNode["probability_of_retransmission"] = ui->Retransmission_SpinBox->value();
     noximConfigNode["packet_injection_rate"] = ui->Packet_Injection_Edit->toPlainText().toStdString();
     // Routing Options
     noximConfigNode["routing_algorithm"] = ui->Algorithm_ComboBox->currentText().toStdString();
@@ -467,6 +452,7 @@ bool Utils::convertAndCompare(QString i, QString j)
 
 // Recursive helper function that does all the work
 // Code written by hersh (https://github.com/jbeder/yaml-cpp/issues/169)
+// Modified to not print a node if its contents are empty
 void Utils::writeNode(const YAML::Node& node, YAML::Emitter& emitter)
 {
   switch (node.Type())
