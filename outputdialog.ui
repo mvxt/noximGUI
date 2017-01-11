@@ -13,6 +13,17 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QLabel {
+	color:rgb(255, 255, 255);
+}
+QLabel:disabled {
+	color:rgb(120, 120, 120);
+}
+QPushButton{
+	color:rgb(255, 255, 255);
+}</string>
+  </property>
   <widget class="QFrame" name="Output_Dialog_Frame">
    <property name="geometry">
     <rect>

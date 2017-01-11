@@ -39,6 +39,15 @@ public:
         if (OutputDialog->objectName().isEmpty())
             OutputDialog->setObjectName(QStringLiteral("OutputDialog"));
         OutputDialog->resize(700, 579);
+        OutputDialog->setStyleSheet(QLatin1String("QLabel {\n"
+"	color:rgb(255, 255, 255);\n"
+"}\n"
+"QLabel:disabled {\n"
+"	color:rgb(120, 120, 120);\n"
+"}\n"
+"QPushButton{\n"
+"	color:rgb(255, 255, 255);\n"
+"}"));
         Output_Dialog_Frame = new QFrame(OutputDialog);
         Output_Dialog_Frame->setObjectName(QStringLiteral("Output_Dialog_Frame"));
         Output_Dialog_Frame->setGeometry(QRect(0, 0, 701, 581));

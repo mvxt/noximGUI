@@ -79,6 +79,9 @@ class NoximGUI : public QMainWindow
         QStringList availableSelectionStrategies;
         QStringList availableTrafficTypes;
 
+        // Constants
+        int MAX = 1000000000;
+
         // YAML Node object containing gui config
         YAML::Node guiConfigNode;
 
@@ -104,7 +107,7 @@ class NoximGUI : public QMainWindow
         bool populatePowerConfig( QString fileName );
 
         // Private method to populate universal fields (shared by all configs)
-        void populateUniversalParams();
+        void populateParams();
 
         // Private method to take info from fields and update noximConfigNode
         void updateNoximConfigNode();

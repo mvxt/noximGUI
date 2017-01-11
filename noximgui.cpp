@@ -48,7 +48,7 @@ NoximGUI::NoximGUI(QWidget *parent) :
     populateComboBoxes();
 
     // Sets the universal parameters
-    populateUniversalParams();
+    populateParams();
 
     // Sets specialized parameters which may be depended on by other parameters
     populateDependentParams();
@@ -321,35 +321,67 @@ bool NoximGUI::populatePowerConfig( QString fileName )
 }
 
 /**
- * @brief Private method to populate universal fields (shared by all configs)
+ * @brief Private method to populate menu fields w/ defaults and
  */
-void NoximGUI::populateUniversalParams()
+void NoximGUI::populateParams()
 {
-    // X & Y mesh dimensions
-    ui->X_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_x"].as<std::string>() ) );
-    ui->Y_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
-
+    // Simulation Parameters
     // Clock options
-    ui->Clock_Period_SpinBox->setRange( std::stoi( noximConfigNode["stats_warm_up_time"].as<std::string>() ) + 1, (int) LONG_MAX );
-
-
+    ui->Clock_Period_SpinBox->setRange( 0, this->MAX );
+    ui->Clock_Period_SpinBox->setValue( std::stoi( noximConfigNode["clock_period_ps"].as<std::string>() ) );
     // Set minimum to warmup time, since clock cycle must be larger than warmup time
+    ui->Simulation_Time_SpinBox->setRange( 0, this->MAX );
     ui->Simulation_Time_SpinBox->setValue( std::stoi( noximConfigNode["simulation_time"].as<std::string>() ) );
+    ui->Warmup_Time_SpinBox->setRange( 0, this->MAX );
     ui->Warmup_Time_SpinBox->setValue( std::stoi( noximConfigNode["stats_warm_up_time"].as<std::string>() ) );
+    ui->Reset_Time_SpinBox->setRange( 0, this->MAX );
     ui->Reset_Time_SpinBox->setValue( std::stoi( noximConfigNode["reset_time"].as<std::string>() ) );
+    ui->Delivery_Stop_SpinBox->setRange( 0, this->MAX );
     ui->Delivery_Stop_SpinBox->setValue( std::stoi( noximConfigNode["max_volume_to_be_drained"].as<std::string>() ) );
-
     // Packet Options
+    ui->Min_Packet_Size_SpinBox->setRange( 1, this->MAX );
     ui->Min_Packet_Size_SpinBox->setValue( std::stoi( noximConfigNode["min_packet_size"].as<std::string>() ) );
+    ui->Max_Packet_Size_SpinBox->setRange( 1, this->MAX );
     ui->Max_Packet_Size_SpinBox->setValue( std::stoi( noximConfigNode["max_packet_size"].as<std::string>() ) );
+    ui->Retransmission_SpinBox->setRange( 0, 1 );
+    ui->Retransmission_SpinBox->setSingleStep( 0.01 );
     ui->Retransmission_SpinBox->setValue( std::stod( noximConfigNode["probability_of_retransmission"].as<std::string>() ) );
-    ui->Packet_Injection_Edit->setText( QString::fromStdString( noximConfigNode["packet_injection_rate"].as<std::string>() ) );
+
+    // Set packet injection params    
+    ui->Packet_Injection_SpinBox->setRange( 0, 1 );
+    ui->Packet_Injection_SpinBox->setSingleStep( 0.01 );
+    ui->Packet_Injection_SpinBox->setValue( std::stod( noximConfigNode["packet_injection_rate"].as<std::string>() ) );
+    // By default, set injection type to poisson and disable other two spinboxes
+    int packetInjectionIndex = ui->Packet_Injection_ComboBox->findText( QString::fromStdString( "Poisson" ) );
+    ui->Packet_Injection_ComboBox->setCurrentIndex( packetInjectionIndex );
+    ui->Packet_Injection_SpinBox_Secondary->setDisabled( true );
+    ui->Packet_Injection_SpinBox_Tertiary->setDisabled( true );
+
+    // Set default traffic
+    std::string trafficString = noximConfigNode["traffic_distribution"].as<std::string>();
+    int trafficIndex = ui->Traffic_Pattern_ComboBox->findText( QString::fromStdString( trafficString ) );
+    if ( trafficIndex >= 0 )
+    {
+        ui->Traffic_Pattern_ComboBox->setCurrentIndex( trafficIndex );
+        if ( trafficString.compare( "TRAFFIC_TABLE_BASED" ) != 0 )
+        {
+            ui->Traffic_Table_File_Widget->setDisabled( true );
+        }
+    }
+    else
+    {
+        ui->Traffic_Pattern_ComboBox->setCurrentIndex( 0 );
+    }
+
+    // Wired Configuration
+    // X & Y mesh dimensions
+    ui->X_SpinBox->setRange( 4, this->MAX );
+    ui->X_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_x"].as<std::string>() ) );
+    ui->Y_SpinBox->setRange( 4, this->MAX );
+    ui->Y_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
 
     // Disable unsupported features or features TODO
     ui->Wireless_Config_Widget->setDisabled( true );
-    ui->Packet_Injection_Edit_2->setDisabled( true );
-    ui->Packet_Injection_Edit_3->setDisabled( true );
-    ui->Packet_Injection_Edit_4->setDisabled( true );
 }
 
 /**
@@ -375,7 +407,7 @@ void NoximGUI::updateNoximConfigNode()
     noximConfigNode["min_packet_size"] = ui->Min_Packet_Size_SpinBox->value();
     noximConfigNode["max_packet_size"] = ui->Max_Packet_Size_SpinBox->value();
     noximConfigNode["probability_of_retransmission"] = ui->Retransmission_SpinBox->value();
-    noximConfigNode["packet_injection_rate"] = ui->Packet_Injection_Edit->toPlainText().toStdString();
+    noximConfigNode["packet_injection_rate"] = ui->Packet_Injection_SpinBox->value();
     // Routing Options
     noximConfigNode["routing_algorithm"] = ui->Algorithm_ComboBox->currentText().toStdString();
     noximConfigNode["selection_strategy"] = ui->Selection_Strategy_ComboBox->currentText().toStdString();
