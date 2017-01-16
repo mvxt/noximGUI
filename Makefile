@@ -323,6 +323,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_resources.cpp
 qrc_resources.cpp: resources.qrc \
 		default_config.yaml \
+		logo.png \
 		splash.png \
 		default_power.yaml \
 		icons/folder-2x.png \

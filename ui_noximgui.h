@@ -84,15 +84,17 @@ public:
     QVBoxLayout *verticalLayout_4;
     QWidget *RH_Length_Widget;
     QLabel *RH_Length_Label;
-    QComboBox *RH_Length_ComboBox;
+    QDoubleSpinBox *RH_Length_SpinBox;
     QWidget *RR_Length_Widget;
     QLabel *RR_Length_Label;
-    QComboBox *RR_Length_ComboBox;
+    QDoubleSpinBox *RR_Length_SpinBox;
     QGroupBox *Routing_Options_Group;
+    QVBoxLayout *verticalLayout_9;
     QWidget *Algorithm_Widget;
     QLabel *Algorithm_Label;
     QComboBox *Algorithm_ComboBox;
-    QLineEdit *Traffic_Options_File_2;
+    QDoubleSpinBox *Algorithm_SpinBox;
+    QLabel *Algorithm_Label_DYAD_Threshold;
     QWidget *Selection_Strategy_Widget;
     QLabel *Selection_Strategy_Label;
     QComboBox *Selection_Strategy_ComboBox;
@@ -133,6 +135,7 @@ public:
     QDoubleSpinBox *Packet_Injection_SpinBox_Secondary;
     QComboBox *Packet_Injection_ComboBox;
     QDoubleSpinBox *Packet_Injection_SpinBox_Tertiary;
+    QDoubleSpinBox *Packet_Injection_SpinBox_Quaternary;
     QGroupBox *Traffic_Options_Group;
     QWidget *Traffic_Pattern_Widget;
     QLabel *Traffic_Pattern_Label;
@@ -141,6 +144,7 @@ public:
     QLineEdit *Traffic_Table_File_LineEdit;
     QPushButton *Traffic_Table_File_Button;
     QLabel *NoximGUI_Label;
+    QLabel *label;
     QWidget *Wireless_Config_Widget;
     QLabel *Wireless_Config_Label;
     QPushButton *Wireless_Channel_PushButton;
@@ -188,6 +192,7 @@ public:
 "    margin-top: 0.5em;\n"
 "}\n"
 "QGroupBox::title {\n"
+"    subcontrol-position:top middle;\n"
 "    subcontrol-origin: margin;\n"
 "    left: 10px;\n"
 "    padding: 0 3px 0 3px;\n"
@@ -238,6 +243,7 @@ public:
         actionSave_As->setIcon(icon3);
         actionExport = new QAction(NoximGUI);
         actionExport->setObjectName(QStringLiteral("actionExport"));
+        actionExport->setEnabled(false);
         QIcon icon4;
         icon4.addFile(QStringLiteral(":/icons/icons/external-link-2x.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionExport->setIcon(icon4);
@@ -260,31 +266,37 @@ public:
         actionFull_Screen->setIcon(icon7);
         actionUndo = new QAction(NoximGUI);
         actionUndo->setObjectName(QStringLiteral("actionUndo"));
+        actionUndo->setEnabled(false);
         QIcon icon8;
         icon8.addFile(QStringLiteral(":/icons/icons/action-undo-2x.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionUndo->setIcon(icon8);
         actionRedo = new QAction(NoximGUI);
         actionRedo->setObjectName(QStringLiteral("actionRedo"));
+        actionRedo->setEnabled(false);
         QIcon icon9;
         icon9.addFile(QStringLiteral(":/icons/icons/action-redo-2x.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRedo->setIcon(icon9);
         actionCut = new QAction(NoximGUI);
         actionCut->setObjectName(QStringLiteral("actionCut"));
+        actionCut->setEnabled(false);
         QIcon icon10;
         icon10.addFile(QStringLiteral(":/icons/icons/cut.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCut->setIcon(icon10);
         actionCopy = new QAction(NoximGUI);
         actionCopy->setObjectName(QStringLiteral("actionCopy"));
+        actionCopy->setEnabled(false);
         QIcon icon11;
         icon11.addFile(QStringLiteral(":/icons/icons/copy.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCopy->setIcon(icon11);
         actionPaste = new QAction(NoximGUI);
         actionPaste->setObjectName(QStringLiteral("actionPaste"));
+        actionPaste->setEnabled(false);
         QIcon icon12;
         icon12.addFile(QStringLiteral(":/icons/icons/clipboard-2x.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionPaste->setIcon(icon12);
         actionClear_All_Fields = new QAction(NoximGUI);
         actionClear_All_Fields->setObjectName(QStringLiteral("actionClear_All_Fields"));
+        actionClear_All_Fields->setEnabled(false);
         actionClear_All_Fields->setIcon(icon6);
         actionRun_Simulation = new QAction(NoximGUI);
         actionRun_Simulation->setObjectName(QStringLiteral("actionRun_Simulation"));
@@ -353,10 +365,10 @@ public:
 "border-radius: 5px;"));
         Wired_Config_Label = new QLabel(NoC_Wired_Config_Widget);
         Wired_Config_Label->setObjectName(QStringLiteral("Wired_Config_Label"));
-        Wired_Config_Label->setGeometry(QRect(290, 5, 251, 21));
+        Wired_Config_Label->setGeometry(QRect(10, 10, 251, 21));
         Mesh_Dim_Group = new QGroupBox(NoC_Wired_Config_Widget);
         Mesh_Dim_Group->setObjectName(QStringLiteral("Mesh_Dim_Group"));
-        Mesh_Dim_Group->setGeometry(QRect(10, 35, 226, 86));
+        Mesh_Dim_Group->setGeometry(QRect(10, 35, 241, 91));
         Mesh_Dim_Group->setAutoFillBackground(false);
         Mesh_Dim_Group->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: normal;"));
@@ -374,7 +386,7 @@ public:
 "font-style: italic;"));
         X_SpinBox = new QSpinBox(X_Dim_Widget);
         X_SpinBox->setObjectName(QStringLiteral("X_SpinBox"));
-        X_SpinBox->setGeometry(QRect(110, 0, 96, 27));
+        X_SpinBox->setGeometry(QRect(120, 0, 96, 26));
         X_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout->addWidget(X_Dim_Widget);
@@ -388,14 +400,14 @@ public:
 "font-style: italic;"));
         Y_SpinBox = new QSpinBox(Y_Dim_Widget);
         Y_SpinBox->setObjectName(QStringLiteral("Y_SpinBox"));
-        Y_SpinBox->setGeometry(QRect(110, 0, 96, 27));
+        Y_SpinBox->setGeometry(QRect(120, 0, 96, 27));
         Y_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout->addWidget(Y_Dim_Widget);
 
         Buffer_Group = new QGroupBox(NoC_Wired_Config_Widget);
         Buffer_Group->setObjectName(QStringLiteral("Buffer_Group"));
-        Buffer_Group->setGeometry(QRect(10, 125, 226, 56));
+        Buffer_Group->setGeometry(QRect(10, 125, 241, 56));
         Buffer_Group->setAutoFillBackground(false);
         Buffer_Group->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: normal;"));
@@ -414,7 +426,7 @@ public:
 ""));
         Depth_ComboBox = new QComboBox(Depth_Widget);
         Depth_ComboBox->setObjectName(QStringLiteral("Depth_ComboBox"));
-        Depth_ComboBox->setGeometry(QRect(110, 0, 96, 27));
+        Depth_ComboBox->setGeometry(QRect(120, 0, 96, 27));
         Depth_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;\n"
 "text-align: center;"));
@@ -423,7 +435,7 @@ public:
 
         Flit_Group = new QGroupBox(NoC_Wired_Config_Widget);
         Flit_Group->setObjectName(QStringLiteral("Flit_Group"));
-        Flit_Group->setGeometry(QRect(245, 35, 291, 56));
+        Flit_Group->setGeometry(QRect(260, 35, 276, 56));
         Flit_Group->setAutoFillBackground(false);
         Flit_Group->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: normal;"));
@@ -442,7 +454,7 @@ public:
 ""));
         Flit_Size_ComboBox = new QComboBox(Flit_Size_Widget);
         Flit_Size_ComboBox->setObjectName(QStringLiteral("Flit_Size_ComboBox"));
-        Flit_Size_ComboBox->setGeometry(QRect(130, 0, 141, 27));
+        Flit_Size_ComboBox->setGeometry(QRect(130, 0, 121, 27));
         Flit_Size_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;\n"
 "text-align: center;"));
@@ -451,7 +463,7 @@ public:
 
         Connection_Group = new QGroupBox(NoC_Wired_Config_Widget);
         Connection_Group->setObjectName(QStringLiteral("Connection_Group"));
-        Connection_Group->setGeometry(QRect(245, 95, 291, 86));
+        Connection_Group->setGeometry(QRect(260, 90, 276, 91));
         Connection_Group->setAutoFillBackground(false);
         Connection_Group->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: normal;"));
@@ -467,13 +479,10 @@ public:
         RH_Length_Label->setGeometry(QRect(5, 0, 111, 26));
         RH_Length_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        RH_Length_ComboBox = new QComboBox(RH_Length_Widget);
-        RH_Length_ComboBox->setObjectName(QStringLiteral("RH_Length_ComboBox"));
-        RH_Length_ComboBox->setEnabled(true);
-        RH_Length_ComboBox->setGeometry(QRect(130, 0, 141, 27));
-        RH_Length_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"text-align: center;"));
+        RH_Length_SpinBox = new QDoubleSpinBox(RH_Length_Widget);
+        RH_Length_SpinBox->setObjectName(QStringLiteral("RH_Length_SpinBox"));
+        RH_Length_SpinBox->setGeometry(QRect(130, 0, 121, 26));
+        RH_Length_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_4->addWidget(RH_Length_Widget);
 
@@ -484,12 +493,10 @@ public:
         RR_Length_Label->setGeometry(QRect(5, 0, 111, 26));
         RR_Length_Label->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: italic;"));
-        RR_Length_ComboBox = new QComboBox(RR_Length_Widget);
-        RR_Length_ComboBox->setObjectName(QStringLiteral("RR_Length_ComboBox"));
-        RR_Length_ComboBox->setGeometry(QRect(130, 0, 141, 27));
-        RR_Length_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;\n"
-"text-align: center;"));
+        RR_Length_SpinBox = new QDoubleSpinBox(RR_Length_Widget);
+        RR_Length_SpinBox->setObjectName(QStringLiteral("RR_Length_SpinBox"));
+        RR_Length_SpinBox->setGeometry(QRect(130, 0, 121, 26));
+        RR_Length_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_4->addWidget(RR_Length_Widget);
 
@@ -500,9 +507,12 @@ public:
         Routing_Options_Group->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: normal;"));
         Routing_Options_Group->setCheckable(false);
+        verticalLayout_9 = new QVBoxLayout(Routing_Options_Group);
+        verticalLayout_9->setSpacing(6);
+        verticalLayout_9->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
         Algorithm_Widget = new QWidget(Routing_Options_Group);
         Algorithm_Widget->setObjectName(QStringLiteral("Algorithm_Widget"));
-        Algorithm_Widget->setGeometry(QRect(10, 19, 261, 71));
         Algorithm_Label = new QLabel(Algorithm_Widget);
         Algorithm_Label->setObjectName(QStringLiteral("Algorithm_Label"));
         Algorithm_Label->setGeometry(QRect(-5, 5, 96, 21));
@@ -510,18 +520,24 @@ public:
 "font-style: italic;"));
         Algorithm_ComboBox = new QComboBox(Algorithm_Widget);
         Algorithm_ComboBox->setObjectName(QStringLiteral("Algorithm_ComboBox"));
-        Algorithm_ComboBox->setGeometry(QRect(85, 5, 176, 21));
+        Algorithm_ComboBox->setGeometry(QRect(85, 5, 166, 21));
         Algorithm_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;\n"
 "text-align: center;"));
-        Traffic_Options_File_2 = new QLineEdit(Algorithm_Widget);
-        Traffic_Options_File_2->setObjectName(QStringLiteral("Traffic_Options_File_2"));
-        Traffic_Options_File_2->setGeometry(QRect(0, 40, 261, 21));
-        Traffic_Options_File_2->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
-"border-radius: 0px;"));
+        Algorithm_SpinBox = new QDoubleSpinBox(Algorithm_Widget);
+        Algorithm_SpinBox->setObjectName(QStringLiteral("Algorithm_SpinBox"));
+        Algorithm_SpinBox->setGeometry(QRect(180, 30, 69, 26));
+        Algorithm_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        Algorithm_Label_DYAD_Threshold = new QLabel(Algorithm_Widget);
+        Algorithm_Label_DYAD_Threshold->setObjectName(QStringLiteral("Algorithm_Label_DYAD_Threshold"));
+        Algorithm_Label_DYAD_Threshold->setGeometry(QRect(5, 30, 161, 21));
+        Algorithm_Label_DYAD_Threshold->setStyleSheet(QLatin1String("font-size: 11pt;\n"
+"font-style: italic;"));
+
+        verticalLayout_9->addWidget(Algorithm_Widget);
+
         Selection_Strategy_Widget = new QWidget(Routing_Options_Group);
         Selection_Strategy_Widget->setObjectName(QStringLiteral("Selection_Strategy_Widget"));
-        Selection_Strategy_Widget->setGeometry(QRect(10, 90, 261, 41));
         Selection_Strategy_Label = new QLabel(Selection_Strategy_Widget);
         Selection_Strategy_Label->setObjectName(QStringLiteral("Selection_Strategy_Label"));
         Selection_Strategy_Label->setGeometry(QRect(0, 0, 261, 21));
@@ -529,10 +545,18 @@ public:
 "font-style: italic;"));
         Selection_Strategy_ComboBox = new QComboBox(Selection_Strategy_Widget);
         Selection_Strategy_ComboBox->setObjectName(QStringLiteral("Selection_Strategy_ComboBox"));
-        Selection_Strategy_ComboBox->setGeometry(QRect(0, 20, 261, 21));
+        Selection_Strategy_ComboBox->setGeometry(QRect(0, 20, 251, 21));
         Selection_Strategy_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;\n"
 "text-align: center;"));
+        Selection_Strategy_Label->raise();
+        Selection_Strategy_ComboBox->raise();
+        Algorithm_Widget->raise();
+        Algorithm_Widget->raise();
+        Algorithm_Widget->raise();
+
+        verticalLayout_9->addWidget(Selection_Strategy_Widget);
+
         Simulation_Params_Widget = new QWidget(Main_Background_Frame);
         Simulation_Params_Widget->setObjectName(QStringLiteral("Simulation_Params_Widget"));
         Simulation_Params_Widget->setGeometry(QRect(10, 10, 831, 236));
@@ -541,7 +565,7 @@ public:
 ""));
         Simulation_Params_Label = new QLabel(Simulation_Params_Widget);
         Simulation_Params_Label->setObjectName(QStringLiteral("Simulation_Params_Label"));
-        Simulation_Params_Label->setGeometry(QRect(295, 10, 251, 21));
+        Simulation_Params_Label->setGeometry(QRect(10, 10, 251, 21));
         Clock_Options_Group = new QGroupBox(Simulation_Params_Widget);
         Clock_Options_Group->setObjectName(QStringLiteral("Clock_Options_Group"));
         Clock_Options_Group->setGeometry(QRect(10, 35, 226, 191));
@@ -562,7 +586,7 @@ public:
 "font-style: italic;"));
         Clock_Period_SpinBox = new QSpinBox(Clock_Period_Widget);
         Clock_Period_SpinBox->setObjectName(QStringLiteral("Clock_Period_SpinBox"));
-        Clock_Period_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Clock_Period_SpinBox->setGeometry(QRect(125, 0, 76, 27));
         Clock_Period_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Clock_Period_Widget);
@@ -576,7 +600,7 @@ public:
 "font-style: italic;"));
         Simulation_Time_SpinBox = new QSpinBox(Simulation_Time_Widget);
         Simulation_Time_SpinBox->setObjectName(QStringLiteral("Simulation_Time_SpinBox"));
-        Simulation_Time_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Simulation_Time_SpinBox->setGeometry(QRect(125, 0, 76, 27));
         Simulation_Time_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Simulation_Time_Widget);
@@ -590,7 +614,7 @@ public:
 "font-style: italic;"));
         Warmup_Time_SpinBox = new QSpinBox(Warmup_Time_Widget);
         Warmup_Time_SpinBox->setObjectName(QStringLiteral("Warmup_Time_SpinBox"));
-        Warmup_Time_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Warmup_Time_SpinBox->setGeometry(QRect(125, 0, 76, 27));
         Warmup_Time_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Warmup_Time_Widget);
@@ -604,7 +628,7 @@ public:
 "font-style: italic;"));
         Reset_Time_SpinBox = new QSpinBox(Reset_Time_Widget);
         Reset_Time_SpinBox->setObjectName(QStringLiteral("Reset_Time_SpinBox"));
-        Reset_Time_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Reset_Time_SpinBox->setGeometry(QRect(125, 0, 76, 27));
         Reset_Time_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Reset_Time_Widget);
@@ -618,14 +642,14 @@ public:
 "font-style: italic;"));
         Delivery_Stop_SpinBox = new QSpinBox(Delivery_Stop_Widget);
         Delivery_Stop_SpinBox->setObjectName(QStringLiteral("Delivery_Stop_SpinBox"));
-        Delivery_Stop_SpinBox->setGeometry(QRect(125, 0, 81, 27));
+        Delivery_Stop_SpinBox->setGeometry(QRect(125, 0, 76, 27));
         Delivery_Stop_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_6->addWidget(Delivery_Stop_Widget);
 
         Packet_Options_Group = new QGroupBox(Simulation_Params_Widget);
         Packet_Options_Group->setObjectName(QStringLiteral("Packet_Options_Group"));
-        Packet_Options_Group->setGeometry(QRect(245, 35, 301, 191));
+        Packet_Options_Group->setGeometry(QRect(245, 35, 291, 191));
         Packet_Options_Group->setAutoFillBackground(false);
         Packet_Options_Group->setStyleSheet(QLatin1String("font-size: 11pt;\n"
 "font-style: normal;"));
@@ -644,7 +668,7 @@ public:
 "font-style: italic;"));
         Min_Packet_Size_SpinBox = new QSpinBox(Min_Packet_Size_Widget);
         Min_Packet_Size_SpinBox->setObjectName(QStringLiteral("Min_Packet_Size_SpinBox"));
-        Min_Packet_Size_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Min_Packet_Size_SpinBox->setGeometry(QRect(190, 0, 76, 27));
         Min_Packet_Size_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_8->addWidget(Min_Packet_Size_Widget);
@@ -658,7 +682,7 @@ public:
 "font-style: italic;"));
         Max_Packet_Size_SpinBox = new QSpinBox(Max_Packet_Size_Widget);
         Max_Packet_Size_SpinBox->setObjectName(QStringLiteral("Max_Packet_Size_SpinBox"));
-        Max_Packet_Size_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Max_Packet_Size_SpinBox->setGeometry(QRect(190, 0, 76, 27));
         Max_Packet_Size_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_8->addWidget(Max_Packet_Size_Widget);
@@ -672,11 +696,8 @@ public:
 "font-style: italic;"));
         Retransmission_SpinBox = new QDoubleSpinBox(Retransmission_Widget);
         Retransmission_SpinBox->setObjectName(QStringLiteral("Retransmission_SpinBox"));
-        Retransmission_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Retransmission_SpinBox->setGeometry(QRect(190, 0, 76, 27));
         Retransmission_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
-        Retransmission_Label->raise();
-        Retransmission_SpinBox->raise();
-        Max_Packet_Size_Widget->raise();
 
         verticalLayout_8->addWidget(Retransmission_Widget);
 
@@ -689,10 +710,8 @@ public:
 "font-style: italic;"));
         Packet_Injection_SpinBox = new QDoubleSpinBox(Packet_Injection_Rate_Widget);
         Packet_Injection_SpinBox->setObjectName(QStringLiteral("Packet_Injection_SpinBox"));
-        Packet_Injection_SpinBox->setGeometry(QRect(190, 0, 81, 27));
+        Packet_Injection_SpinBox->setGeometry(QRect(190, 0, 76, 27));
         Packet_Injection_SpinBox->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
-        Packet_Injection_Label->raise();
-        Packet_Injection_SpinBox->raise();
 
         verticalLayout_8->addWidget(Packet_Injection_Rate_Widget);
 
@@ -700,18 +719,22 @@ public:
         Packet_Injection_Type_Widget->setObjectName(QStringLiteral("Packet_Injection_Type_Widget"));
         Packet_Injection_SpinBox_Secondary = new QDoubleSpinBox(Packet_Injection_Type_Widget);
         Packet_Injection_SpinBox_Secondary->setObjectName(QStringLiteral("Packet_Injection_SpinBox_Secondary"));
-        Packet_Injection_SpinBox_Secondary->setGeometry(QRect(165, 0, 51, 27));
+        Packet_Injection_SpinBox_Secondary->setGeometry(QRect(105, 0, 51, 27));
         Packet_Injection_SpinBox_Secondary->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         Packet_Injection_ComboBox = new QComboBox(Packet_Injection_Type_Widget);
         Packet_Injection_ComboBox->setObjectName(QStringLiteral("Packet_Injection_ComboBox"));
-        Packet_Injection_ComboBox->setGeometry(QRect(0, 0, 156, 26));
+        Packet_Injection_ComboBox->setGeometry(QRect(0, 0, 101, 26));
         Packet_Injection_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;\n"
 "text-align: center;"));
         Packet_Injection_SpinBox_Tertiary = new QDoubleSpinBox(Packet_Injection_Type_Widget);
         Packet_Injection_SpinBox_Tertiary->setObjectName(QStringLiteral("Packet_Injection_SpinBox_Tertiary"));
-        Packet_Injection_SpinBox_Tertiary->setGeometry(QRect(220, 0, 51, 27));
+        Packet_Injection_SpinBox_Tertiary->setGeometry(QRect(160, 0, 51, 27));
         Packet_Injection_SpinBox_Tertiary->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        Packet_Injection_SpinBox_Quaternary = new QDoubleSpinBox(Packet_Injection_Type_Widget);
+        Packet_Injection_SpinBox_Quaternary->setObjectName(QStringLiteral("Packet_Injection_SpinBox_Quaternary"));
+        Packet_Injection_SpinBox_Quaternary->setGeometry(QRect(215, 0, 51, 27));
+        Packet_Injection_SpinBox_Quaternary->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
 
         verticalLayout_8->addWidget(Packet_Injection_Type_Widget);
 
@@ -732,7 +755,7 @@ public:
 "font-style: italic;"));
         Traffic_Pattern_ComboBox = new QComboBox(Traffic_Pattern_Widget);
         Traffic_Pattern_ComboBox->setObjectName(QStringLiteral("Traffic_Pattern_ComboBox"));
-        Traffic_Pattern_ComboBox->setGeometry(QRect(0, 20, 256, 21));
+        Traffic_Pattern_ComboBox->setGeometry(QRect(0, 20, 251, 21));
         Traffic_Pattern_ComboBox->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;\n"
 "text-align: center;"));
@@ -742,23 +765,22 @@ public:
         Traffic_Table_File_Widget->setStyleSheet(QStringLiteral(""));
         Traffic_Table_File_LineEdit = new QLineEdit(Traffic_Table_File_Widget);
         Traffic_Table_File_LineEdit->setObjectName(QStringLiteral("Traffic_Table_File_LineEdit"));
-        Traffic_Table_File_LineEdit->setGeometry(QRect(0, 0, 186, 21));
+        Traffic_Table_File_LineEdit->setGeometry(QRect(0, 0, 181, 21));
         Traffic_Table_File_LineEdit->setStyleSheet(QLatin1String("background-color: rgb(255, 255, 255);\n"
 "border-radius: 0px;"));
         Traffic_Table_File_Button = new QPushButton(Traffic_Table_File_Widget);
         Traffic_Table_File_Button->setObjectName(QStringLiteral("Traffic_Table_File_Button"));
-        Traffic_Table_File_Button->setGeometry(QRect(195, 0, 61, 21));
+        Traffic_Table_File_Button->setGeometry(QRect(190, 0, 61, 21));
         Traffic_Table_File_Button->setStyleSheet(QLatin1String("background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(240, 240, 240, 255), stop:1 rgba(255, 255, 255, 255));\n"
 "border-color: rgb(0, 0, 0);\n"
 ""));
         NoximGUI_Label = new QLabel(Simulation_Params_Widget);
         NoximGUI_Label->setObjectName(QStringLiteral("NoximGUI_Label"));
         NoximGUI_Label->setGeometry(QRect(775, 205, 51, 26));
-        Simulation_Params_Label->raise();
-        Clock_Options_Group->raise();
-        Packet_Options_Group->raise();
-        Traffic_Options_Group->raise();
-        NoximGUI_Label->raise();
+        label = new QLabel(Simulation_Params_Widget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(615, 155, 151, 66));
+        label->setPixmap(QPixmap(QString::fromUtf8(":/assets/logo.png")));
         Wireless_Config_Widget = new QWidget(Main_Background_Frame);
         Wireless_Config_Widget->setObjectName(QStringLiteral("Wireless_Config_Widget"));
         Wireless_Config_Widget->setGeometry(QRect(10, 455, 831, 331));
@@ -1083,7 +1105,7 @@ public:
 #endif // QT_NO_TOOLTIP
         actionSend_Feedback->setShortcut(QApplication::translate("NoximGUI", "Ctrl+Shift+F", 0));
         actionAbout_noximGUI->setText(QApplication::translate("NoximGUI", "About...", 0));
-        Wired_Config_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600;\">Wired Configuration</span></p></body></html>", 0));
+        Wired_Config_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Wired Configuration</span></p></body></html>", 0));
         Mesh_Dim_Group->setTitle(QApplication::translate("NoximGUI", "Mesh Dimensions", 0));
         X_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Mesh Size (X):</p></body></html>", 0));
         Y_Label->setText(QApplication::translate("NoximGUI", "Mesh Size (Y):", 0));
@@ -1096,12 +1118,13 @@ public:
         RR_Length_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">R-to-R (mm):</p></body></html>", 0));
         Routing_Options_Group->setTitle(QApplication::translate("NoximGUI", "Routing Options", 0));
         Algorithm_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Algorithm:</p></body></html>", 0));
+        Algorithm_Label_DYAD_Threshold->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">DYAD Threshold:</p></body></html>", 0));
         Selection_Strategy_Label->setText(QApplication::translate("NoximGUI", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:italic;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Selection Strategy:</p></body></html>", 0));
-        Simulation_Params_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600;\">Simulation Parameters</span></p></body></html>", 0));
+        Simulation_Params_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Simulation Parameters</span></p></body></html>", 0));
         Clock_Options_Group->setTitle(QApplication::translate("NoximGUI", "Clock Options", 0));
         Clock_Period_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Clock Period:</p></body></html>", 0));
         Simulation_Time_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\">Simulation Time:</p></body></html>", 0));
@@ -1121,6 +1144,7 @@ public:
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Traffic Pattern:</p></body></html>", 0));
         Traffic_Table_File_Button->setText(QApplication::translate("NoximGUI", "File...", 0));
         NoximGUI_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">v0.9.0</span></p></body></html>", 0));
+        label->setText(QString());
         Wireless_Config_Label->setText(QApplication::translate("NoximGUI", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Wireless Configuration</span></p></body></html>", 0));
         Wireless_Channel_PushButton->setText(QApplication::translate("NoximGUI", "Add Channel...", 0));
         Hub_Defaults_Group->setTitle(QApplication::translate("NoximGUI", "Hub Defaults", 0));

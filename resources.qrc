@@ -20,5 +20,6 @@
         <file>default_config.yaml</file>
         <file>default_power.yaml</file>
         <file>splash.png</file>
+        <file>logo.png</file>
     </qresource>
 </RCC>

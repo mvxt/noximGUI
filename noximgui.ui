@@ -20,6 +20,7 @@
     margin-top: 0.5em;
 }
 QGroupBox::title {
+    subcontrol-position:top middle;
     subcontrol-origin: margin;
     left: 10px;
     padding: 0 3px 0 3px;
@@ -79,14 +80,14 @@ border-radius: 5px;</string>
        <widget class="QLabel" name="Wired_Config_Label">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>5</y>
+          <x>10</x>
+          <y>10</y>
           <width>251</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Wired Configuration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Wired Configuration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
        <widget class="QGroupBox" name="Mesh_Dim_Group">
@@ -94,8 +95,8 @@ border-radius: 5px;</string>
          <rect>
           <x>10</x>
           <y>35</y>
-          <width>226</width>
-          <height>86</height>
+          <width>241</width>
+          <height>91</height>
          </rect>
         </property>
         <property name="autoFillBackground">
@@ -134,10 +135,10 @@ font-style: italic;</string>
            <widget class="QSpinBox" name="X_SpinBox">
             <property name="geometry">
              <rect>
-              <x>110</x>
+              <x>120</x>
               <y>0</y>
               <width>96</width>
-              <height>27</height>
+              <height>26</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -168,7 +169,7 @@ font-style: italic;</string>
            <widget class="QSpinBox" name="Y_SpinBox">
             <property name="geometry">
              <rect>
-              <x>110</x>
+              <x>120</x>
               <y>0</y>
               <width>96</width>
               <height>27</height>
@@ -187,7 +188,7 @@ font-style: italic;</string>
          <rect>
           <x>10</x>
           <y>125</y>
-          <width>226</width>
+          <width>241</width>
           <height>56</height>
          </rect>
         </property>
@@ -228,7 +229,7 @@ font-style: italic;
            <widget class="QComboBox" name="Depth_ComboBox">
             <property name="geometry">
              <rect>
-              <x>110</x>
+              <x>120</x>
               <y>0</y>
               <width>96</width>
               <height>27</height>
@@ -247,9 +248,9 @@ text-align: center;</string>
        <widget class="QGroupBox" name="Flit_Group">
         <property name="geometry">
          <rect>
-          <x>245</x>
+          <x>260</x>
           <y>35</y>
-          <width>291</width>
+          <width>276</width>
           <height>56</height>
          </rect>
         </property>
@@ -292,7 +293,7 @@ font-style: italic;
              <rect>
               <x>130</x>
               <y>0</y>
-              <width>141</width>
+              <width>121</width>
               <height>27</height>
              </rect>
             </property>
@@ -309,10 +310,10 @@ text-align: center;</string>
        <widget class="QGroupBox" name="Connection_Group">
         <property name="geometry">
          <rect>
-          <x>245</x>
-          <y>95</y>
-          <width>291</width>
-          <height>86</height>
+          <x>260</x>
+          <y>90</y>
+          <width>276</width>
+          <height>91</height>
          </rect>
         </property>
         <property name="autoFillBackground">
@@ -348,22 +349,17 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;R-to-H (mm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QComboBox" name="RH_Length_ComboBox">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
+           <widget class="QDoubleSpinBox" name="RH_Length_SpinBox">
             <property name="geometry">
              <rect>
               <x>130</x>
               <y>0</y>
-              <width>141</width>
-              <height>27</height>
+              <width>121</width>
+              <height>26</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-text-align: center;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -387,19 +383,17 @@ font-style: italic;</string>
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;R-to-R (mm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
-           <widget class="QComboBox" name="RR_Length_ComboBox">
+           <widget class="QDoubleSpinBox" name="RR_Length_SpinBox">
             <property name="geometry">
              <rect>
               <x>130</x>
               <y>0</y>
-              <width>141</width>
-              <height>27</height>
+              <width>121</width>
+              <height>26</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;
-text-align: center;</string>
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </widget>
@@ -428,108 +422,119 @@ font-style: normal;</string>
         <property name="checkable">
          <bool>false</bool>
         </property>
-        <widget class="QWidget" name="Algorithm_Widget" native="true">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>19</y>
-           <width>261</width>
-           <height>71</height>
-          </rect>
-         </property>
-         <widget class="QLabel" name="Algorithm_Label">
-          <property name="geometry">
-           <rect>
-            <x>-5</x>
-            <y>5</y>
-            <width>96</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font-size: 11pt;
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QWidget" name="Algorithm_Widget" native="true">
+           <widget class="QLabel" name="Algorithm_Label">
+            <property name="geometry">
+             <rect>
+              <x>-5</x>
+              <y>5</y>
+              <width>96</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-size: 11pt;
 font-style: italic;</string>
-          </property>
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Algorithm:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="Algorithm_ComboBox">
-          <property name="geometry">
-           <rect>
-            <x>85</x>
-            <y>5</y>
-            <width>176</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Algorithm:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="Algorithm_ComboBox">
+            <property name="geometry">
+             <rect>
+              <x>85</x>
+              <y>5</y>
+              <width>166</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
 text-align: center;</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="Traffic_Options_File_2">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>40</y>
-            <width>261</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;</string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="Selection_Strategy_Widget" native="true">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>90</y>
-           <width>261</width>
-           <height>41</height>
-          </rect>
-         </property>
-         <widget class="QLabel" name="Selection_Strategy_Label">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>261</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font-size: 11pt;
+            </property>
+           </widget>
+           <widget class="QDoubleSpinBox" name="Algorithm_SpinBox">
+            <property name="geometry">
+             <rect>
+              <x>180</x>
+              <y>30</y>
+              <width>69</width>
+              <height>26</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="Algorithm_Label_DYAD_Threshold">
+            <property name="geometry">
+             <rect>
+              <x>5</x>
+              <y>30</y>
+              <width>161</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-size: 11pt;
 font-style: italic;</string>
-          </property>
-          <property name="text">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;DYAD Threshold:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="Selection_Strategy_Widget" native="true">
+           <widget class="QLabel" name="Selection_Strategy_Label">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>261</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-size: 11pt;
+font-style: italic;</string>
+            </property>
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:italic;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Selection Strategy:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-         <widget class="QComboBox" name="Selection_Strategy_ComboBox">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>20</y>
-            <width>261</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
+            </property>
+           </widget>
+           <widget class="QComboBox" name="Selection_Strategy_ComboBox">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>20</y>
+              <width>251</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
 text-align: center;</string>
-          </property>
-         </widget>
-        </widget>
+            </property>
+           </widget>
+           <zorder>Selection_Strategy_Label</zorder>
+           <zorder>Selection_Strategy_ComboBox</zorder>
+           <zorder>Algorithm_Widget</zorder>
+           <zorder>Algorithm_Widget</zorder>
+           <zorder>Algorithm_Widget</zorder>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="Simulation_Params_Widget" native="true">
@@ -549,14 +554,14 @@ border-radius: 5px;
        <widget class="QLabel" name="Simulation_Params_Label">
         <property name="geometry">
          <rect>
-          <x>295</x>
+          <x>10</x>
           <y>10</y>
           <width>251</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Simulation Parameters&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Simulation Parameters&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
        <widget class="QGroupBox" name="Clock_Options_Group">
@@ -606,7 +611,7 @@ font-style: italic;</string>
              <rect>
               <x>125</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -640,7 +645,7 @@ font-style: italic;</string>
              <rect>
               <x>125</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -674,7 +679,7 @@ font-style: italic;</string>
              <rect>
               <x>125</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -708,7 +713,7 @@ font-style: italic;</string>
              <rect>
               <x>125</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -742,7 +747,7 @@ font-style: italic;</string>
              <rect>
               <x>125</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -759,7 +764,7 @@ font-style: italic;</string>
          <rect>
           <x>245</x>
           <y>35</y>
-          <width>301</width>
+          <width>291</width>
           <height>191</height>
          </rect>
         </property>
@@ -804,7 +809,7 @@ font-style: italic;</string>
              <rect>
               <x>190</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -838,7 +843,7 @@ font-style: italic;</string>
              <rect>
               <x>190</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -872,7 +877,7 @@ font-style: italic;</string>
              <rect>
               <x>190</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -880,9 +885,6 @@ font-style: italic;</string>
              <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
-           <zorder>Retransmission_Label</zorder>
-           <zorder>Retransmission_SpinBox</zorder>
-           <zorder>Max_Packet_Size_Widget</zorder>
           </widget>
          </item>
          <item>
@@ -909,7 +911,7 @@ font-style: italic;</string>
              <rect>
               <x>190</x>
               <y>0</y>
-              <width>81</width>
+              <width>76</width>
               <height>27</height>
              </rect>
             </property>
@@ -917,9 +919,6 @@ font-style: italic;</string>
              <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
            </widget>
-           <zorder>Packet_Injection_Label</zorder>
-           <zorder>Packet_Injection_SpinBox</zorder>
-           <zorder>Packet_Injection_Type_Widget</zorder>
           </widget>
          </item>
          <item>
@@ -927,7 +926,7 @@ font-style: italic;</string>
            <widget class="QDoubleSpinBox" name="Packet_Injection_SpinBox_Secondary">
             <property name="geometry">
              <rect>
-              <x>165</x>
+              <x>105</x>
               <y>0</y>
               <width>51</width>
               <height>27</height>
@@ -942,7 +941,7 @@ font-style: italic;</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>156</width>
+              <width>101</width>
               <height>26</height>
              </rect>
             </property>
@@ -955,7 +954,20 @@ text-align: center;</string>
            <widget class="QDoubleSpinBox" name="Packet_Injection_SpinBox_Tertiary">
             <property name="geometry">
              <rect>
-              <x>220</x>
+              <x>160</x>
+              <y>0</y>
+              <width>51</width>
+              <height>27</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QDoubleSpinBox" name="Packet_Injection_SpinBox_Quaternary">
+            <property name="geometry">
+             <rect>
+              <x>215</x>
               <y>0</y>
               <width>51</width>
               <height>27</height>
@@ -1026,7 +1038,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>0</x>
             <y>20</y>
-            <width>256</width>
+            <width>251</width>
             <height>21</height>
            </rect>
           </property>
@@ -1054,7 +1066,7 @@ text-align: center;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>186</width>
+            <width>181</width>
             <height>21</height>
            </rect>
           </property>
@@ -1066,7 +1078,7 @@ border-radius: 0px;</string>
          <widget class="QPushButton" name="Traffic_Table_File_Button">
           <property name="geometry">
            <rect>
-            <x>195</x>
+            <x>190</x>
             <y>0</y>
             <width>61</width>
             <height>21</height>
@@ -1096,12 +1108,22 @@ border-color: rgb(0, 0, 0);
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.9.0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <zorder>Simulation_Params_Label</zorder>
-       <zorder>Clock_Options_Group</zorder>
-       <zorder>Packet_Options_Group</zorder>
-       <zorder>Traffic_Options_Group</zorder>
-       <zorder>NoximGUI_Label</zorder>
-       <zorder>widget</zorder>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>615</x>
+          <y>155</y>
+          <width>151</width>
+          <height>66</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="resources.qrc">:/assets/logo.png</pixmap>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Wireless_Config_Widget" native="true">
        <property name="geometry">
@@ -1637,6 +1659,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionExport">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/external-link-2x.png</normaloff>:/icons/icons/external-link-2x.png</iconset>
@@ -1699,6 +1724,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/action-undo-2x.png</normaloff>:/icons/icons/action-undo-2x.png</iconset>
@@ -1714,6 +1742,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/action-redo-2x.png</normaloff>:/icons/icons/action-redo-2x.png</iconset>
@@ -1729,6 +1760,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/cut.png</normaloff>:/icons/icons/cut.png</iconset>
@@ -1744,6 +1778,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/copy.png</normaloff>:/icons/icons/copy.png</iconset>
@@ -1759,6 +1796,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/clipboard-2x.png</normaloff>:/icons/icons/clipboard-2x.png</iconset>
@@ -1774,6 +1814,9 @@ text-align: center;</string>
    </property>
   </action>
   <action name="actionClear_All_Fields">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/delete-2x.png</normaloff>:/icons/icons/delete-2x.png</iconset>

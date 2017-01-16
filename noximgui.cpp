@@ -50,9 +50,6 @@ NoximGUI::NoximGUI(QWidget *parent) :
     // Sets the universal parameters
     populateParams();
 
-    // Sets specialized parameters which may be depended on by other parameters
-    populateDependentParams();
-
     // Finally, show splash screen and start program
     QImage splashImage;
     splashImage.load(":/assets/splash.png");
@@ -142,8 +139,7 @@ bool NoximGUI::writeGUIConfig()
  */
 bool NoximGUI::setDefaultNoximConfig()
 {
-    std::cout << noximConfigFileName << std::endl;
-    return setNoximConfig( QString::fromStdString( noximConfigFileName ) );
+    return setNoximConfig( QString( ":/assets/default_config.yaml" ) );
 }
 
 /**
@@ -215,9 +211,6 @@ void NoximGUI::populateComboBoxes()
 {
     // Buffer Depth Values
     ui->Depth_ComboBox->addItems( availableBufferDepthValues );
-    // Connection Lengths
-    ui->RH_Length_ComboBox->addItems( availableConnectionLengths );
-    ui->RR_Length_ComboBox->addItems( availableConnectionLengths );
     // Flit Sizes
     ui->Flit_Size_ComboBox->addItems( availableFlitSizes );
     // Packet Injection Types
@@ -241,7 +234,7 @@ void NoximGUI::populateLists()
                availablePacketInjectionTypes.end() );
 
     // Set vector for selection strategies
-    availableSelectionStrategies << "RANDOM" << "BUFFER_LEVEL" <<"NOP";
+    availableSelectionStrategies << "RANDOM" << "BUFFER_LEVEL" << "NOP";
     std::sort( availableSelectionStrategies.begin(),
                availableSelectionStrategies.end() );
 
@@ -300,14 +293,6 @@ void NoximGUI::populateLists()
 }
 
 /**
- * @brief Private method to populate dependent fields (changes other params)
- */
-void NoximGUI::populateDependentParams()
-{
-    // TODO
-}
-
-/**
  * @brief Private method to populate YAML power config node
  */
 bool NoximGUI::populatePowerConfig( QString fileName )
@@ -321,7 +306,7 @@ bool NoximGUI::populatePowerConfig( QString fileName )
 }
 
 /**
- * @brief Private method to populate menu fields w/ defaults and
+ * @brief Private method to populate menu fields w/ defaults or with loaded config file
  */
 void NoximGUI::populateParams()
 {
@@ -346,7 +331,6 @@ void NoximGUI::populateParams()
     ui->Retransmission_SpinBox->setRange( 0, 1 );
     ui->Retransmission_SpinBox->setSingleStep( 0.01 );
     ui->Retransmission_SpinBox->setValue( std::stod( noximConfigNode["probability_of_retransmission"].as<std::string>() ) );
-
     // Set packet injection params    
     ui->Packet_Injection_SpinBox->setRange( 0, 1 );
     ui->Packet_Injection_SpinBox->setSingleStep( 0.01 );
@@ -354,10 +338,21 @@ void NoximGUI::populateParams()
     // By default, set injection type to poisson and disable other two spinboxes
     int packetInjectionIndex = ui->Packet_Injection_ComboBox->findText( QString::fromStdString( "Poisson" ) );
     ui->Packet_Injection_ComboBox->setCurrentIndex( packetInjectionIndex );
+    ui->Packet_Injection_SpinBox_Secondary->setRange( 0, 1 );
+    ui->Packet_Injection_SpinBox_Secondary->setSingleStep( 0.01 );
     ui->Packet_Injection_SpinBox_Secondary->setDisabled( true );
+    ui->Packet_Injection_SpinBox_Tertiary->setRange( 0, 1 );
+    ui->Packet_Injection_SpinBox_Tertiary->setSingleStep( 0.01 );
     ui->Packet_Injection_SpinBox_Tertiary->setDisabled( true );
+    ui->Packet_Injection_SpinBox_Quaternary->setRange( 0, 1 );
+    ui->Packet_Injection_SpinBox_Quaternary->setSingleStep( 0.01 );
+    ui->Packet_Injection_SpinBox_Quaternary->setDisabled( true );
 
     // Set default traffic
+    ui->Traffic_Table_File_LineEdit->setText(
+                QString::fromStdString(
+                    noximConfigNode["traffic_table_filename"].as<std::string>() ) );
+
     std::string trafficString = noximConfigNode["traffic_distribution"].as<std::string>();
     int trafficIndex = ui->Traffic_Pattern_ComboBox->findText( QString::fromStdString( trafficString ) );
     if ( trafficIndex >= 0 )
@@ -380,7 +375,81 @@ void NoximGUI::populateParams()
     ui->Y_SpinBox->setRange( 4, this->MAX );
     ui->Y_SpinBox->setValue( std::stoi( noximConfigNode["mesh_dim_y"].as<std::string>() ) );
 
-    // Disable unsupported features or features TODO
+    // Buffer depth
+    std::string bufferDepthString = noximConfigNode["buffer_depth"].as<std::string>();
+    int bufferDepthIndex = ui->Depth_ComboBox->findText( QString::fromStdString( bufferDepthString ) );
+    if ( bufferDepthIndex >= 0 )
+    {
+        ui->Depth_ComboBox->setCurrentIndex( bufferDepthIndex );
+    }
+    else
+    {
+        ui->Depth_ComboBox->setCurrentIndex( 0 );
+    }
+
+    // Flit size
+    std::string flitSizeString = noximConfigNode["flit_size"].as<std::string>();
+    int flitSizeIndex = ui->Flit_Size_ComboBox->findText( QString::fromStdString( flitSizeString ) );
+    if ( flitSizeIndex >= 0 )
+    {
+        ui->Flit_Size_ComboBox->setCurrentIndex( flitSizeIndex );
+    }
+    else
+    {
+        ui->Flit_Size_ComboBox->setCurrentIndex( 0 );
+    }
+
+    // Connection Lengths
+    double rhLengthMin = std::stod( this->availableConnectionLengths.first().toStdString() );
+    double rhLengthMax = std::stod( this->availableConnectionLengths.back().toStdString() );
+    ui->RH_Length_SpinBox->setRange( rhLengthMin, rhLengthMax );
+    ui->RH_Length_SpinBox->setSingleStep( 0.5 );
+    ui->RH_Length_SpinBox->setValue( std::stod( noximConfigNode["r2h_link_length"].as<std::string>() ) );
+
+    double rrLengthMin = std::stod( this->availableConnectionLengths.first().toStdString() );
+    double rrLengthMax = std::stod( this->availableConnectionLengths.back().toStdString() );
+    ui->RR_Length_SpinBox->setRange( rrLengthMin, rrLengthMax );
+    ui->RR_Length_SpinBox->setSingleStep( 0.5 );
+    ui->RR_Length_SpinBox->setValue( std::stod( noximConfigNode["r2r_link_length"].as<std::string>() ) );
+
+    // Routing algorithm
+    ui->Algorithm_SpinBox->setRange( 0, 1 );
+    ui->Algorithm_SpinBox->setSingleStep( 0.1 );
+    ui->Algorithm_SpinBox->setValue( std::stod( noximConfigNode["dyad_threshold"].as<std::string>() ) );
+
+    std::string algorithmString = noximConfigNode["routing_algorithm"].as<std::string>();
+    int algorithmIndex = ui->Algorithm_ComboBox->findText( QString::fromStdString( algorithmString ) );
+    if ( algorithmIndex >= 0 )
+    {
+        ui->Algorithm_ComboBox->setCurrentIndex( algorithmIndex );
+        if ( algorithmString.compare( "DYAD" ) == 0 )
+        {
+            ui->Algorithm_SpinBox->setDisabled( false );
+        }
+        else
+        {
+            ui->Algorithm_SpinBox->setDisabled( true );
+        }
+    }
+    else
+    {
+        ui->Algorithm_ComboBox->setCurrentIndex( 0 );
+        ui->Algorithm_SpinBox->setDisabled( true );
+    }
+
+    // Selection strategy
+    std::string selectionString = noximConfigNode["selection_strategy"].as<std::string>();
+    int selectionIndex = ui->Selection_Strategy_ComboBox->findText( QString::fromStdString( selectionString ) );
+    if ( selectionIndex >= 0 )
+    {
+        ui->Selection_Strategy_ComboBox->setCurrentIndex( selectionIndex );
+    }
+    else
+    {
+        ui->Selection_Strategy_ComboBox->setCurrentIndex( 0 );
+    }
+
+    // Set wireless permanently to disabled, not currently supported
     ui->Wireless_Config_Widget->setDisabled( true );
 }
 
@@ -395,8 +464,8 @@ void NoximGUI::updateNoximConfigNode()
     // Flit size
     noximConfigNode["flit_size"] = ui->Flit_Size_ComboBox->currentText().toStdString();
     // Wired connection lengths
-    noximConfigNode["r2h_link_length"] = ui->RH_Length_ComboBox->currentText().toStdString();
-    noximConfigNode["r2r_link_length"] = ui->RR_Length_ComboBox->currentText().toStdString();
+    noximConfigNode["r2h_link_length"] = ui->RH_Length_SpinBox->value();
+    noximConfigNode["r2r_link_length"] = ui->RR_Length_SpinBox->value();
     // Clock options
     //noximConfigNode["clock_period_ps"] = ui->Clock_Period_Edit->toPlainText().toStdString();
     noximConfigNode["simulation_time"] = ui->Simulation_Time_SpinBox->value();
@@ -412,12 +481,83 @@ void NoximGUI::updateNoximConfigNode()
     noximConfigNode["routing_algorithm"] = ui->Algorithm_ComboBox->currentText().toStdString();
     noximConfigNode["selection_strategy"] = ui->Selection_Strategy_ComboBox->currentText().toStdString();
     noximConfigNode["traffic_distribution"] = ui->Traffic_Pattern_ComboBox->currentText().toStdString();
+    noximConfigNode["traffic_table_filename"] = ui->Traffic_Table_File_LineEdit->text().toStdString();
     // Buffer depth
     noximConfigNode["buffer_depth"] = ui->Depth_ComboBox->currentText().toStdString();
 }
 
 /**
- * @brief Private method to run the simulation when button pressed.
+ * @brief User has pressed 'new file' button, reset all params
+ *          to default
+ */
+void NoximGUI::on_actionNew_triggered()
+{
+    bool success = setDefaultNoximConfig();
+    populateParams();
+    if( !success )
+    {
+        QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                              QString( "Could not load default config. Contact developer." ) );
+    }
+}
+
+/**
+ * @brief User has pressed 'load file' button, load file,
+ *          check validity, and then populate fields
+ */
+void NoximGUI::on_actionOpen_triggered()
+{
+    QString loadConfigFileName = "";
+    QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    loadConfigFileName = dialog.getOpenFileName( 0, "Select configuration" );
+    if ( loadConfigFileName.isEmpty() || loadConfigFileName.isNull() )
+    {
+        QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                              QString( "Error opening configuration file. "
+                                       "Check the file or try a different one." ) );
+    }
+    else
+    {
+        noximConfigFileName = loadConfigFileName.toStdString();
+        setNoximConfig( loadConfigFileName );
+        populateParams();
+    }
+}
+
+/**
+ * @brief User has pressed 'save file' button, write file
+ */
+void NoximGUI::on_actionSave_triggered()
+{
+    QFileDialog saveDialog;
+    saveDialog.setDefaultSuffix("yaml");
+    QString saveConfigFileName = saveDialog.getSaveFileName( this,
+                                                               tr("Save Configuration"),
+                                                               QDir::currentPath(),
+                                                               tr("YAML Files (*.yaml *.yml)"));
+
+    if ( saveConfigFileName.isEmpty() || saveConfigFileName.isNull() )
+    {
+        QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                              QString( "You must supply a name to save this file to." ) );
+    }
+    else
+    {
+        noximConfigFileName = saveConfigFileName.toStdString();
+        bool writeConfigResult = writeNoximConfig( saveConfigFileName );
+        if( !writeConfigResult )
+        {
+            QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                                  QString( "There was an error saving the file. Contact developer." ) );
+        }
+    }
+}
+
+/**
+ * @brief Private method for signal received when
+ *  run simulation button pressed.
+ *  Runs the simulation.
  */
 void NoximGUI::on_actionRun_Simulation_triggered()
 {
@@ -435,6 +575,34 @@ void NoximGUI::on_actionRun_Simulation_triggered()
         std::string config( "-config " + noximConfigFileName );
         std::string powerConfig( "-power " + powerConfigFileName );
         std::string args = config + " " + powerConfig;
+
+        // Have to set packet injection as separate arg
+        //  Set pirType string and then change it to lowercase
+        QString pirType = ui->Packet_Injection_ComboBox->currentText();
+        std::string pirTypeLower = pirType.toStdString();
+        std::transform(pirTypeLower.begin(), pirTypeLower.end(), pirTypeLower.begin(), ::tolower);
+        std::string pir( "-pir " + noximConfigNode["packet_injection_rate"].as<std::string>() );
+        if( pirType == "Poisson" )
+        {
+            pir = pir + " " + pirTypeLower;
+        }
+        else if( pirType == "Burst" )
+        {
+            std::ostringstream burst;
+            burst << " " << pirTypeLower << " "
+                  << ui->Packet_Injection_SpinBox_Secondary->value();
+            pir = pir + burst.str();
+        }
+        else if( pirType == "Pareto" )
+        {
+            std::ostringstream pareto;
+            pareto << " " << pirTypeLower << " "
+                   << ui->Packet_Injection_SpinBox_Secondary->value() << " "
+                   << ui->Packet_Injection_SpinBox_Tertiary->value() << " "
+                   << ui->Packet_Injection_SpinBox_Quaternary->value();
+            pir = pir + pareto.str();
+        }
+        args = args + " " + pir;
         std::string exec = guiConfigNode[execConfigName].as<std::string>() + " " + args;
 
         // Start process, execute code
@@ -450,9 +618,9 @@ void NoximGUI::on_actionRun_Simulation_triggered()
 
         // Display output with config values
         std::stringstream ss;
-        ss << "CONFIGURATION:" << std::endl;
-        ss << "______________" << std::endl;
-        Utils::writeYamlOrderedMaps( ss, noximConfigNode );
+//        ss << "CONFIGURATION:" << std::endl;
+//        ss << "______________" << std::endl;
+//        Utils::writeYamlOrderedMaps( ss, noximConfigNode );
         ss << std::endl;
         ss << "OUTPUT:" << std::endl;
         ss << "______________" << std::endl;
@@ -470,7 +638,105 @@ void NoximGUI::on_actionRun_Simulation_triggered()
     else
     {
         QMessageBox::warning( NULL, QString( "NoximGUI" ),
-                              QString( "You must save the config file before simulations can run. Check your settings." ) );
+                              QString( "You must save the config file "
+                                       "before simulations can run. Check your settings." ) );
+    }
+}
+
+/**
+ * @brief Private signal that activates/deactivates extra UI elements
+ *          when Routing Algorithm ComboBox activated.
+ *          If DYAD, activate threshold spinbox.
+ *          Else deactivate
+ * @param QString &option - String value of option selected
+ */
+void NoximGUI::on_Algorithm_ComboBox_activated(const QString &algorithm)
+{
+    if( algorithm == "DYAD" )
+    {
+        ui->Algorithm_SpinBox->setDisabled( false );
+    }
+    else
+    {
+        ui->Algorithm_SpinBox->setDisabled( true );
+    }
+}
+
+
+/**
+ * @brief Private signal that activates/deactivates extra UI elements
+ *          when Packet Injection ComboBox activated.
+ *          If poisson, deactivate both spinboxes.
+ *          Else if burst, activate one spinbox.
+ *          Else if pareto, activate both spinboxes.
+ * @param QString &option - String value of option selected
+ */
+void NoximGUI::on_Packet_Injection_ComboBox_activated(const QString &option)
+{
+    if( option == "Poisson" )
+    {
+        ui->Packet_Injection_SpinBox_Secondary->setDisabled( true );
+        ui->Packet_Injection_SpinBox_Tertiary->setDisabled( true );
+        ui->Packet_Injection_SpinBox_Quaternary->setDisabled( true );
+    }
+    else if( option == "Burst" )
+    {
+        ui->Packet_Injection_SpinBox_Secondary->setDisabled( false );
+        ui->Packet_Injection_SpinBox_Tertiary->setDisabled( true );
+        ui->Packet_Injection_SpinBox_Quaternary->setDisabled( true );
+    }
+    else if( option == "Pareto" )
+    {
+        ui->Packet_Injection_SpinBox_Secondary->setDisabled( false );
+        ui->Packet_Injection_SpinBox_Tertiary->setDisabled( false );
+        ui->Packet_Injection_SpinBox_Quaternary->setDisabled( false );
+    }
+    else
+    {
+        ui->Packet_Injection_SpinBox_Secondary->setDisabled( true );
+        ui->Packet_Injection_SpinBox_Tertiary->setDisabled( true );
+        ui->Packet_Injection_SpinBox_Quaternary->setDisabled( true );
+    }
+}
+
+/**
+ * @brief Private signal that activates/deactivates extra UI elements
+ *          when Traffic Pattern ComboBox activated.
+ *          If TRAFFIC_TABLE_BASED, activate file selector.
+ *          Else deactivate
+ * @param QString &traffic - String value of option selected
+ *
+ */
+void NoximGUI::on_Traffic_Pattern_ComboBox_activated(const QString &traffic)
+{
+    if( traffic == "TRAFFIC_TABLE_BASED" )
+    {
+        ui->Traffic_Table_File_Widget->setDisabled( false );
+    }
+    else
+    {
+        ui->Traffic_Table_File_Widget->setDisabled( true );
+    }
+}
+
+/**
+ * @brief Private signal that calls file-explorer when button clicked.
+ */
+void NoximGUI::on_Traffic_Table_File_Button_clicked()
+{
+    QString tableFileName = "";
+    QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    tableFileName = dialog.getOpenFileName( 0, "Select text file containing table routes" );
+    if ( tableFileName.isEmpty() || tableFileName.isNull() )
+    {
+        QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                              QString( "Error opening table routing file. "
+                                       "Check the file or try a different one." ) );
+    }
+    else
+    {
+        ui->Traffic_Table_File_LineEdit->setText(tableFileName);
     }
 }
 

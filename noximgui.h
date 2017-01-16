@@ -60,10 +60,29 @@ class NoximGUI : public QMainWindow
         bool setNoximConfig( QString fileName );
 
     private slots:
+        // Algorithm selection enables/disables other UI elements
+        void on_Algorithm_ComboBox_activated(const QString &algorithm);
+
         // Run Simulation button pressed.
         void on_actionRun_Simulation_triggered();
 
-    private:
+        // Packet injection enables/disables other UI elements
+        void on_Packet_Injection_ComboBox_activated(const QString &option);
+
+        // Traffic pattern enables/disables other UI elements
+        void on_Traffic_Pattern_ComboBox_activated(const QString &traffic);
+
+        // Traffic file button calls file dialog
+        void on_Traffic_Table_File_Button_clicked();
+
+
+        void on_actionNew_triggered();
+
+        void on_actionOpen_triggered();
+
+        void on_actionSave_triggered();
+
+private:
         // Const strings
         std::string execConfigName;
         std::string guiConfigFileName;
@@ -96,9 +115,6 @@ class NoximGUI : public QMainWindow
 
         // Private method to populate combo boxes
         void populateComboBoxes();
-
-        // Private method to populate dependent fields (changes other params)
-        void populateDependentParams();
 
         // Private method to populate vectors
         void populateLists();
