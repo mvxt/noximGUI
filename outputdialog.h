@@ -19,10 +19,10 @@ class OutputDialog : public QDialog
     void showOutput( QString text );
     ~OutputDialog();
 
-private slots:
+  private slots:
     void on_Print_Button_clicked();
 
-private:
+  private:
     Ui::OutputDialog *ui;
 };
 

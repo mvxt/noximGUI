@@ -527,11 +527,6 @@ border-radius: 0px;
 text-align: center;</string>
             </property>
            </widget>
-           <zorder>Selection_Strategy_Label</zorder>
-           <zorder>Selection_Strategy_ComboBox</zorder>
-           <zorder>Algorithm_Widget</zorder>
-           <zorder>Algorithm_Widget</zorder>
-           <zorder>Algorithm_Widget</zorder>
           </widget>
          </item>
         </layout>
@@ -1098,23 +1093,23 @@ border-color: rgb(0, 0, 0);
        <widget class="QLabel" name="NoximGUI_Label">
         <property name="geometry">
          <rect>
-          <x>775</x>
+          <x>755</x>
           <y>205</y>
-          <width>51</width>
+          <width>71</width>
           <height>26</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.9.0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;v0.11.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
        <widget class="QLabel" name="label">
         <property name="geometry">
          <rect>
           <x>615</x>
-          <y>155</y>
+          <y>145</y>
           <width>151</width>
-          <height>66</height>
+          <height>86</height>
          </rect>
         </property>
         <property name="text">
@@ -1126,6 +1121,9 @@ border-color: rgb(0, 0, 0);
        </widget>
       </widget>
       <widget class="QWidget" name="Wireless_Config_Widget" native="true">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>10</x>

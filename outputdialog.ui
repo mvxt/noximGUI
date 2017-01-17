@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>579</height>
+    <width>747</width>
+    <height>638</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,97 +24,67 @@ QPushButton{
 	color:rgb(255, 255, 255);
 }</string>
   </property>
-  <widget class="QFrame" name="Output_Dialog_Frame">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>701</width>
-     <height>581</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(80, 80, 80)</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QWidget" name="Simulation_Widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>676</width>
-      <height>526</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(50, 50, 50);
-border-radius: 5px;
-</string>
-    </property>
-    <widget class="QLabel" name="Simulation_Label">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>221</width>
-       <height>36</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Simulation Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QTextBrowser" name="Simulation_Output_TextBrowser">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>35</y>
-       <width>656</width>
-       <height>481</height>
-      </rect>
-     </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QFrame" name="Output_Dialog_Frame">
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
+      <string notr="true">background-color: rgb(80, 80, 80)</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QWidget" name="Simulation_Widget" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(50, 50, 50);
 border-radius: 5px;
 </string>
-     </property>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="Simulation_Label">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Simulation Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextBrowser" name="Simulation_Output_TextBrowser">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 5px;
+</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDialogButtonBox" name="Output_Dialog_ButtonBox">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="Print_Button">
+        <property name="text">
+         <string>Print...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
-   </widget>
-   <widget class="QDialogButtonBox" name="Output_Dialog_ButtonBox">
-    <property name="geometry">
-     <rect>
-      <x>145</x>
-      <y>541</y>
-      <width>536</width>
-      <height>36</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <property name="standardButtons">
-     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="Print_Button">
-    <property name="geometry">
-     <rect>
-      <x>25</x>
-      <y>545</y>
-      <width>99</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Print...</string>
-    </property>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

@@ -18,6 +18,11 @@ OutputDialog::~OutputDialog()
 // Sets output text and prevents changes
 void OutputDialog::showOutput( QString text )
 {
+    QTextDocument *doc = ui->Simulation_Output_TextBrowser->document();
+    QFont font = doc->defaultFont();
+    font.setFamily( "Courier New" );
+    font.setPointSize(10);
+    doc->setDefaultFont( font );
     ui->Simulation_Output_TextBrowser->setText( text );
 }
 

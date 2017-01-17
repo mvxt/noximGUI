@@ -14,16 +14,18 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     noximgui.cpp \
-    outputdialog.cpp
+    outputdialog.cpp \
+    runconfigurations.cpp
 
 HEADERS  += \
     noximgui.h \
-    outputdialog.h
+    outputdialog.h \
+    runconfigurations.h
 
 FORMS    += \
     noximgui.ui \
     outputdialog.ui \
-    run_configurations.ui
+    runconfigurations.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/release/ -lyaml-cpp
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/debug/ -lyaml-cpp
@@ -41,7 +43,8 @@ else:unix: PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/libyaml-c
 DISTFILES += \
     default_config.yaml \
     default_power.yaml \
-    splash.png
+    splash.png \
+    logo.png
 
 RESOURCES += \
     resources.qrc

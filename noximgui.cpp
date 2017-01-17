@@ -1,6 +1,9 @@
 #include "noximgui.h"
-#include "ui_noximgui.h"
 #include "outputdialog.h"
+#include "runconfigurations.h"
+#include "ui_noximgui.h"
+#include "ui_runconfigurations.h"
+
 #include <QTimer>
 #include <iostream>
 /**
@@ -492,12 +495,20 @@ void NoximGUI::updateNoximConfigNode()
  */
 void NoximGUI::on_actionNew_triggered()
 {
-    bool success = setDefaultNoximConfig();
-    populateParams();
-    if( !success )
+    QMessageBox::StandardButton confirm;
+    confirm = QMessageBox::question(this, "New Config", "<font color='#000000'>Are you sure?</font>",
+                                    QMessageBox::Yes|QMessageBox::No);
+    bool ok = ( confirm == QMessageBox::Yes );
+
+    if( ok )
     {
-        QMessageBox::warning( NULL, QString( "NoximGUI" ),
-                              QString( "Could not load default config. Contact developer." ) );
+        bool success = setDefaultNoximConfig();
+        populateParams();
+        if( !success )
+        {
+            QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                                  QString( "Could not load default config. Contact developer." ) );
+        }
     }
 }
 
@@ -507,15 +518,21 @@ void NoximGUI::on_actionNew_triggered()
  */
 void NoximGUI::on_actionOpen_triggered()
 {
-    QString loadConfigFileName = "";
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFile);
-    loadConfigFileName = dialog.getOpenFileName( 0, "Select configuration" );
-    if ( loadConfigFileName.isEmpty() || loadConfigFileName.isNull() )
+    dialog.setDefaultSuffix("yaml");
+    QString loadConfigFileName = dialog.getOpenFileName( this,
+                                                         tr("Select configuration"),
+                                                         QDir::currentPath(),
+                                                         tr("YAML Files (*.yaml *.yml)") );
+    if ( loadConfigFileName.isNull() )
+    {
+        // User canceled, do nothing
+    }
+    else if ( loadConfigFileName.isEmpty() )
     {
         QMessageBox::warning( NULL, QString( "NoximGUI" ),
-                              QString( "Error opening configuration file. "
-                                       "Check the file or try a different one." ) );
+                              QString( "You didn't select a file." ) );
     }
     else
     {
@@ -533,11 +550,15 @@ void NoximGUI::on_actionSave_triggered()
     QFileDialog saveDialog;
     saveDialog.setDefaultSuffix("yaml");
     QString saveConfigFileName = saveDialog.getSaveFileName( this,
-                                                               tr("Save Configuration"),
-                                                               QDir::currentPath(),
-                                                               tr("YAML Files (*.yaml *.yml)"));
+                                                             tr("Save Configuration"),
+                                                             QDir::currentPath(),
+                                                             tr("YAML Files (*.yaml *.yml)") );
 
-    if ( saveConfigFileName.isEmpty() || saveConfigFileName.isNull() )
+    if (  saveConfigFileName.isNull() )
+    {
+        // User canceled, do nothing
+    }
+    else if ( saveConfigFileName.isEmpty() )
     {
         QMessageBox::warning( NULL, QString( "NoximGUI" ),
                               QString( "You must supply a name to save this file to." ) );
@@ -627,7 +648,7 @@ void NoximGUI::on_actionRun_Simulation_triggered()
         ss << stdout.toStdString();
         OutputDialog outputDialog;
         outputDialog.showOutput( QString::fromStdString(ss.str()) );
-        outputDialog.setModal( true);
+        outputDialog.setModal(true);
         outputDialog.exec();
 
         QFile file( qTempFile );
@@ -641,6 +662,53 @@ void NoximGUI::on_actionRun_Simulation_triggered()
                               QString( "You must save the config file "
                                        "before simulations can run. Check your settings." ) );
     }
+}
+
+/**
+ * @brief Private method for signal received when
+ *  run configurations button pressed/keyboard shortcut keyed
+ *  Opens dialog to edit run configurations
+ */
+void NoximGUI::on_actionRun_Configurations_triggered()
+{
+    RunConfigurations runConfigurations;
+    runConfigurations.setModal(true);
+    runConfigurations.setSettings(noximConfigNode);
+    int result = runConfigurations.exec();
+    // User clicked OK
+    if ( result == QDialog::Accepted )
+    {
+        YAML::Node runConfigNode = runConfigurations.getSettings();
+
+        // Iterate through each node in runConfigNode and overwrite
+        //  the same key/value pair in noximConfigNode
+        for( YAML::const_iterator it = runConfigNode.begin();
+             it != runConfigNode.end(); ++it )
+        {
+            std::string key = it->first.as<std::string>();
+            noximConfigNode[key] = it->second;
+        }
+        Utils::writeYamlOrderedMaps(std::cout, runConfigNode);
+    }
+    else if ( result == QDialog::Rejected )
+    {
+        // User clicked cancel, do nothing
+    }
+    else // Undefined
+    {
+        QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                              QString( "Undefined response." ) );
+    }
+}
+
+/**
+ * @brief Private method for signal received when
+ *  exit button pressed/keyboard shortcut keyed
+ *  Exits the program.
+ */
+void NoximGUI::on_actionExit_triggered()
+{
+    this->close();
 }
 
 /**
@@ -804,3 +872,4 @@ void Utils::writeYamlOrderedMaps(std::ostream& out, const YAML::Node& node)
   writeNode(node, emitter);
   out << emitter.c_str() << std::endl;
 }
+

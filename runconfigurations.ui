@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>RunConfigurations</class>
+ <widget class="QDialog" name="RunConfigurations">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,23 +11,52 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Run Configurations</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox {
-    border: 1px solid gray;
+    border: 1px solid black;
     border-radius: 9px;
     margin-top: 0.5em;
 }
-
 QGroupBox::title {
+    subcontrol-position:top middle;
     subcontrol-origin: margin;
     left: 10px;
     padding: 0 3px 0 3px;
+	color:rgb(255, 255, 255);
 }
-background-color: rgb(80, 80, 80);</string>
+QLabel {
+	color:rgb(255, 255, 255);
+}
+QLabel:disabled {
+	color:rgb(120, 120, 120);
+}
+QCheckBox{
+	color:rgb(255, 255, 255);
+}
+QCheckBox:disabled{
+	color::rgb(120, 120, 120);
+}
+QLineEdit:disabled{
+	background-color:rgb(180, 180, 180);
+}
+QWidget:disabled{
+	background-color:rgb(180, 180, 180);
+}
+QTextEdit:disabled{
+	background-color:rgb(180, 180, 180);
+}
+QComboBox:disabled{
+	background-color:rgb(180, 180, 180);
+}
+QLineEdit:disabled{
+	background-color:rgb(120, 120, 120);
+}
+background-color: rgb(80, 80, 80);
+</string>
   </property>
-  <widget class="QFrame" name="frame">
+  <widget class="QFrame" name="Run_Configurations_Frame">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -45,7 +74,7 @@ background-color: rgb(80, 80, 80);</string>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="Run_Confirmations_Tab_Widget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -65,13 +94,13 @@ border-radius: 5px;</string>
      <attribute name="title">
       <string>Misc. Run Configurations</string>
      </attribute>
-     <widget class="QGroupBox" name="groupBox">
+     <widget class="QGroupBox" name="Simulation_Options_GroupBox">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
         <width>296</width>
-        <height>186</height>
+        <height>156</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -82,6 +111,9 @@ border-radius: 5px;</string>
        <string>Simulation Options</string>
       </property>
       <widget class="QCheckBox" name="Wireless_CheckBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>15</x>
@@ -90,15 +122,21 @@ border-radius: 5px;</string>
          <height>22</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="text">
         <string>Enable Wireless</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox">
+      <widget class="QCheckBox" name="Power_Saving_Mode_CheckBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
-         <x>15</x>
-         <y>45</y>
+         <x>50</x>
+         <y>40</y>
          <width>161</width>
          <height>22</height>
         </rect>
@@ -107,21 +145,21 @@ border-radius: 5px;</string>
         <string>Power Saving Mode</string>
        </property>
       </widget>
-      <widget class="QWidget" name="Max_Packet_Size_Widget" native="true">
+      <widget class="QWidget" name="Random_Number_Seed_Widget" native="true">
        <property name="geometry">
         <rect>
-         <x>15</x>
-         <y>150</y>
-         <width>271</width>
+         <x>10</x>
+         <y>120</y>
+         <width>281</width>
          <height>26</height>
         </rect>
        </property>
-       <widget class="QLabel" name="Max_Packet_Size_Label">
+       <widget class="QLabel" name="Random_Number_Seed_Label">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>191</width>
+          <width>156</width>
           <height>26</height>
          </rect>
         </property>
@@ -133,12 +171,12 @@ font-style: italic;</string>
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Random Number Seed:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QSpinBox" name="Max_Packet_Size_SpinBox">
+       <widget class="QSpinBox" name="Random_Number_Seed_SpinBox">
         <property name="geometry">
          <rect>
-          <x>190</x>
+          <x>160</x>
           <y>0</y>
-          <width>81</width>
+          <width>111</width>
           <height>27</height>
          </rect>
         </property>
@@ -147,47 +185,21 @@ font-style: italic;</string>
         </property>
        </widget>
       </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox_2">
+      <widget class="QWidget" name="Verbose_Widget" native="true">
        <property name="geometry">
         <rect>
-         <x>15</x>
-         <y>70</y>
-         <width>251</width>
-         <height>22</height>
+         <x>10</x>
+         <y>90</y>
+         <width>281</width>
+         <height>21</height>
         </rect>
        </property>
-       <property name="text">
-        <string>Enable Low-Power Link Strategy</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="widget" native="true">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>120</y>
-         <width>271</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <widget class="QCheckBox" name="Power_Save_CheckBox_3">
+       <widget class="QComboBox" name="Verbose_ComboBox">
         <property name="geometry">
          <rect>
-          <x>0</x>
+          <x>110</x>
           <y>0</y>
-          <width>106</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Verbose</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBox">
-        <property name="geometry">
-         <rect>
-          <x>105</x>
-          <y>0</y>
-          <width>166</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -197,12 +209,29 @@ border-radius: 0px;
 text-align: center;</string>
         </property>
        </widget>
+       <widget class="QLabel" name="Verbose_Label">
+        <property name="geometry">
+         <rect>
+          <x>15</x>
+          <y>0</y>
+          <width>86</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 11pt;
+font-style: italic;</string>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Verbosity:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
       </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox_4">
+      <widget class="QCheckBox" name="Detailed_Output_Checkbox">
        <property name="geometry">
         <rect>
          <x>15</x>
-         <y>95</y>
+         <y>65</y>
          <width>161</width>
          <height>22</height>
         </rect>
@@ -212,7 +241,7 @@ text-align: center;</string>
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_2">
+     <widget class="QGroupBox" name="Administrative_GroupBox">
       <property name="geometry">
        <rect>
         <x>315</x>
@@ -228,7 +257,7 @@ text-align: center;</string>
       <property name="title">
        <string>Administrative</string>
       </property>
-      <widget class="QCheckBox" name="Trace_Mode_CheckBox_2">
+      <widget class="QCheckBox" name="Trace_Mode_CheckBox">
        <property name="geometry">
         <rect>
          <x>15</x>
@@ -241,7 +270,7 @@ text-align: center;</string>
         <string>Trace Mode</string>
        </property>
       </widget>
-      <widget class="QWidget" name="widget_4" native="true">
+      <widget class="QWidget" name="Trace_Mode_File_Widget" native="true">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -250,10 +279,10 @@ text-align: center;</string>
          <height>21</height>
         </rect>
        </property>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="Trace_Mode_File_PushButton">
         <property name="geometry">
          <rect>
-          <x>215</x>
+          <x>210</x>
           <y>0</y>
           <width>71</width>
           <height>21</height>
@@ -268,12 +297,15 @@ border-color: rgb(0, 0, 0);
          <string>File...</string>
         </property>
        </widget>
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QLineEdit" name="Trace_Mode_File_LineEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
-          <x>-5</x>
-          <y>0</y>
-          <width>211</width>
+          <x>0</x>
+          <y>-1</y>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
@@ -281,18 +313,18 @@ border-color: rgb(0, 0, 0);
          <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
 font-size: 10pt;
-text-align: right;</string>
+</string>
         </property>
        </widget>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_3">
+     <widget class="QGroupBox" name="Power_Configuration_GroupBox">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>200</y>
+        <y>170</y>
         <width>296</width>
-        <height>191</height>
+        <height>221</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -302,13 +334,13 @@ text-align: right;</string>
       <property name="title">
        <string>Power Configuration</string>
       </property>
-      <widget class="QListWidget" name="listWidget">
+      <widget class="QListWidget" name="Power_Configuration_ListWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>20</y>
          <width>276</width>
-         <height>126</height>
+         <height>161</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -318,11 +350,11 @@ font-size: 10pt;
 text-align: right;</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="Power_Configuration_Delete_PushButton">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>155</y>
+         <x>135</x>
+         <y>190</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -336,11 +368,11 @@ border-color: rgb(0, 0, 0);
         <string>Delete</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="Power_Configuration_Add_PushButton">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>155</y>
+         <x>215</x>
+         <y>190</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -353,11 +385,11 @@ border-color: rgb(0, 0, 0);</string>
         <string>Add</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="Power_Configuration_Edit_PushButton">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>155</y>
+         <x>55</x>
+         <y>190</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -371,12 +403,47 @@ border-color: rgb(0, 0, 0);</string>
        </property>
       </widget>
      </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>405</x>
+        <y>215</y>
+        <width>146</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="resources.qrc">:/assets/logo.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>230</y>
+        <width>151</width>
+        <height>106</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="resources.qrc">:/assets/logo.png</pixmap>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="Sweeping_Config_Tab">
      <attribute name="title">
       <string>Sweeping</string>
      </attribute>
-     <widget class="QGroupBox" name="groupBox_4">
+     <widget class="QGroupBox" name="Sweep_Options_GroupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -392,113 +459,21 @@ border-color: rgb(0, 0, 0);</string>
       <property name="title">
        <string>Sweep Options</string>
       </property>
-      <widget class="QCheckBox" name="Wireless_CheckBox_2">
+      <widget class="QWidget" name="Variable_Sweep_Widget" native="true">
        <property name="geometry">
         <rect>
-         <x>15</x>
-         <y>20</y>
-         <width>156</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable Wireless</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox_5">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>45</y>
-         <width>161</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Power Saving Mode</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="Max_Packet_Size_Widget_2" native="true">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>150</y>
+         <x>10</x>
+         <y>25</y>
          <width>271</width>
          <height>26</height>
         </rect>
        </property>
-       <widget class="QLabel" name="Max_Packet_Size_Label_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>191</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font-size: 11pt;
-font-style: italic;</string>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Random Number Seed:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QSpinBox" name="Max_Packet_Size_SpinBox_2">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>0</y>
-          <width>81</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox_6">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>70</y>
-         <width>251</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable Low-Power Link Strategy</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="widget_2" native="true">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>120</y>
-         <width>271</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <widget class="QCheckBox" name="Power_Save_CheckBox_7">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>106</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Verbose</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBox_2">
+       <widget class="QComboBox" name="Variable_Sweep_ComboBox">
         <property name="geometry">
          <rect>
           <x>105</x>
           <y>0</y>
-          <width>166</width>
+          <width>161</width>
           <height>21</height>
          </rect>
         </property>
@@ -508,22 +483,29 @@ border-radius: 0px;
 text-align: center;</string>
         </property>
        </widget>
-      </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox_8">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>95</y>
-         <width>161</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Detailed Output</string>
-       </property>
+       <widget class="QLabel" name="Variable_Sweep_Label">
+        <property name="geometry">
+         <rect>
+          <x>-5</x>
+          <y>1</y>
+          <width>106</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 11pt;
+font-style: italic;</string>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Variable:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_5">
+     <widget class="QGroupBox" name="Sweep_Output_Options_GroupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>315</x>
@@ -539,7 +521,7 @@ text-align: center;</string>
       <property name="title">
        <string>Output Options</string>
       </property>
-      <widget class="QRadioButton" name="radioButton">
+      <widget class="QRadioButton" name="Sweep_Output_BarGraph_RadioButton">
        <property name="geometry">
         <rect>
          <x>15</x>
@@ -552,7 +534,7 @@ text-align: center;</string>
         <string>Bar Graph</string>
        </property>
       </widget>
-      <widget class="QRadioButton" name="radioButton_2">
+      <widget class="QRadioButton" name="Sweep_Output_LineGraph_RadioButton">
        <property name="geometry">
         <rect>
          <x>15</x>
@@ -565,7 +547,7 @@ text-align: center;</string>
         <string>Line Graph</string>
        </property>
       </widget>
-      <widget class="QRadioButton" name="radioButton_3">
+      <widget class="QRadioButton" name="Sweep_Output_ScatterPlot_RadioButton">
        <property name="geometry">
         <rect>
          <x>15</x>
@@ -578,7 +560,7 @@ text-align: center;</string>
         <string>Scatter Plot</string>
        </property>
       </widget>
-      <widget class="QGraphicsView" name="graphicsView">
+      <widget class="QGraphicsView" name="Sweep_Output_GraphicsView">
        <property name="geometry">
         <rect>
          <x>135</x>
@@ -591,7 +573,7 @@ text-align: center;</string>
         <string notr="true">background-color: rgb(255, 255, 255);</string>
        </property>
       </widget>
-      <widget class="QWidget" name="widget_5" native="true">
+      <widget class="QWidget" name="Sweep_Output_Image_Widget" native="true">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -600,7 +582,7 @@ text-align: center;</string>
          <height>21</height>
         </rect>
        </property>
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="Sweep_Output_Image_PushButton">
         <property name="geometry">
          <rect>
           <x>225</x>
@@ -618,8 +600,22 @@ border-color: rgb(0, 0, 0);
          <string>File...</string>
         </property>
        </widget>
+       <widget class="QLineEdit" name="Sweep_Output_Image_LineEdit">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 0px;</string>
+        </property>
+       </widget>
       </widget>
-      <widget class="QCheckBox" name="Power_Save_CheckBox_14">
+      <widget class="QCheckBox" name="Sweep_Output_Image_CheckBox">
        <property name="geometry">
         <rect>
          <x>15</x>
@@ -629,40 +625,29 @@ border-color: rgb(0, 0, 0);
         </rect>
        </property>
        <property name="text">
-        <string>Save to File:</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>151</y>
-         <width>211</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 0px;</string>
+        <string>Save Copy to Image:</string>
        </property>
       </widget>
      </widget>
-     <widget class="QCheckBox" name="Power_Save_CheckBox_15">
+     <widget class="QCheckBox" name="Enable_Sweeping_CheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>15</x>
         <y>5</y>
-        <width>251</width>
+        <width>321</width>
         <height>22</height>
        </rect>
       </property>
       <property name="text">
-       <string>Enable Sweeping</string>
+       <string>Enable Sweeping (still in development)</string>
       </property>
      </widget>
     </widget>
    </widget>
-   <widget class="QDialogButtonBox" name="buttonBox">
+   <widget class="QDialogButtonBox" name="Confirm_ButtonBox">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -670,6 +655,10 @@ border-radius: 0px;</string>
       <width>621</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(240, 240, 240, 255), stop:1 rgba(255, 255, 255, 255));
+border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -680,6 +669,8 @@ border-radius: 0px;</string>
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

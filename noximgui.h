@@ -63,9 +63,6 @@ class NoximGUI : public QMainWindow
         // Algorithm selection enables/disables other UI elements
         void on_Algorithm_ComboBox_activated(const QString &algorithm);
 
-        // Run Simulation button pressed.
-        void on_actionRun_Simulation_triggered();
-
         // Packet injection enables/disables other UI elements
         void on_Packet_Injection_ComboBox_activated(const QString &option);
 
@@ -75,12 +72,24 @@ class NoximGUI : public QMainWindow
         // Traffic file button calls file dialog
         void on_Traffic_Table_File_Button_clicked();
 
-
+        // New default configuration
         void on_actionNew_triggered();
 
+        // Open a configuration file
         void on_actionOpen_triggered();
 
+        // Save configuration file
         void on_actionSave_triggered();
+
+        // Run Simulation button pressed.
+        void on_actionRun_Simulation_triggered();
+
+        // Run Configurations
+        void on_actionRun_Configurations_triggered();
+
+        // Exit program
+        void on_actionExit_triggered();
+
 
 private:
         // Const strings

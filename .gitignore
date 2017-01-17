@@ -1,3 +1,8 @@
 ### Compiled or built files
 *.o
 NoximGUI
+*.vcd
+*.pdf
+*.txt
+moc*
+*.user

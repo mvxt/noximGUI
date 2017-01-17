@@ -50,15 +50,19 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		noximgui.cpp \
-		outputdialog.cpp qrc_resources.cpp \
+		outputdialog.cpp \
+		runconfigurations.cpp qrc_resources.cpp \
 		moc_noximgui.cpp \
-		moc_outputdialog.cpp
+		moc_outputdialog.cpp \
+		moc_runconfigurations.cpp
 OBJECTS       = main.o \
 		noximgui.o \
 		outputdialog.o \
+		runconfigurations.o \
 		qrc_resources.o \
 		moc_noximgui.o \
-		moc_outputdialog.o
+		moc_outputdialog.o \
+		moc_runconfigurations.o
 DIST          = default_config.yaml \
 		default_power.yaml \
 		splash.png \
@@ -120,9 +124,11 @@ DIST          = default_config.yaml \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		NoximGUI.pro noximgui.h \
-		outputdialog.h main.cpp \
+		outputdialog.h \
+		runconfigurations.h main.cpp \
 		noximgui.cpp \
-		outputdialog.cpp
+		outputdialog.cpp \
+		runconfigurations.cpp
 QMAKE_TARGET  = NoximGUI
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = NoximGUI
@@ -150,7 +156,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a ui_noximgui.h ui_outputdialog.h ui_run_configurations.h $(OBJECTS)  
+$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a ui_noximgui.h ui_outputdialog.h ui_runconfigurations.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: NoximGUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -295,9 +301,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents resources.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents noximgui.h outputdialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp noximgui.cpp outputdialog.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents noximgui.ui outputdialog.ui run_configurations.ui $(DISTDIR)/
+	$(COPY_FILE) --parents noximgui.h outputdialog.h runconfigurations.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp noximgui.cpp outputdialog.cpp runconfigurations.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents noximgui.ui outputdialog.ui runconfigurations.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -343,28 +349,31 @@ qrc_resources.cpp: resources.qrc \
 		icons/media-play-2x.png
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name resources resources.qrc -o qrc_resources.cpp
 
-compiler_moc_header_make_all: moc_noximgui.cpp moc_outputdialog.cpp
+compiler_moc_header_make_all: moc_noximgui.cpp moc_outputdialog.cpp moc_runconfigurations.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_noximgui.cpp moc_outputdialog.cpp
+	-$(DEL_FILE) moc_noximgui.cpp moc_outputdialog.cpp moc_runconfigurations.cpp
 moc_noximgui.cpp: noximgui.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mikeyvxt/NoximGUI -I/usr/local/include/yaml-cpp -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include noximgui.h -o moc_noximgui.cpp
 
 moc_outputdialog.cpp: outputdialog.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mikeyvxt/NoximGUI -I/usr/local/include/yaml-cpp -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include outputdialog.h -o moc_outputdialog.cpp
 
+moc_runconfigurations.cpp: runconfigurations.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mikeyvxt/NoximGUI -I/usr/local/include/yaml-cpp -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include runconfigurations.h -o moc_runconfigurations.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_noximgui.h ui_outputdialog.h ui_run_configurations.h
+compiler_uic_make_all: ui_noximgui.h ui_outputdialog.h ui_runconfigurations.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_noximgui.h ui_outputdialog.h ui_run_configurations.h
+	-$(DEL_FILE) ui_noximgui.h ui_outputdialog.h ui_runconfigurations.h
 ui_noximgui.h: noximgui.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic noximgui.ui -o ui_noximgui.h
 
 ui_outputdialog.h: outputdialog.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic outputdialog.ui -o ui_outputdialog.h
 
-ui_run_configurations.h: run_configurations.ui
-	/usr/lib/x86_64-linux-gnu/qt5/bin/uic run_configurations.ui -o ui_run_configurations.h
+ui_runconfigurations.h: runconfigurations.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic runconfigurations.ui -o ui_runconfigurations.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -380,13 +389,19 @@ main.o: main.cpp noximgui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 noximgui.o: noximgui.cpp noximgui.h \
+		outputdialog.h \
+		runconfigurations.h \
 		ui_noximgui.h \
-		outputdialog.h
+		ui_runconfigurations.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o noximgui.o noximgui.cpp
 
 outputdialog.o: outputdialog.cpp outputdialog.h \
 		ui_outputdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o outputdialog.o outputdialog.cpp
+
+runconfigurations.o: runconfigurations.cpp runconfigurations.h \
+		ui_runconfigurations.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o runconfigurations.o runconfigurations.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
@@ -396,6 +411,9 @@ moc_noximgui.o: moc_noximgui.cpp
 
 moc_outputdialog.o: moc_outputdialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_outputdialog.o moc_outputdialog.cpp
+
+moc_runconfigurations.o: moc_runconfigurations.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_runconfigurations.o moc_runconfigurations.cpp
 
 ####### Install
 
