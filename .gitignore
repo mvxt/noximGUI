@@ -6,3 +6,6 @@ NoximGUI
 *.txt
 moc*
 *.user
+ui*
+qrc*
+*.yaml

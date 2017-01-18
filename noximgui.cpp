@@ -19,8 +19,8 @@ NoximGUI::NoximGUI(QWidget *parent) :
     // Sets default configuration files
     guiConfigFileName = "gui_config.yaml";
     execConfigName = "Executable";
-    noximConfigFileName = ":/assets/default_config.yaml";
-    powerConfigFileName = ":/assets/default_power.yaml";
+    noximConfigFileName = DEFAULT_CONFIG;
+    powerConfigFileName = DEFAULT_POWER;
 
     // Checks if user selected a file. If not, fails and exits with warning
     if( getNoximExecutable() )
@@ -89,11 +89,11 @@ bool NoximGUI::getNoximExecutable()
     struct stat buffer;
     if ( stat( "gui_config.yaml", &buffer ) == 0 ) // File exists
     {
-        YAML::Node guiConfigNode = YAML::LoadFile( guiConfigFileName );
+        guiConfigNode = YAML::LoadFile( guiConfigFileName );
         if ( !guiConfigNode.IsNull() )
         {
-            std::string result = guiConfigNode[execConfigName].as<std::string>();
-            return setGUIConfig( QString::fromStdString( result ) );
+            std::string executablePath = guiConfigNode[execConfigName].as<std::string>();
+            return setGUIConfig( QString::fromStdString( executablePath ) );
         }
     }
     dialog.setFileMode(QFileDialog::ExistingFile);
@@ -115,6 +115,7 @@ bool NoximGUI::setGUIConfig( QString fileName )
     }
 
     this->guiConfigNode[execConfigName] = fileName.toStdString();
+    setPowerConfigPath();
     return writeGUIConfig();
 }
 
@@ -184,6 +185,20 @@ bool NoximGUI::writeNoximConfig( QString fileName )
     noximConfigFileName = fileName.toStdString();
 
     return true;
+}
+
+/**
+ * @brief Sets the new powerConfigFileName based on the YAML node.
+ * @return
+ */
+void NoximGUI::setPowerConfigPath()
+{
+    // pwrShortName is not 'default', then set the new path
+    std::string pwrShortName = guiConfigNode["power_config"].as<std::string>();
+    if ( pwrShortName.compare( "default" ) != 0 )
+    {
+        powerConfigFileName = QDir::currentPath().toStdString() + "/pwr/" + pwrShortName;
+    }
 }
 
 /**
@@ -584,13 +599,37 @@ void NoximGUI::on_actionRun_Simulation_triggered()
 {
     updateNoximConfigNode();
 
-    // Save config to temp file for simulation
-    QString qTempFile = "temp";
-    QString qTempPowFile = "tempPow";
+    QString simConfigFile;
+    QString simPowerFile;
+    bool configValid;
+    bool powerValid;
 
-    bool writeConfigResult = writeNoximConfig( qTempFile );
-    bool writePowerResult = writePowerConfig( qTempPowFile );
-    if ( writeConfigResult && writePowerResult )
+    // If config files are defaults, save to temp files
+    //   Otherwise use the files chosen
+    if ( noximConfigFileName.compare( DEFAULT_CONFIG ) == 0 )
+    {
+        simConfigFile = "defaultConfig";
+        configValid = writeNoximConfig( simConfigFile );
+    }
+    else
+    {
+        simConfigFile = QString::fromStdString( noximConfigFileName );
+        configValid = true;
+    }
+
+    std::string powerConfigString = guiConfigNode["power_config"].as<std::string>();
+    if ( powerConfigString.compare( "default" ) == 0 )
+    {
+        simPowerFile = "defaultPowerConfig";
+        powerValid = writePowerConfig( simPowerFile );
+    }
+    else
+    {
+        simPowerFile = QString::fromStdString( powerConfigFileName );
+        powerValid = true;
+    }
+
+    if ( configValid && powerValid )
     {
         // Set arguments
         std::string config( "-config " + noximConfigFileName );
@@ -639,9 +678,6 @@ void NoximGUI::on_actionRun_Simulation_triggered()
 
         // Display output with config values
         std::stringstream ss;
-//        ss << "CONFIGURATION:" << std::endl;
-//        ss << "______________" << std::endl;
-//        Utils::writeYamlOrderedMaps( ss, noximConfigNode );
         ss << std::endl;
         ss << "OUTPUT:" << std::endl;
         ss << "______________" << std::endl;
@@ -651,10 +687,18 @@ void NoximGUI::on_actionRun_Simulation_triggered()
         outputDialog.setModal(true);
         outputDialog.exec();
 
-        QFile file( qTempFile );
-        file.remove();
-        QFile file1( qTempPowFile );
-        file1.remove();
+        // If we used temp files, delete them.
+        if ( simConfigFile.compare( "tempConfig" ) == 0 )
+        {
+            QFile file( simConfigFile );
+            file.remove();
+        }
+
+        if ( simPowerFile.compare( "tempPower" ) == 0 )
+        {
+            QFile file( simPowerFile );
+            file.remove();
+        }
     }
     else
     {
@@ -674,6 +718,17 @@ void NoximGUI::on_actionRun_Configurations_triggered()
     RunConfigurations runConfigurations;
     runConfigurations.setModal(true);
     runConfigurations.setSettings(noximConfigNode);
+
+    // Set current default (selected). If !exists, choose 'default' by default
+    if ( YAML::Node powerConfig = guiConfigNode["power_config"] )
+    {
+        runConfigurations.setCurrentPowerConfig( powerConfig.as<std::string>() );
+    }
+    else
+    {
+        runConfigurations.setCurrentPowerConfig( "default" );
+    }
+
     int result = runConfigurations.exec();
     // User clicked OK
     if ( result == QDialog::Accepted )
@@ -689,6 +744,15 @@ void NoximGUI::on_actionRun_Configurations_triggered()
             noximConfigNode[key] = it->second;
         }
         Utils::writeYamlOrderedMaps(std::cout, runConfigNode);
+
+        // Set the new 'default' power_config from returned run configs
+        guiConfigNode["power_config"] = runConfigNode["power_config"];
+
+        // Remove 'power_config' key from simulationConfigs since that's
+        //   not a thing
+        noximConfigNode.remove( noximConfigNode["power_config"] );
+
+        // Set new powerConfigPath
     }
     else if ( result == QDialog::Rejected )
     {
@@ -704,10 +768,11 @@ void NoximGUI::on_actionRun_Configurations_triggered()
 /**
  * @brief Private method for signal received when
  *  exit button pressed/keyboard shortcut keyed
- *  Exits the program.
+ *  Saves guiConfig to file, exits the program.
  */
 void NoximGUI::on_actionExit_triggered()
 {
+    writeGUIConfig();
     this->close();
 }
 

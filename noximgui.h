@@ -93,6 +93,10 @@ class NoximGUI : public QMainWindow
 
 private:
         // Const strings
+        const std::string DEFAULT_CONFIG = ":/assets/default_config.yaml";
+        const std::string DEFAULT_POWER = ":/assets/default_power.yaml";
+
+        // Strings
         std::string execConfigName;
         std::string guiConfigFileName;
         std::string noximConfigFileName;
@@ -136,6 +140,9 @@ private:
 
         // Private method to take info from fields and update noximConfigNode
         void updateNoximConfigNode();
+
+        // Private method to set the new power config filename accordingly
+        void setPowerConfigPath();
 
         // Private method to write noximExec to gui_config.yaml
         bool writeGUIConfig();

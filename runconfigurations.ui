@@ -334,7 +334,7 @@ font-size: 10pt;
       <property name="title">
        <string>Power Configuration</string>
       </property>
-      <widget class="QListWidget" name="Power_Configuration_ListWidget">
+      <widget class="QListView" name="Power_Configuration_ListView">
        <property name="geometry">
         <rect>
          <x>10</x>
