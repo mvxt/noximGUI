@@ -23,6 +23,15 @@ RunConfigurations::~RunConfigurations()
 }
 
 /**
+ * @brief Convenience method to return full path of power file, given its shortname
+ * @param shortName
+ */
+QString RunConfigurations::getFullPath( QString shortName )
+{
+    return QDir::currentPath() + "/pwr/" + shortName + ".yaml";
+}
+
+/**
  * @brief Gets all settings from the window and returns.
  *           Called by the mainWindow
  * @return
@@ -110,7 +119,7 @@ void RunConfigurations::setSettings( YAML::Node configs )
  */
 void RunConfigurations::populateAvailablePowerConfigs()
 {
-    pwrModel = new QStringListModel( this );
+    pwrModel = new PowerModel( this );
     std::string filepath;
     DIR *dp;
     struct dirent *dirp;
@@ -217,8 +226,15 @@ void RunConfigurations::populateAvailablePowerConfigs()
     // Only one item selectable at a time
     ui->Power_Configuration_ListView->setSelectionMode( QAbstractItemView::SingleSelection );
 
-    // Additional feature to manually modify data in listView
-    ui->Power_Configuration_ListView->setEditTriggers( QAbstractItemView::DoubleClicked );
+    // Enable editing power config name by double-click
+    ui->Power_Configuration_ListView->setEditTriggers( QAbstractItemView::SelectedClicked );
+
+    // Connect signal and slot for handling pwrModel changes
+    QObject::connect( pwrModel,
+                      SIGNAL( dataChanged( QModelIndex, QModelIndex, QVector<int>) ),
+                      this,
+                      SLOT( on_pwrModel_dataChanged( const QModelIndex&,
+                                                     const QModelIndex& ) ) );
 }
 
 /**
@@ -242,7 +258,18 @@ void RunConfigurations::setCurrentPowerConfig( std::string current )
  */
 void RunConfigurations::on_Confirm_ButtonBox_accepted()
 {
-    this->accept();
+    QModelIndex selected = ui->Power_Configuration_ListView->currentIndex();
+    QString selectedString = (QString) selected.data().toString();
+    if ( selectedString.isEmpty() )
+    {
+        QMessageBox::warning( NULL,
+                              QString( "NoximGUI" ),
+                              QString( "You must select a power configuration." ) );
+    }
+    else
+    {
+        this->accept();
+    }
 }
 
 /**
@@ -295,20 +322,31 @@ void RunConfigurations::on_Trace_Mode_File_PushButton_clicked()
  */
 void RunConfigurations::on_Wireless_CheckBox_clicked()
 {
-    bool wirlessEnabled = ui->Wireless_CheckBox->isChecked();
-    wirlessEnabled ? ui->Power_Saving_Mode_CheckBox->setDisabled( false ) :
-                   ui->Power_Saving_Mode_CheckBox->setDisabled( true );
+    bool wirelessEnabled = ui->Wireless_CheckBox->isChecked();
+    wirelessEnabled ? ui->Power_Saving_Mode_CheckBox->setDisabled( false ) :
+                      ui->Power_Saving_Mode_CheckBox->setDisabled( true );
 }
 
 /**
- * @brief User adding new power config
+ * @brief User adding new power config. Add to end
  */
 void RunConfigurations::on_Power_Configuration_Add_PushButton_clicked()
 {
-    // TODO
-    // Add row, add at end
-    // Create new file with the entered name in /pwr/NAME
-    // Copy default power configs to new file
+    // Get position, add row
+    int row = pwrModel->rowCount();
+    pwrModel->insertRows( row, 1 );
+
+    // Get the row for Edit mode
+    QModelIndex index = pwrModel->index( row );
+    ui->Power_Configuration_ListView->setCurrentIndex( index );
+    ui->Power_Configuration_ListView->edit( index );
+
+    //emit pwrModel->dataChanged(index, index);
+    // TODO: Create new file with new name in /pwr, give it default config
+    //    QString newPwrString = (QString) index.data().toString();
+    //    std::cout << newPwrString.toStdString();
+    //    QFile newPwrConfig( DEFAULT_PWR_CONFIG );
+    //    newPwrConfig.copy( QDir::currentPath() + "/pwr/" + newPwrString );
 }
 
 /**
@@ -317,8 +355,21 @@ void RunConfigurations::on_Power_Configuration_Add_PushButton_clicked()
 void RunConfigurations::on_Power_Configuration_Delete_PushButton_clicked()
 {
     // TODO
-    // Remove row selected
     // Remove corresponding file
+    QModelIndex selected = ui->Power_Configuration_ListView->currentIndex();
+    QString pwrShortName = (QString) selected.data().toString();
+    if ( pwrShortName == "default" )
+    {
+        QMessageBox::warning( NULL,
+                              QString( "NoximGUI" ),
+                              QString( "You can't delete the default configuration." ) );
+    }
+    else
+    {
+        int row = ui->Power_Configuration_ListView->currentIndex().row();
+        pwrModel->removeRows( row, 1 );
+        ui->Power_Configuration_ListView->update();
+    }
 }
 
 /**
@@ -326,7 +377,41 @@ void RunConfigurations::on_Power_Configuration_Delete_PushButton_clicked()
  */
 void RunConfigurations::on_Power_Configuration_Edit_PushButton_clicked()
 {
-    // TODO
-    // Get item selected,
-    // opens corresponding file in a text editor
+    // Checks that the currently selected item isn't 'default'.
+    QModelIndex selected = ui->Power_Configuration_ListView->currentIndex();
+    QString newPwrShortName = (QString) selected.data().toString();
+    if ( newPwrShortName == "default" )
+    {
+        QMessageBox::warning( NULL,
+                              QString( "NoximGUI" ),
+                              QString( "You can't edit the default configuration." ) );
+    }
+    else
+    {
+        // OK, now open the corresponding file in a text editor
+        QString newPwrFileName = getFullPath( newPwrShortName );
+        // TODO
+        // OPEN FILE newPwrFileName IN TEXTEDITOR
+        //    std::cout << newPwrString.toStdString();
+        // opens corresponding file in a text editor
+    }
 }
+
+/**
+ * @brief Custom slot for detecting when user has made changes to a power config (name)
+ * @param changed
+ */
+void RunConfigurations::on_pwrModel_dataChanged( const QModelIndex &topLeft,
+                                                 const QModelIndex &bottomRight )
+{
+    // Detected a change in the list
+    // TODO: get the new item name, create new pwr config file w/ name
+    const QVariant &oldData = topLeft.data( Qt::UserRole + 1 ); // here is the old data
+    const QVariant &newData = topLeft.data( Qt::EditRole ); // here is the new data
+    QString oldItemName = oldData.toString();
+    QString newItemName = newData.toString();
+    std::cout << "OUTPUT oldItemName: " << oldItemName.toStdString() << std::endl;
+    std::cout << "OUTPUT newItemName: " << newItemName.toStdString() << std::endl;
+    // Else do nothing
+}
+

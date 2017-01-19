@@ -115,7 +115,6 @@ bool NoximGUI::setGUIConfig( QString fileName )
     }
 
     this->guiConfigNode[execConfigName] = fileName.toStdString();
-    setPowerConfigPath();
     return writeGUIConfig();
 }
 
@@ -155,7 +154,7 @@ bool NoximGUI::setDefaultNoximConfig()
 bool NoximGUI::setNoximConfig( QString fileName )
 {
     QFile file( fileName );
-    file.open(QFile::ReadOnly);
+    file.open( QFile::ReadOnly );
     QTextStream in(&file);
     noximConfigNode = YAML::Load( in.readAll().toStdString() );
     if ( noximConfigNode.IsNull() )
@@ -191,10 +190,9 @@ bool NoximGUI::writeNoximConfig( QString fileName )
  * @brief Sets the new powerConfigFileName based on the YAML node.
  * @return
  */
-void NoximGUI::setPowerConfigPath()
+void NoximGUI::setPowerConfigPath( std::string pwrShortName )
 {
     // pwrShortName is not 'default', then set the new path
-    std::string pwrShortName = guiConfigNode["power_config"].as<std::string>();
     if ( pwrShortName.compare( "default" ) != 0 )
     {
         powerConfigFileName = QDir::currentPath().toStdString() + "/pwr/" + pwrShortName;
@@ -688,13 +686,13 @@ void NoximGUI::on_actionRun_Simulation_triggered()
         outputDialog.exec();
 
         // If we used temp files, delete them.
-        if ( simConfigFile.compare( "tempConfig" ) == 0 )
+        if ( simConfigFile.compare( "defaultConfig" ) == 0 )
         {
             QFile file( simConfigFile );
             file.remove();
         }
 
-        if ( simPowerFile.compare( "tempPower" ) == 0 )
+        if ( simPowerFile.compare( "defaultPowerConfig" ) == 0 )
         {
             QFile file( simPowerFile );
             file.remove();
@@ -745,14 +743,12 @@ void NoximGUI::on_actionRun_Configurations_triggered()
         }
         Utils::writeYamlOrderedMaps(std::cout, runConfigNode);
 
-        // Set the new 'default' power_config from returned run configs
-        guiConfigNode["power_config"] = runConfigNode["power_config"];
+        // Set the new power config path from returned run configs
+        setPowerConfigPath( runConfigNode["power_config"].as<std::string>() );
 
         // Remove 'power_config' key from simulationConfigs since that's
         //   not a thing
         noximConfigNode.remove( noximConfigNode["power_config"] );
-
-        // Set new powerConfigPath
     }
     else if ( result == QDialog::Rejected )
     {
@@ -861,11 +857,15 @@ void NoximGUI::on_Traffic_Table_File_Button_clicked()
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFile);
     tableFileName = dialog.getOpenFileName( 0, "Select text file containing table routes" );
-    if ( tableFileName.isEmpty() || tableFileName.isNull() )
+
+    if ( tableFileName.isNull() )
+    {
+        // User canceled, do nothing
+    }
+    else if ( tableFileName.isEmpty() )
     {
         QMessageBox::warning( NULL, QString( "NoximGUI" ),
-                              QString( "Error opening table routing file. "
-                                       "Check the file or try a different one." ) );
+                              QString( "Name cannot be blank." ) );
     }
     else
     {

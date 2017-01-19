@@ -142,7 +142,7 @@ private:
         void updateNoximConfigNode();
 
         // Private method to set the new power config filename accordingly
-        void setPowerConfigPath();
+        void setPowerConfigPath( std::string pwrShortName );
 
         // Private method to write noximExec to gui_config.yaml
         bool writeGUIConfig();

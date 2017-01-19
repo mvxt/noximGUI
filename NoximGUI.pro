@@ -41,8 +41,6 @@ else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../.
 else:unix: PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/libyaml-cpp.a
 
 DISTFILES += \
-    default_config.yaml \
-    default_power.yaml \
     splash.png \
     logo.png
 

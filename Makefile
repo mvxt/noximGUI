@@ -63,9 +63,7 @@ OBJECTS       = main.o \
 		moc_noximgui.o \
 		moc_outputdialog.o \
 		moc_runconfigurations.o
-DIST          = default_config.yaml \
-		default_power.yaml \
-		splash.png \
+DIST          = splash.png \
 		logo.png \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \

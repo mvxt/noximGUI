@@ -14,12 +14,16 @@
 #include <QFileDialog>
 #include <QListWidget>
 #include <QMessageBox>
+#include <QObject>
 #include <QStringListModel>
+#include <QVector>
 #include <yaml.h>
 
 namespace Ui {
     class RunConfigurations;
 }
+
+class PowerModel;
 
 class RunConfigurations : public QDialog
 {
@@ -69,13 +73,39 @@ class RunConfigurations : public QDialog
     // User clicked to edit a power configuration
     void on_Power_Configuration_Edit_PushButton_clicked();
 
+    // User changed a power config in the listview
+    void on_pwrModel_dataChanged( const QModelIndex &topLeft,
+                                  const QModelIndex &bottomRight );
+
   private:
     Ui::RunConfigurations *ui;
-    QStringListModel *model;
     std::string POWER_DIR = QDir::currentPath().toStdString() + "/pwr";
-    std::string DEFAULT_PWR_CONFIG = ":/assets/default_power.yaml";
+    QString DEFAULT_PWR_CONFIG = ":/assets/default_power.yaml";
     QStringList configList; // List of power configs + default
-    QStringListModel *pwrModel; // Stringlist model of power configs
+    PowerModel *pwrModel; // Stringlist model of power configs
+
+    // Convenience method to return full path name of given shortname
+    QString getFullPath( QString shortName );
+};
+
+class PowerModel : public QStringListModel
+{
+  public:
+    PowerModel ( QObject * parent = 0 ) : QStringListModel( parent ) {}
+
+    // Reimplemented setData method
+    virtual bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole )
+    {
+        // backup the previous model data
+        if ( role == Qt::EditRole || role == Qt::DisplayRole )
+        {
+            std::cout << "OLD CONTENTS: " << index.data().toString().toStdString() << std::endl;
+            std::cout << "NEW CONTENTS: " << value.toString().toStdString() << std::endl;
+            QStringListModel::setData(index, index.data(), Qt::UserRole + 1 );
+        }
+
+        return QStringListModel::setData(index, value, role);
+    }
 };
 
 #endif // RUNCONFIGURATIONS_H
