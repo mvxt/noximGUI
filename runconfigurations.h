@@ -29,6 +29,9 @@ class RunConfigurations : public QDialog
 {
     Q_OBJECT
 
+    // PowerModel should have access to everything in RunConfigurations
+    friend class PowerModel;
+
   public:
     // Constructor
     explicit RunConfigurations( QWidget *parent = 0 );
@@ -47,6 +50,9 @@ class RunConfigurations : public QDialog
 
     // Sets currently selected power config based on info passed from mainWindow
     void setCurrentPowerConfig( std::string current );
+
+    // Static string for default power config path
+    static QString DEFAULT_PWR_CONFIG;
 
   private slots:
     // User pressed ok
@@ -73,35 +79,53 @@ class RunConfigurations : public QDialog
     // User clicked to edit a power configuration
     void on_Power_Configuration_Edit_PushButton_clicked();
 
-    // User changed a power config in the listview
-    void on_pwrModel_dataChanged( const QModelIndex &topLeft,
-                                  const QModelIndex &bottomRight );
-
   private:
     Ui::RunConfigurations *ui;
     std::string POWER_DIR = QDir::currentPath().toStdString() + "/pwr";
-    QString DEFAULT_PWR_CONFIG = ":/assets/default_power.yaml";
     QStringList configList; // List of power configs + default
     PowerModel *pwrModel; // Stringlist model of power configs
 
     // Convenience method to return full path name of given shortname
-    QString getFullPath( QString shortName );
+    static QString getFullPath( QString shortName );
 };
 
+/**
+ * @brief The PowerModel class, inherits QStringListModel
+ */
 class PowerModel : public QStringListModel
 {
   public:
     PowerModel ( QObject * parent = 0 ) : QStringListModel( parent ) {}
 
-    // Reimplemented setData method
+    // Reimplemented setData method for custom purposes
+    //  When user changes items in the power config, create/delete or move files accordingly
     virtual bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole )
     {
-        // backup the previous model data
+        // Custom actions to create/delete corresponding power files
         if ( role == Qt::EditRole || role == Qt::DisplayRole )
         {
-            std::cout << "OLD CONTENTS: " << index.data().toString().toStdString() << std::endl;
-            std::cout << "NEW CONTENTS: " << value.toString().toStdString() << std::endl;
-            QStringListModel::setData(index, index.data(), Qt::UserRole + 1 );
+            QString oldName = index.data().toString();
+            QString newName = value.toString();
+
+            // If newname is null, do nothing and return false
+            if ( newName.isNull() || newName.isEmpty() )
+            {
+                return false;
+            }
+
+            // New config file
+            if ( oldName.isEmpty() && !newName.isEmpty() )
+            {
+                QFile::copy( RunConfigurations::DEFAULT_PWR_CONFIG,
+                             RunConfigurations::getFullPath( newName ) );
+            }
+            else if ( !oldName.isEmpty() && !newName.isEmpty() ) // Move files
+            {
+                QFile::copy( RunConfigurations::getFullPath( oldName ),
+                             RunConfigurations::getFullPath( newName ) );
+                QFile oldFile( RunConfigurations::getFullPath( oldName ) );
+                oldFile.remove();
+            }
         }
 
         return QStringListModel::setData(index, value, role);

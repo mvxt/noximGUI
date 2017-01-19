@@ -1,6 +1,8 @@
 #include "runconfigurations.h"
 #include "ui_runconfigurations.h"
 
+QString RunConfigurations::DEFAULT_PWR_CONFIG = ":/assets/default_power.yaml";
+
 /**
  * @brief Constructor for the class
  */
@@ -28,7 +30,7 @@ RunConfigurations::~RunConfigurations()
  */
 QString RunConfigurations::getFullPath( QString shortName )
 {
-    return QDir::currentPath() + "/pwr/" + shortName + ".yaml";
+    return QDir::currentPath() + "/pwr/" + shortName;
 }
 
 /**
@@ -192,10 +194,10 @@ void RunConfigurations::populateAvailablePowerConfigs()
                 continue;
             }
 
-            configList << dirp->d_name;
-
             // Print filepaths for debugging
             std::cout << filepath << std::endl;
+
+            configList << dirp->d_name;
         }
 
         closedir( dp );
@@ -228,20 +230,10 @@ void RunConfigurations::populateAvailablePowerConfigs()
 
     // Enable editing power config name by double-click
     ui->Power_Configuration_ListView->setEditTriggers( QAbstractItemView::SelectedClicked );
-
-    // Connect signal and slot for handling pwrModel changes
-    QObject::connect( pwrModel,
-                      SIGNAL( dataChanged( QModelIndex, QModelIndex, QVector<int>) ),
-                      this,
-                      SLOT( on_pwrModel_dataChanged( const QModelIndex&,
-                                                     const QModelIndex& ) ) );
 }
 
 /**
- * @brief Populates the list of power configurations by reading power
- *          config files from /pwr folder, if exists. If not, creates it.
- *          Code is modified from answer by Duoas on Cplusplus.com
- *          (http://www.cplusplus.com/forum/beginner/10292/).
+ * @brief Sets currently-selected power config
  *
  */
 void RunConfigurations::setCurrentPowerConfig( std::string current )
@@ -340,13 +332,6 @@ void RunConfigurations::on_Power_Configuration_Add_PushButton_clicked()
     QModelIndex index = pwrModel->index( row );
     ui->Power_Configuration_ListView->setCurrentIndex( index );
     ui->Power_Configuration_ListView->edit( index );
-
-    //emit pwrModel->dataChanged(index, index);
-    // TODO: Create new file with new name in /pwr, give it default config
-    //    QString newPwrString = (QString) index.data().toString();
-    //    std::cout << newPwrString.toStdString();
-    //    QFile newPwrConfig( DEFAULT_PWR_CONFIG );
-    //    newPwrConfig.copy( QDir::currentPath() + "/pwr/" + newPwrString );
 }
 
 /**
@@ -354,8 +339,6 @@ void RunConfigurations::on_Power_Configuration_Add_PushButton_clicked()
  */
 void RunConfigurations::on_Power_Configuration_Delete_PushButton_clicked()
 {
-    // TODO
-    // Remove corresponding file
     QModelIndex selected = ui->Power_Configuration_ListView->currentIndex();
     QString pwrShortName = (QString) selected.data().toString();
     if ( pwrShortName == "default" )
@@ -369,6 +352,10 @@ void RunConfigurations::on_Power_Configuration_Delete_PushButton_clicked()
         int row = ui->Power_Configuration_ListView->currentIndex().row();
         pwrModel->removeRows( row, 1 );
         ui->Power_Configuration_ListView->update();
+
+        std::cout << "SANITY CHECK: " << RunConfigurations::getFullPath( pwrShortName ).toStdString();
+        QFile deleteFile( RunConfigurations::getFullPath( pwrShortName ) );
+        deleteFile.remove();
     }
 }
 
@@ -395,23 +382,5 @@ void RunConfigurations::on_Power_Configuration_Edit_PushButton_clicked()
         //    std::cout << newPwrString.toStdString();
         // opens corresponding file in a text editor
     }
-}
-
-/**
- * @brief Custom slot for detecting when user has made changes to a power config (name)
- * @param changed
- */
-void RunConfigurations::on_pwrModel_dataChanged( const QModelIndex &topLeft,
-                                                 const QModelIndex &bottomRight )
-{
-    // Detected a change in the list
-    // TODO: get the new item name, create new pwr config file w/ name
-    const QVariant &oldData = topLeft.data( Qt::UserRole + 1 ); // here is the old data
-    const QVariant &newData = topLeft.data( Qt::EditRole ); // here is the new data
-    QString oldItemName = oldData.toString();
-    QString newItemName = newData.toString();
-    std::cout << "OUTPUT oldItemName: " << oldItemName.toStdString() << std::endl;
-    std::cout << "OUTPUT newItemName: " << newItemName.toStdString() << std::endl;
-    // Else do nothing
 }
 
