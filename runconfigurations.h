@@ -10,12 +10,15 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <QDesktopServices>
 #include <QDialog>
 #include <QFileDialog>
 #include <QListWidget>
 #include <QMessageBox>
 #include <QObject>
 #include <QStringListModel>
+#include <QTextEdit>
+#include <QTextStream>
 #include <QVector>
 #include <yaml.h>
 
@@ -116,15 +119,31 @@ class PowerModel : public QStringListModel
             // New config file
             if ( oldName.isEmpty() && !newName.isEmpty() )
             {
+                // Copy from default config
                 QFile::copy( RunConfigurations::DEFAULT_PWR_CONFIG,
                              RunConfigurations::getFullPath( newName ) );
+
+                // Set permissions
+                QFile newFile( RunConfigurations::getFullPath( newName ) );
+                newFile.setPermissions( QFile::ReadOwner | QFile::WriteOwner |
+                                        QFile::ReadUser | QFile::WriteUser |
+                                        QFile::ReadGroup | QFile::WriteGroup );
             }
             else if ( !oldName.isEmpty() && !newName.isEmpty() ) // Move files
             {
+                // Copy from old config
                 QFile::copy( RunConfigurations::getFullPath( oldName ),
                              RunConfigurations::getFullPath( newName ) );
+
+                // Remove old config
                 QFile oldFile( RunConfigurations::getFullPath( oldName ) );
                 oldFile.remove();
+
+                // Set permissions
+                QFile newFile( RunConfigurations::getFullPath( newName ) );
+                newFile.setPermissions( QFile::ReadOwner | QFile::WriteOwner |
+                                        QFile::ReadUser | QFile::WriteUser |
+                                        QFile::ReadGroup | QFile::WriteGroup );
             }
         }
 

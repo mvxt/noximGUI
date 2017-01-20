@@ -194,9 +194,6 @@ void RunConfigurations::populateAvailablePowerConfigs()
                 continue;
             }
 
-            // Print filepaths for debugging
-            std::cout << filepath << std::endl;
-
             configList << dirp->d_name;
         }
 
@@ -250,6 +247,8 @@ void RunConfigurations::setCurrentPowerConfig( std::string current )
  */
 void RunConfigurations::on_Confirm_ButtonBox_accepted()
 {
+    // Check that user has selected a power config
+    // Else if check that if trace mode enabled, that trace filename not blank
     QModelIndex selected = ui->Power_Configuration_ListView->currentIndex();
     QString selectedString = (QString) selected.data().toString();
     if ( selectedString.isEmpty() )
@@ -257,6 +256,17 @@ void RunConfigurations::on_Confirm_ButtonBox_accepted()
         QMessageBox::warning( NULL,
                               QString( "NoximGUI" ),
                               QString( "You must select a power configuration." ) );
+    }
+    else if ( ui->Trace_Mode_CheckBox->isChecked() )
+    {
+        if ( ui->Trace_Mode_File_LineEdit->text().isNull() ||
+             ui->Trace_Mode_File_LineEdit->text().isEmpty() )
+        {
+            QMessageBox::warning( NULL,
+                                  QString( "NoximGUI" ),
+                                  QString( "If trace mode selected, trace file name"
+                                           "must not be blank." ) );
+        }
     }
     else
     {
@@ -293,7 +303,7 @@ void RunConfigurations::on_Trace_Mode_File_PushButton_clicked()
     QString saveTraceFileName = dialog.getSaveFileName( this,
                                                         tr("Save trace to file"),
                                                         QDir::currentPath(),
-                                                        tr("Text Files (*.txt)") );
+                                                        tr("VCD Files (*.vcd)") );
     if ( saveTraceFileName.isNull() )
     {
         // User canceled, do nothing
@@ -353,7 +363,6 @@ void RunConfigurations::on_Power_Configuration_Delete_PushButton_clicked()
         pwrModel->removeRows( row, 1 );
         ui->Power_Configuration_ListView->update();
 
-        std::cout << "SANITY CHECK: " << RunConfigurations::getFullPath( pwrShortName ).toStdString();
         QFile deleteFile( RunConfigurations::getFullPath( pwrShortName ) );
         deleteFile.remove();
     }
@@ -375,12 +384,9 @@ void RunConfigurations::on_Power_Configuration_Edit_PushButton_clicked()
     }
     else
     {
-        // OK, now open the corresponding file in a text editor
+        // OK, now open the corresponding file in system default text editor
         QString newPwrFileName = getFullPath( newPwrShortName );
-        // TODO
-        // OPEN FILE newPwrFileName IN TEXTEDITOR
-        //    std::cout << newPwrString.toStdString();
-        // opens corresponding file in a text editor
+        QDesktopServices::openUrl( QUrl::fromLocalFile( newPwrFileName ) );
     }
 }
 

@@ -101,6 +101,7 @@ private:
         std::string guiConfigFileName;
         std::string noximConfigFileName;
         std::string powerConfigFileName;
+        std::string shortName;
 
         // Vectors containing packet injection, routing, selection_strategy, traffic types
         QStringList availableBufferDepthValues;
@@ -129,14 +130,26 @@ private:
         // Private method to populate combo boxes
         void populateComboBoxes();
 
-        // Private method to populate vectors
-        void populateLists();
+        // Private method to populate static vectors
+        void populateStaticLists();
+
+        // Private method to populate dynamic vectors
+        void populateDynamicLists();
 
         // Private method to populate YAML power config
         bool populatePowerConfig( QString fileName );
 
         // Private method to populate universal fields (shared by all configs)
         void populateParams();
+
+        // Private method to populate combo boxes
+        void repopulateComboBoxes();
+
+        // Private method to repopulate dynamic vectors
+        void repopulateDynamicLists();
+
+        // Private method to populate universal fields (shared by all configs)
+        void repopulateParams();
 
         // Private method to take info from fields and update noximConfigNode
         void updateNoximConfigNode();

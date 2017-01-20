@@ -19,6 +19,7 @@ NoximGUI::NoximGUI(QWidget *parent) :
     // Sets default configuration files
     guiConfigFileName = "gui_config.yaml";
     execConfigName = "Executable";
+    shortName = "default";
     noximConfigFileName = DEFAULT_CONFIG;
     powerConfigFileName = DEFAULT_POWER;
 
@@ -44,13 +45,20 @@ NoximGUI::NoximGUI(QWidget *parent) :
         exit( EXIT_FAILURE );
     }
 
-    // Sets all of the vectors with appropriate parameters
-    populateLists();
+    // Sets all of the static vectors with appropriate parameters
+    //   Only ever called once @ beginning program
+    populateStaticLists();
+
+    // Sets all of the dynamic vectors with parameters based on scanning power config
+    //   Called every time power config changes
+    populateDynamicLists();
 
     // Uses vectors to set comboboxes
+    //   Called every time power config changes
     populateComboBoxes();
 
-    // Sets the universal parameters
+    // Sets the rest of the parameters in the menu
+    //   Called every time power config changes
     populateParams();
 
     // Finally, show splash screen and start program
@@ -181,8 +189,6 @@ bool NoximGUI::writeNoximConfig( QString fileName )
     Utils::writeYamlOrderedMaps(fout, noximConfigNode);
     fout.close();
 
-    noximConfigFileName = fileName.toStdString();
-
     return true;
 }
 
@@ -196,6 +202,10 @@ void NoximGUI::setPowerConfigPath( std::string pwrShortName )
     if ( pwrShortName.compare( "default" ) != 0 )
     {
         powerConfigFileName = QDir::currentPath().toStdString() + "/pwr/" + pwrShortName;
+    }
+    else // pwrShortName is 'default', set to asset
+    {
+        powerConfigFileName = DEFAULT_POWER;
     }
 }
 
@@ -214,8 +224,6 @@ bool NoximGUI::writePowerConfig( QString fileName )
     std::ofstream fout( fileName.toStdString().c_str() );
     Utils::writeYamlOrderedMaps(fout, powerConfigNode);
     fout.close();
-
-    powerConfigFileName = fileName.toStdString();
 
     return true;
 }
@@ -240,12 +248,12 @@ void NoximGUI::populateComboBoxes()
 }
 
 /**
- * @brief Private method to populate vectors with appropriate values
+ * @brief Private method to populate static vectors with appropriate values
  */
-void NoximGUI::populateLists()
+void NoximGUI::populateStaticLists()
 {
     // Set QStringList for packet injection types
-    availablePacketInjectionTypes << "Poisson" << "Burst" << "Pareto";
+    availablePacketInjectionTypes << "Poisson" << "Burst" << "Pareto" << "Custom";
     std::sort( availablePacketInjectionTypes.begin(),
                availablePacketInjectionTypes.end() );
 
@@ -261,7 +269,14 @@ void NoximGUI::populateLists()
                     "TRAFFIC_LOCAL" << "TRAFFIC_ULOCAL" << "TRAFFIC_TABLE_BASED";
     std::sort( availableTrafficTypes.begin(),
                availableTrafficTypes.end() );
+}
 
+/**
+ * @brief Private method to populate dynamic vectors with appropriate values.
+ *          Is called every time the default config loads/changes
+ */
+void NoximGUI::populateDynamicLists()
+{
     // Set vector for connection lengths
     YAML::Node connectionLengthsNode = powerConfigNode["Energy"]["LinkBitLine"];
     for( std::size_t i = 0; i < connectionLengthsNode.size(); i++ )
@@ -275,15 +290,6 @@ void NoximGUI::populateLists()
     }
     std::sort( availableConnectionLengths.begin(), availableConnectionLengths.end() );
 
-    // Set vector for routing types
-    YAML::Node routingNode = powerConfigNode["Energy"]["Router"]["routing"];
-    for( YAML::const_iterator it = routingNode.begin(); it != routingNode.end(); ++it )
-    {
-        QString temp = QString::fromStdString( it->first.as<std::string>() );
-        availableRoutingTypes << temp;
-    }
-    std::sort( availableRoutingTypes.begin(), availableRoutingTypes.end() );
-
     // Set vector for flit sizes
     YAML::Node bufferNode = powerConfigNode["Energy"]["Buffer"];
     for( std::size_t i = 0; i < bufferNode.size(); i++ )
@@ -295,6 +301,15 @@ void NoximGUI::populateLists()
         }
     }
     std::sort( availableFlitSizes.begin(), availableFlitSizes.end(), Utils::convertAndCompare );
+
+    // Set vector for routing types
+    YAML::Node routingNode = powerConfigNode["Energy"]["Router"]["routing"];
+    for( YAML::const_iterator it = routingNode.begin(); it != routingNode.end(); ++it )
+    {
+        QString temp = QString::fromStdString( it->first.as<std::string>() );
+        availableRoutingTypes << temp;
+    }
+    std::sort( availableRoutingTypes.begin(), availableRoutingTypes.end() );
 
     // Set vector for buffer depth values
     for( std::size_t i = 0; i < bufferNode.size(); i++ )
@@ -315,9 +330,12 @@ bool NoximGUI::populatePowerConfig( QString fileName )
 {
     QFile file( fileName );
     file.open(QFile::ReadOnly);
-    QTextStream in(&file);
+    QTextStream in( &file );
     NoximGUI::powerConfigNode = YAML::Load( in.readAll().toStdString() );
     powerConfigFileName = fileName.toStdString();
+    in.seek( 0 );
+    file.flush();
+    file.close();
     return powerConfigNode.IsNull() ? false : true;
 }
 
@@ -470,6 +488,48 @@ void NoximGUI::populateParams()
 }
 
 /**
+ * @brief Private method to repopulate combo boxes with updated values
+ *          Clears combo boxes then repopulates them.
+ */
+void NoximGUI::repopulateComboBoxes()
+{
+    ui->Depth_ComboBox->clear();
+    ui->Flit_Size_ComboBox->clear();
+    ui->Packet_Injection_ComboBox->clear();
+    ui->Algorithm_ComboBox->clear();
+    ui->Selection_Strategy_ComboBox->clear();
+    ui->Traffic_Pattern_ComboBox->clear();
+
+    // Repopulate
+    populateComboBoxes();
+}
+
+/**
+ * @brief Private method to repopulate dynamic vectors with appropriate values
+ *          Clears QStringLists then repopulates them.
+ */
+void NoximGUI::repopulateDynamicLists()
+{
+    // TODO clear dynamic lists first
+    availableConnectionLengths.clear();
+    availableFlitSizes.clear();
+    availableRoutingTypes.clear();
+    availableBufferDepthValues.clear();
+
+    // Repopulate
+    populateDynamicLists();
+}
+
+/**
+ * @brief Private method to repopulate dynamic vectors with appropriate values
+ */
+void NoximGUI::repopulateParams()
+{
+    // TODO clear params first
+    populateParams();
+}
+
+/**
  * @brief Private method to populate noximConfigNode with field items
  */
 void NoximGUI::updateNoximConfigNode()
@@ -585,6 +645,10 @@ void NoximGUI::on_actionSave_triggered()
             QMessageBox::warning( NULL, QString( "NoximGUI" ),
                                   QString( "There was an error saving the file. Contact developer." ) );
         }
+        else
+        {
+            noximConfigFileName = saveConfigFileName.toStdString();
+        }
     }
 }
 
@@ -615,8 +679,7 @@ void NoximGUI::on_actionRun_Simulation_triggered()
         configValid = true;
     }
 
-    std::string powerConfigString = guiConfigNode["power_config"].as<std::string>();
-    if ( powerConfigString.compare( "default" ) == 0 )
+    if ( powerConfigFileName.compare( DEFAULT_POWER ) == 0 )
     {
         simPowerFile = "defaultPowerConfig";
         powerValid = writePowerConfig( simPowerFile );
@@ -630,8 +693,8 @@ void NoximGUI::on_actionRun_Simulation_triggered()
     if ( configValid && powerValid )
     {
         // Set arguments
-        std::string config( "-config " + noximConfigFileName );
-        std::string powerConfig( "-power " + powerConfigFileName );
+        std::string config( "-config " + simConfigFile.toStdString() );
+        std::string powerConfig( "-power " + simPowerFile.toStdString() );
         std::string args = config + " " + powerConfig;
 
         // Have to set packet injection as separate arg
@@ -659,6 +722,13 @@ void NoximGUI::on_actionRun_Simulation_triggered()
                    << ui->Packet_Injection_SpinBox_Tertiary->value() << " "
                    << ui->Packet_Injection_SpinBox_Quaternary->value();
             pir = pir + pareto.str();
+        }
+        else if( pirType == "Custom" )
+        {
+            std::ostringstream custom;
+            custom << " " << pirTypeLower << " "
+                   << ui->Packet_Injection_SpinBox_Secondary->value();
+            pir = pir + custom.str();
         }
         args = args + " " + pir;
         std::string exec = guiConfigNode[execConfigName].as<std::string>() + " " + args;
@@ -717,15 +787,8 @@ void NoximGUI::on_actionRun_Configurations_triggered()
     runConfigurations.setModal(true);
     runConfigurations.setSettings(noximConfigNode);
 
-    // Set current default (selected). If !exists, choose 'default' by default
-    if ( YAML::Node powerConfig = guiConfigNode["power_config"] )
-    {
-        runConfigurations.setCurrentPowerConfig( powerConfig.as<std::string>() );
-    }
-    else
-    {
-        runConfigurations.setCurrentPowerConfig( "default" );
-    }
+    // Sets currently selected power config
+    runConfigurations.setCurrentPowerConfig( shortName );
 
     int result = runConfigurations.exec();
     // User clicked OK
@@ -744,11 +807,33 @@ void NoximGUI::on_actionRun_Configurations_triggered()
         Utils::writeYamlOrderedMaps(std::cout, runConfigNode);
 
         // Set the new power config path from returned run configs
+        shortName = runConfigNode["power_config"].as<std::string>();
         setPowerConfigPath( runConfigNode["power_config"].as<std::string>() );
 
         // Remove 'power_config' key from simulationConfigs since that's
         //   not a thing
         noximConfigNode.remove( noximConfigNode["power_config"] );
+
+        // Change powerConfig YAML Node, reload menus
+        if ( !populatePowerConfig( QString::fromStdString( NoximGUI::powerConfigFileName ) ) )
+        {
+            QMessageBox::warning( NULL, QString( "NoximGUI" ),
+                                  QString( "Error: Couldn't load the new power config. Check it for errors." ) );
+        }
+        else
+        {
+            // Sets all of the dynamic vectors with parameters based on scanning power config
+            //   Called every time power config changes
+            repopulateDynamicLists();
+
+            // Uses vectors to set comboboxes
+            //   Called every time power config changes
+            repopulateComboBoxes();
+
+            // Sets the rest of the parameters in the menu
+            //   Called every time power config changes
+            repopulateParams();
+        }
     }
     else if ( result == QDialog::Rejected )
     {
@@ -819,6 +904,12 @@ void NoximGUI::on_Packet_Injection_ComboBox_activated(const QString &option)
         ui->Packet_Injection_SpinBox_Secondary->setDisabled( false );
         ui->Packet_Injection_SpinBox_Tertiary->setDisabled( false );
         ui->Packet_Injection_SpinBox_Quaternary->setDisabled( false );
+    }
+    else if( option == "Custom" )
+    {
+        ui->Packet_Injection_SpinBox_Secondary->setDisabled( false );
+        ui->Packet_Injection_SpinBox_Tertiary->setDisabled( true );
+        ui->Packet_Injection_SpinBox_Quaternary->setDisabled( true );
     }
     else
     {

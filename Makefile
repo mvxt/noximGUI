@@ -155,7 +155,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a ui_noximgui.h ui_outputdialog.h ui_runconfigurations.h $(OBJECTS)  
+$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a ui_noximgui.h ui_runconfigurations.h ui_outputdialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: NoximGUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -302,7 +302,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents noximgui.h outputdialog.h runconfigurations.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp noximgui.cpp outputdialog.cpp runconfigurations.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents noximgui.ui outputdialog.ui runconfigurations.ui $(DISTDIR)/
+	$(COPY_FILE) --parents noximgui.ui runconfigurations.ui outputdialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -362,17 +362,17 @@ moc_runconfigurations.cpp: runconfigurations.h
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_noximgui.h ui_outputdialog.h ui_runconfigurations.h
+compiler_uic_make_all: ui_noximgui.h ui_runconfigurations.h ui_outputdialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_noximgui.h ui_outputdialog.h ui_runconfigurations.h
+	-$(DEL_FILE) ui_noximgui.h ui_runconfigurations.h ui_outputdialog.h
 ui_noximgui.h: noximgui.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic noximgui.ui -o ui_noximgui.h
 
-ui_outputdialog.h: outputdialog.ui
-	/usr/lib/x86_64-linux-gnu/qt5/bin/uic outputdialog.ui -o ui_outputdialog.h
-
 ui_runconfigurations.h: runconfigurations.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic runconfigurations.ui -o ui_runconfigurations.h
+
+ui_outputdialog.h: outputdialog.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic outputdialog.ui -o ui_outputdialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
