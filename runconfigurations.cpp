@@ -267,6 +267,10 @@ void RunConfigurations::on_Confirm_ButtonBox_accepted()
                                   QString( "If trace mode selected, trace file name"
                                            "must not be blank." ) );
         }
+        else
+        {
+            this->accept();
+        }
     }
     else
     {
