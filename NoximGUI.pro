@@ -27,12 +27,25 @@ FORMS    += \
     runconfigurations.ui \
     outputdialog.ui
 
+INCLUDEPATH += $$PWD/../../../usr/local/include/yaml-cpp
+#   $$PWD/../Qt/5.4/gcc_64/include/QtPrintSupport \
+#   $$PWD/../Qt/5.4/gcc_64/include/QtWidgets \
+#   $$PWD/../Qt/5.4/gcc_64/include/QtGui \
+#   $$PWD/../Qt/5.4/gcc_64/include/QtCore
+DEPENDPATH += $$PWD/../../../usr/local/include/yaml-cpp
+
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/release/ -lyaml-cpp
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/debug/ -lyaml-cpp
-else:unix: LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/ -lyaml-cpp
-
-INCLUDEPATH += $$PWD/../../../usr/local/include/yaml-cpp
-DEPENDPATH += $$PWD/../../../usr/local/include/yaml-cpp
+else:unix: CONFIG(release, debug|release): LIBS += -lyaml-cpp
+#    -lQt5PrintSupport \
+#    -lQt5Widgets \
+#    -lQt5Gui \
+#    -lQt5Core
+else:unix: CONFIG(debug, debug|release): LIBS += -lyaml-cpp
+#    -lQt5PrintSupport \
+#    -lQt5Widgets \
+#    -lQt5Gui \
+#    -lQt5Core
 
 win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/release/libyaml-cpp.a
 else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/debug/libyaml-cpp.a

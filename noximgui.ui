@@ -124,6 +124,9 @@ font-style: normal;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of nodes in mesh X-dimension&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -157,6 +160,9 @@ font-style: italic;</string>
               <width>96</width>
               <height>26</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of nodes in mesh Y-dimension&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -216,6 +222,9 @@ font-style: normal;</string>
               <width>96</width>
               <height>26</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Buffer size of each channel (flits)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -279,6 +288,9 @@ font-style: normal;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flit size (bits)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;
@@ -341,6 +353,9 @@ font-style: normal;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Router-to-Hub connection length (mm)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -374,6 +389,9 @@ font-style: italic;</string>
               <width>111</width>
               <height>26</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Router-to-Router connection length (mm)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -434,6 +452,9 @@ font-style: normal;</string>
               <height>21</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Routing algorithm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -479,6 +500,9 @@ text-align: center;</string>
               <height>21</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DYAD Threshold&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -499,6 +523,9 @@ font-style: italic;</string>
               <width>261</width>
               <height>21</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Selection strategy&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -531,6 +558,13 @@ text-align: center;</string>
          </item>
         </layout>
        </widget>
+       <zorder>Wired_Config_Label</zorder>
+       <zorder>Mesh_Dim_Group</zorder>
+       <zorder>Buffer_Group</zorder>
+       <zorder>Flit_Group</zorder>
+       <zorder>Connection_Group</zorder>
+       <zorder>Routing_Options_Group</zorder>
+       <zorder>Algorithm_Label</zorder>
       </widget>
       <widget class="QWidget" name="Simulation_Params_Widget" native="true">
        <property name="geometry">
@@ -593,6 +627,9 @@ font-style: normal;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Duration of clock period (ps)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -626,6 +663,9 @@ font-style: italic;</string>
               <width>121</width>
               <height>26</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Simulation length (cycles)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -661,6 +701,9 @@ font-style: italic;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Warmup time before stat collection (cycles)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -695,6 +738,9 @@ font-style: italic;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Duration of reset signal (cycles)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -728,6 +774,9 @@ font-style: italic;</string>
               <width>121</width>
               <height>26</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop after given amount of load&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -791,6 +840,9 @@ font-style: normal;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum packet size (flits)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -824,6 +876,9 @@ font-style: italic;</string>
               <width>191</width>
               <height>26</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Maximum packet size (flits)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -859,6 +914,9 @@ font-style: italic;</string>
               <height>26</height>
              </rect>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Probability of Retransmission [0..1]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -892,6 +950,9 @@ font-style: italic;</string>
               <width>191</width>
               <height>21</height>
              </rect>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Packet injection rate [0..1]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font-size: 11pt;
@@ -1016,6 +1077,9 @@ font-style: normal;</string>
             <height>21</height>
            </rect>
           </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Spatial distribution of traffic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -1065,6 +1129,9 @@ text-align: center;</string>
             <height>21</height>
            </rect>
           </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to file containing table for TRAFFIC_TABLE_BASED&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;</string>
@@ -1078,6 +1145,9 @@ border-radius: 0px;</string>
             <width>61</width>
             <height>21</height>
            </rect>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Find table file for TRAFFIC_TABLE_BASED&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(240, 240, 240, 255), stop:1 rgba(255, 255, 255, 255));

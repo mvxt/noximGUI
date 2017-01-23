@@ -122,6 +122,9 @@ border-radius: 5px;</string>
          <height>22</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable radio hub wireless transmission [&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;CURRENTLY UNAVAILABLE&lt;/span&gt;] &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="styleSheet">
         <string notr="true"/>
        </property>
@@ -162,6 +165,9 @@ border-radius: 5px;</string>
           <width>156</width>
           <height>26</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Seed for generating random numbers in simulation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="styleSheet">
          <string notr="true">font-size: 11pt;
@@ -218,6 +224,9 @@ text-align: center;</string>
           <height>21</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Verbosity level of output&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">font-size: 11pt;
 font-style: italic;</string>
@@ -235,6 +244,9 @@ font-style: italic;</string>
          <width>161</width>
          <height>22</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables detailed output&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
         <string>Detailed Output</string>
@@ -266,6 +278,9 @@ font-style: italic;</string>
          <height>22</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable tracing signals to a &lt;span style=&quot; font-style:italic;&quot;&gt;.vcd&lt;/span&gt; file. You will need a separate program to view and visualize these files&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
         <string>Trace Mode</string>
        </property>
@@ -288,6 +303,9 @@ font-style: italic;</string>
           <height>21</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save trace signals to file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(240, 240, 240, 255), stop:1 rgba(255, 255, 255, 255));
 border-color: rgb(0, 0, 0);
@@ -309,6 +327,9 @@ border-color: rgb(0, 0, 0);
           <height>21</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to file to save signal traces to&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 0px;
@@ -326,6 +347,9 @@ font-size: 10pt;
         <width>296</width>
         <height>221</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add, delete, and edit power configuration files for simulations&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">border-radius: 5px;
