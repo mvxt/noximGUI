@@ -2,8 +2,6 @@
 *.o
 NoximGUI
 *.vcd
-*.pdf
-*.txt
 moc*
 *.user
 ui*

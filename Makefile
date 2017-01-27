@@ -13,8 +13,8 @@ MAKEFILE      = Makefile
 CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES) -static -static-libgcc -static-libstdc++
+CXXFLAGS      = -pipe -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES) -static -static-libgcc -static-libstdc++
 INCPATH       = -I. -isystem /usr/local/include/yaml-cpp -I/opt/Qt5/qtbase/include -I/opt/Qt5/qtbase/include/QtPrintSupport -I/opt/Qt5/qtbase/include/QtWidgets -I/opt/Qt5/qtbase/include/QtGui -I/opt/Qt5/qtbase/include/QtCore -I. -I. -I/opt/Qt5/qtbase/mkspecs/linux-g++
 QMAKE         = /opt/Qt5/qtbase/bin/qmake
 DEL_FILE      = rm -f
@@ -36,9 +36,9 @@ DISTNAME      = NoximGUI1.0.0
 DISTDIR = /home/mikeyvxt/NoximGUI/.tmp/NoximGUI1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -lyaml-cpp -L/opt/Qt5/qtbase/lib -lQt5PrintSupport -lQt5Widgets -lgobject-2.0 -L/opt/Qt5/qtbase/plugins/platforms -lqxcb -lX11-xcb -lXi -lxcb-render-util -lSM -lICE -lxcb-glx -lxcb-render -lxcb -lxcb-image -lxcb-icccm -lxcb-sync -lxcb-xfixes -lxcb-shm -lxcb-randr -lxcb-shape -lxcb-keysyms -lxcb-xkb -lQt5PlatformSupport -lfontconfig -lfreetype -lQt5DBus -lXrender -lXext -lX11 -lEGL -L/opt/Qt5/qtbase/plugins/imageformats -lqico -lQt5Gui -ljpeg -lpng -lqtharfbuzzng -lQt5Core -lz -licui18n -licuuc -licudata -lpcre16 -lm -ldl -lgthread-2.0 -pthread -lglib-2.0 -lrt -lGL -lpthread 
+LIBS          = $(SUBLIBS) -lyaml-cpp -L/opt/Qt5/qtbase/lib -lQt5PrintSupport -lQt5Widgets -lgobject-2.0 -L/opt/Qt5/qtbase/plugins/platforms -lqxcb -lX11-xcb -lXi -lxcb-render-util -lSM -lICE -lxcb-glx -lxcb-render -lxcb -lxcb-image -lxcb-icccm -lxcb-sync -lxcb-xfixes -lxcb-shm -lxcb-randr -lxcb-shape -lxcb-keysyms -lxcb-xkb -lQt5PlatformSupport -lfontconfig -lfreetype -lQt5DBus -lXrender -lXext -lX11 -lEGL -L/opt/Qt5/qtbase/plugins/imageformats -lqico -lQt5Gui -ljpeg -lpng -lqtharfbuzzng -lQt5Core -lz -licui18n -licuuc -licudata -lpcre16 -lm -ldl -lgthread-2.0 -pthread -lglib-2.0 -lrt -lGL -lpthread
 AR            = ar cqs
-RANLIB        = 
+RANLIB        =
 SED           = sed
 STRIP         = strip
 
@@ -216,7 +216,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a /opt/Qt5/qtbase/lib/libQt5PrintSupport.a /opt/Qt5/qtbase/lib/libQt5Widgets.a /opt/Qt5/qtbase/lib/libQt5Gui.a /opt/Qt5/qtbase/lib/libQt5Core.a ui_noximgui.h ui_runconfigurations.h ui_outputdialog.h $(OBJECTS)  
+$(TARGET): /home/mikeyvxt/NoximGUI/../../../usr/local/include/yaml-cpp/libyaml-cpp.a /opt/Qt5/qtbase/lib/libQt5PrintSupport.a /opt/Qt5/qtbase/lib/libQt5Widgets.a /opt/Qt5/qtbase/lib/libQt5Gui.a /opt/Qt5/qtbase/lib/libQt5Core.a ui_noximgui.h ui_runconfigurations.h ui_outputdialog.h $(OBJECTS)
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: NoximGUI.pro /opt/Qt5/qtbase/mkspecs/linux-g++/qmake.conf /opt/Qt5/qtbase/mkspecs/features/spec_pre.prf \
@@ -492,13 +492,13 @@ distdir: FORCE
 	$(COPY_FILE) --parents noximgui.ui runconfigurations.ui outputdialog.ui $(DISTDIR)/
 
 
-clean:compiler_clean 
+clean:compiler_clean
 	-$(DEL_FILE) $(OBJECTS)
 	-$(DEL_FILE) *~ core *.core
 
 
-distclean: clean 
-	-$(DEL_FILE) $(TARGET) 
+distclean: clean
+	-$(DEL_FILE) $(TARGET)
 	-$(DEL_FILE) /home/mikeyvxt/NoximGUI/noximgui_plugin_import.cpp
 	-$(DEL_FILE) Makefile
 
@@ -1334,7 +1334,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
@@ -2580,16 +2580,16 @@ noximgui_plugin_import.o: noximgui_plugin_import.cpp /opt/Qt5/qtbase/include/QtC
 		/opt/Qt5/qtbase/src/corelib/json/qjsonvalue.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o noximgui_plugin_import.o noximgui_plugin_import.cpp
 
-qrc_resources.o: qrc_resources.cpp 
+qrc_resources.o: qrc_resources.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
 
-moc_noximgui.o: moc_noximgui.cpp 
+moc_noximgui.o: moc_noximgui.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_noximgui.o moc_noximgui.cpp
 
-moc_outputdialog.o: moc_outputdialog.cpp 
+moc_outputdialog.o: moc_outputdialog.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_outputdialog.o moc_outputdialog.cpp
 
-moc_runconfigurations.o: moc_runconfigurations.cpp 
+moc_runconfigurations.o: moc_runconfigurations.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_runconfigurations.o moc_runconfigurations.cpp
 
 ####### Install
@@ -2599,4 +2599,3 @@ install:   FORCE
 uninstall:   FORCE
 
 FORCE:
-
