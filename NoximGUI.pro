@@ -34,9 +34,7 @@ DISTFILES += \
     assets/img/logo.png
 
 RESOURCES += \
-    resources.qrc \
-    forms/resources.qrc \
-    forms/resources.qrc
+    resources.qrc
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/yaml-cpp/lib/release/ -lyaml-cpp
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/yaml-cpp/lib/debug/ -lyaml-cpp

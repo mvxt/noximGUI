@@ -440,7 +440,7 @@ border-color: rgb(0, 0, 0);</string>
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap resource="resources.qrc">:/assets/logo.png</pixmap>
+       <pixmap>:/assets/logo.png</pixmap>
       </property>
      </widget>
      <widget class="QLabel" name="label">
@@ -456,7 +456,7 @@ border-color: rgb(0, 0, 0);</string>
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap resource="resources.qrc">:/assets/logo.png</pixmap>
+       <pixmap>:/assets/logo.png</pixmap>
       </property>
      </widget>
     </widget>
@@ -693,8 +693,6 @@ border-color: rgb(0, 0, 0);</string>
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
