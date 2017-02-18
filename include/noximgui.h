@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <yaml.h>
+#include <yaml-cpp/yaml.h>
 
 // C++ Headers
 #include <algorithm>
@@ -93,8 +93,8 @@ class NoximGUI : public QMainWindow
 
 private:
         // Const strings
-        const std::string DEFAULT_CONFIG = ":/assets/default_config.yaml";
-        const std::string DEFAULT_POWER = ":/assets/default_power.yaml";
+        const std::string DEFAULT_CONFIG = ":/assets/config/default_config.yaml";
+        const std::string DEFAULT_POWER = ":/assets/pwr/default_power.yaml";
 
         // Strings
         std::string execConfigName;

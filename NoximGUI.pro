@@ -12,38 +12,41 @@ TARGET = NoximGUI
 TEMPLATE = app
 CONFIG += c++11
 
-SOURCES += main.cpp \
-    noximgui.cpp \
-    outputdialog.cpp \
-    runconfigurations.cpp
+INCLUDEPATH += include/
+
+SOURCES += src/main.cpp \
+    src/noximgui.cpp \
+    src/outputdialog.cpp \
+    src/runconfigurations.cpp
 
 HEADERS  += \
-    noximgui.h \
-    outputdialog.h \
-    runconfigurations.h
+    include/noximgui.h \
+    include/outputdialog.h \
+    include/runconfigurations.h
 
 FORMS    += \
-    noximgui.ui \
-    runconfigurations.ui \
-    outputdialog.ui
-
-INCLUDEPATH += $$PWD/../../../usr/local/include/yaml-cpp
-DEPENDPATH += $$PWD/../../../usr/local/include/yaml-cpp
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/release/ -lyaml-cpp
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../usr/local/include/yaml-cpp/debug/ -lyaml-cpp
-else:unix: CONFIG(release, debug|release): LIBS += -lyaml-cpp
-else:unix: CONFIG(debug, debug|release): LIBS += -lyaml-cpp
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/release/libyaml-cpp.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/debug/libyaml-cpp.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/release/yaml-cpp.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/debug/yaml-cpp.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../../../usr/local/include/yaml-cpp/libyaml-cpp.a
+    forms/noximgui.ui \
+    forms/runconfigurations.ui \
+    forms/outputdialog.ui
 
 DISTFILES += \
-    splash.png \
-    logo.png
+    assets/img/splash.png \
+    assets/img/logo.png
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    forms/resources.qrc \
+    forms/resources.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/yaml-cpp/lib/release/ -lyaml-cpp
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/yaml-cpp/lib/debug/ -lyaml-cpp
+else:unix: LIBS += -L$$PWD/lib/yaml-cpp/lib/ -lyaml-cpp
+
+INCLUDEPATH += $$PWD/lib/yaml-cpp/include
+DEPENDPATH += $$PWD/lib/yaml-cpp/include
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/yaml-cpp/lib/release/libyaml-cpp.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/yaml-cpp/lib/debug/libyaml-cpp.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/yaml-cpp/lib/release/yaml-cpp.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/yaml-cpp/lib/debug/yaml-cpp.lib
+else:unix: PRE_TARGETDEPS += $$PWD/lib/yaml-cpp/lib/libyaml-cpp.a

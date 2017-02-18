@@ -150,7 +150,7 @@ bool NoximGUI::writeGUIConfig()
  */
 bool NoximGUI::setDefaultNoximConfig()
 {
-    return setNoximConfig( QString( ":/assets/default_config.yaml" ) );
+    return setNoximConfig( QString::fromStdString( DEFAULT_CONFIG ) );
 }
 
 /**

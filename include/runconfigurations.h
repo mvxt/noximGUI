@@ -20,7 +20,7 @@
 #include <QTextEdit>
 #include <QTextStream>
 #include <QVector>
-#include <yaml.h>
+#include <yaml-cpp/yaml.h>
 
 namespace Ui {
     class RunConfigurations;

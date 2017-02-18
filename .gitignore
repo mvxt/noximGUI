@@ -8,3 +8,4 @@ ui*
 qrc*
 *.yaml
 pwr/
+lib/
